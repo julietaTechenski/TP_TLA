@@ -58,16 +58,17 @@
 
 
 /** Terminals. */
-%token <token> STRINGS
+%token <token> STRING
 %token <token> DATE
 %token <token> HOUR    // -> 00, 01, 02, ...
 %token <token> DEF_TYPE
 %token <token> HOURS   // -> hours
-%token <token> WEEKDAYS
-%token <token> OPEN_CURLY_BRACE
-%token <token> CLOSE_CURLY_BRACE
+%token <token> WEEKDAY
+%token <token> OPEN_CURLY_BRACKET
+%token <token> CLOSE_CURLY_BRACKET
 %token <token> OPEN_BRACKET
 %token <token> CLOSE_BRACKET
+%token <token> COMMA
 %token <token> EVENT
 %token <token> DEF
 %token <token> SEMICOLON // -> recomendación: Si es algo que siempre se debe agregar, conviene ponerlo en el no-terminal padre que las agrupa
@@ -77,31 +78,26 @@
 %token <token> ROLE
 %token <token> ST_DATE
 %token <token> END_DATE
+%token <token> SINGLE_DATE
 %token <token> ST_TIME
 %token <token> END_TIME
 %token <token> TASK
-%token <token> DESC
+%token <token> DESCR
 %token <token> USERS
 %token <token> GENERATE
+%token <token> CREATE
 %token <token> FROM
 %token <token> TYPE
 %token <token> ALL
 %token <token> IMPORT
 %token <token> EXPORT
-%token <token> DASH
+%token <token> HYPHEN
 
 %token <token> UNKNOWN
 
 
 
 /** Non-terminals. */
-
-/*
-
-create_first ---> group
-
-*/
-
 
 %type <define> define
 %type <id> id
@@ -119,6 +115,10 @@ create_first ---> group
 %type <command> command
 %type <group> group
 %type <program> program
+%type <initialize> initialize
+%type <user> user
+%type <group> group
+
 
 
 
@@ -154,11 +154,75 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 %%*/
 
 
-program: group command generate										{ $$ = ProgramSemanticAction(currentCompilerState(),$1, $2, $3); }
+program: initialize command_list generate_list							{ $$ = ProgramSemanticAction(currentCompilerState(),$1, $2, $3); }
 	;
 
-group: 																{ $$ = GroupSemanticAction(..., ...); }
+id: STRING
 	;
 
-command: 															{ $$ = CommandSemanticAction( ... , ... ); }
+initialize: group SEMICOLON user SEMICOLON															{ $$ = GroupSemanticAction(..., ...); }
+	;
+
+group: CREATE GROUP id															{ $$ = CommandSemanticAction( ... , ... ); }
+	;
+
+user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_range
+	;
+
+weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET
+	;
+
+weekday_list: WEEKDAY 
+	| WEEKDAY COMMA weekday_list
+	;	
+
+hour_range: OPEN_BRACKET hour_list CLOSE_BRACKET
+	;
+
+hour_list: HOUR HYPHEN HOUR 
+	| HOUR HYPHEN HOUR COMMA hour_list
+	;
+
+define: DEF id OPEN_CURLY_BRACE command_list CLOSE_CURLY_BRACKET
+	;
+
+command_list: command SEMICOLON 
+	| command SEMICOLON command_list
+	;
+
+command: group 
+	| user 
+	| create_event 
+	| create_task 
+	| IMPORT ports 
+	| EXPORT ports
+	| define
+	;
+
+create_event: EVENT id user_group ST_DATE DATE END_DATE DATE
+	;
+
+create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING 
+	;
+
+user_group: USER id 
+	| GROUP id	
+	;
+
+generate_list: generate SEMICOLON 
+	| generate SEMICOLON generate_list
+	;
+
+generate: GENERATE id FROM id TYPE DEF_TYPE users ST_DATE DATE
+	;
+
+users: ALL 
+	| OPEN_BRACKET users_list CLOSE_BRACKET
+	;
+
+users_list: id 
+	| id COMMA users_list
+	;
+
+ports: id PATH STRING
 	;
