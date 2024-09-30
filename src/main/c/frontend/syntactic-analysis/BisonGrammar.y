@@ -160,10 +160,10 @@ program: initialize command_list generate_list							{ $$ = ProgramSemanticActio
 id: STRING
 	;
 
-initialize: group SEMICOLON user SEMICOLON															{ $$ = GroupSemanticAction(..., ...); }
+initialize: group SEMICOLON user SEMICOLON								{ $$ = GroupSemanticAction(..., ...); }
 	;
 
-group: CREATE GROUP id															{ $$ = CommandSemanticAction( ... , ... ); }
+group: CREATE GROUP id													{ $$ = CommandSemanticAction( ... , ... ); }
 	;
 
 user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_range
