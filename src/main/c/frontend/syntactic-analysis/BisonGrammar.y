@@ -36,6 +36,8 @@
 %destructor { releaseProgram($$); } <program>
 */
 
+
+
 /** Terminals. */
 /*%token <integer> INTEGER
 %token <token> ADD
@@ -46,6 +48,11 @@
 %token <token> SUB
 
 %token <token> UNKNOWN
+ Non-terminals.
+%type <constant> constant
+%type <expression> expression
+%type <factor> factor
+%type <program> program
 
 */
 
@@ -63,7 +70,7 @@
 %token <token> CLOSE_BRACKET
 %token <token> EVENT
 %token <token> DEF
-%token <token> SEMIOLON // -> recomendación: Si es algo que siempre se debe agregar, conviene ponerlo en el no-terminal padre que las agrupa
+%token <token> SEMICOLON // -> recomendación: Si es algo que siempre se debe agregar, conviene ponerlo en el no-terminal padre que las agrupa
 %token <token> PATH
 %token <token> GROUP
 %token <token> USER
@@ -86,11 +93,34 @@
 %token <token> UNKNOWN
 
 
+
 /** Non-terminals. */
-%type <constant> constant
-%type <expression> expression
-%type <factor> factor
+
+/*
+
+create_first ---> group
+
+*/
+
+
+%type <define> define
+%type <id> id
+%type <create> create
+%type <create_event> create_event
+%type <create_task> create_task
+%type <ports> ports
+%type <weekdays> weekdays
+%type <weekday_list> weekday_list
+%type <hour_range> hour_range
+%type <hour_list> hour_list
+%type <users> users
+%type <users_list> users_list
+%type <generate> generate
+%type <command> command
+%type <group> group
 %type <program> program
+
+
 
 /**
  * Precedence and associativity.
@@ -98,12 +128,12 @@
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
  */
 %left ADD SUB
-%left MUL DIV
+%left MUL DIV     // more precedence 
 
 %%
 
 // IMPORTANT: To use λ in the following grammar, use the %empty symbol.
-
+/*
 program: expression													{ $$ = ExpressionProgramSemanticAction(currentCompilerState(), $1); }
 	;
 
@@ -121,4 +151,14 @@ factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS				{ $$ = ExpressionFactor
 constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 	;
 
-%%
+%%*/
+
+
+program: group command generate										{ $$ = ProgramSemanticAction(currentCompilerState(),$1, $2, $3); }
+	;
+
+group: 																{ $$ = GroupSemanticAction(..., ...); }
+	;
+
+command: 															{ $$ = CommandSemanticAction( ... , ... ); }
+	;
