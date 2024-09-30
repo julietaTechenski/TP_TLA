@@ -37,7 +37,7 @@
 */
 
 /** Terminals. */
-%token <integer> INTEGER
+/*%token <integer> INTEGER
 %token <token> ADD
 %token <token> CLOSE_PARENTHESIS
 %token <token> DIV
@@ -46,6 +46,45 @@
 %token <token> SUB
 
 %token <token> UNKNOWN
+
+*/
+
+
+/** Terminals. */
+%token <token> STRINGS
+%token <token> DATE
+%token <token> HOUR    // -> 00, 01, 02, ...
+%token <token> DEF_TYPE
+%token <token> HOURS   // -> hours
+%token <token> WEEKDAYS
+%token <token> OPEN_CURLY_BRACE
+%token <token> CLOSE_CURLY_BRACE
+%token <token> OPEN_BRACKET
+%token <token> CLOSE_BRACKET
+%token <token> EVENT
+%token <token> DEF
+%token <token> SEMIOLON // -> recomendación: Si es algo que siempre se debe agregar, conviene ponerlo en el no-terminal padre que las agrupa
+%token <token> PATH
+%token <token> GROUP
+%token <token> USER
+%token <token> ROLE
+%token <token> ST_DATE
+%token <token> END_DATE
+%token <token> ST_TIME
+%token <token> END_TIME
+%token <token> TASK
+%token <token> DESC
+%token <token> USERS
+%token <token> GENERATE
+%token <token> FROM
+%token <token> TYPE
+%token <token> ALL
+%token <token> IMPORT
+%token <token> EXPORT
+%token <token> DASH
+
+%token <token> UNKNOWN
+
 
 /** Non-terminals. */
 %type <constant> constant
