@@ -64,8 +64,8 @@
 %token <token> DEF_TYPE
 %token <token> HOURS   // -> hours
 %token <token> WEEKDAY
-%token <token> OPEN_CURLY_BRACKET
-%token <token> CLOSE_CURLY_BRACKET
+%token <token> OPEN_CURLY_BRACE
+%token <token> CLOSE_CURLY_BRACE
 %token <token> OPEN_BRACKET
 %token <token> CLOSE_BRACKET
 %token <token> COMMA
@@ -83,7 +83,7 @@
 %token <token> END_TIME
 %token <token> TASK
 %token <token> DESCR
-%token <token> USERS
+%token <token> USERS   // -> nos quedo sin usar
 %token <token> GENERATE
 %token <token> CREATE
 %token <token> FROM
@@ -108,6 +108,7 @@
 %type <weekdays> weekdays
 %type <weekday_list> weekday_list
 %type <hour_range> hour_range
+%type <hour_ranges> hour_ranges
 %type <hour_list> hour_list
 %type <users> users
 %type <users_list> users_list
@@ -117,7 +118,11 @@
 %type <program> program
 %type <initialize> initialize
 %type <user> user
+%type <user_group> user_group
 %type <group> group
+%type <command_list> command_list
+%type <group> group
+%type <generate_list> generate_list
 
 
 
@@ -157,72 +162,79 @@ constant: INTEGER													{ $$ = IntegerConstantSemanticAction($1); }
 program: initialize command_list generate_list							{ $$ = ProgramSemanticAction(currentCompilerState(),$1, $2, $3); }
 	;
 
-id: STRING
+id: STRING																{ $$ = IdSemanticAction($1); }
 	;
 
-initialize: group SEMICOLON user SEMICOLON								{ $$ = GroupSemanticAction(..., ...); }
+initialize: group SEMICOLON user SEMICOLON								{ $$ = InitializeSemanticAction($1, $2); }
 	;
 
-group: CREATE GROUP id													{ $$ = CommandSemanticAction( ... , ... ); }
+group: CREATE GROUP id													{ $$ = GroupSemanticAction($1); }
 	;
 
-user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_range
+user: CREATE USER id ROLE id WEEKDAY weekdays HOURS hour_list			{ $$ = UserSemanticAction($1, $2, $3, $4); }   // ***  esto esta raro WEEKDAY  y WEEKDAY tienen dos significados
 	;
 
-weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET
+weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
 	;
 
-weekday_list: WEEKDAY 
-	| WEEKDAY COMMA weekday_list
+weekday_list: WEEKDAY													{ $$ = WeekdayListSemanticAction(WEEKDAY); }		// ***
+	| WEEKDAY COMMA weekday_list										{ $$ = WeekdayListSemanticAction(WEEKDAY, $1); }		//
 	;	
 
-hour_range: OPEN_BRACKET hour_list CLOSE_BRACKET
+
+hour_list: OPEN_BRACKET hour_ranges CLOSE_BRACKET						{ $$ = HourListSemanticAction($1); }
 	;
 
-hour_list: HOUR HYPHEN HOUR 
-	| HOUR HYPHEN HOUR COMMA hour_list
+
+hour_ranges: hour_range													{ $$ = HourRangesSemanticAction($1); }
+	| hour_range COMMA hour_ranges										{ $$ = HourRangesSemanticAction($1, $2); }
 	;
 
-define: DEF id OPEN_CURLY_BRACE command_list CLOSE_CURLY_BRACKET
+
+hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction(HOUR, HOUR); }   //
 	;
 
-command_list: command SEMICOLON 
-	| command SEMICOLON command_list
+
+define: DEF id OPEN_CURLY_BRACE command_list CLOSE_CURLY_BRACE			{ $$ = DefineSemanticAction($1, $2); }
 	;
 
-command: group 
-	| user 
-	| create_event 
-	| create_task 
-	| IMPORT ports 
-	| EXPORT ports
-	| define
+command_list: command SEMICOLON 										{ $$ = CommandListSemanticAction($1); }
+	| command SEMICOLON command_list									{ $$ = CommandListSemanticAction($1, $2); }
 	;
 
-create_event: EVENT id user_group ST_DATE DATE END_DATE DATE
+command: group															{ $$ = CommandSemanticAction($1); }															
+	| user 																{ $$ = CommandSemanticAction($1); }
+	| create_event 														{ $$ = CommandSemanticAction($1); }
+	| create_task														{ $$ = CommandSemanticAction($1); }		
+	| IMPORT ports 														{ $$ = CommandSemanticAction($1, IMPORT); }
+	| EXPORT ports														{ $$ = CommandSemanticAction($1, EXPORT); }
+	| define															{ $$ = CommandSemanticAction($1); }
 	;
 
-create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING 
+create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEventSemanticAction($1, $2, DATE, DATE); }	     //
 	;
 
-user_group: USER id 
-	| GROUP id	
+create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING	{ $$ = CreateTaskSemanticAction($1, $2, $3, $4, $5/*, $6*/); }  // description
 	;
 
-generate_list: generate SEMICOLON 
-	| generate SEMICOLON generate_list
+user_group: USER id														{ $$ = UserGroupSemanticAction($1); }
+	| GROUP id															{ $$ = UserGroupSemanticAction($1); }
 	;
 
-generate: GENERATE id FROM id TYPE DEF_TYPE users ST_DATE DATE
+generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction($1); }
+	| generate SEMICOLON generate_list									{ $$ = GenerateListSemanticAction($1, $2); }
 	;
 
-users: ALL 
-	| OPEN_BRACKET users_list CLOSE_BRACKET
+generate: GENERATE id FROM id TYPE DEF_TYPE users ST_DATE DATE|			{ $$ = GenerateSemanticAction($1, $2, $3, DEF_TYPE, DATE); }
 	;
 
-users_list: id 
-	| id COMMA users_list
+users: ALL																{ $$ = UsersSemanticAction(); }			//
+	| OPEN_BRACKET users_list CLOSE_BRACKET								{ $$ = UsersSemanticAction($1); }
 	;
 
-ports: id PATH id
+users_list: id 															{ $$ = UsersListSemanticAction($1); }
+	| id COMMA users_list												{ $$ = UsersListSemanticAction($1, $2); }
+	;
+
+ports: id PATH id														{ $$ = PortsSemanticAction($1, $3); }
 	;

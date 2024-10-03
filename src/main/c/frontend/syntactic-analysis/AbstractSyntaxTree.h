@@ -95,6 +95,7 @@ typedef struct Date Date;
 typedef struct Minute Minute;
 typedef struct Time Time;
 typedef struct All All;
+typedef enum PortType PortType;
 
 enum Weekday {
 	MONDAY,
@@ -110,6 +111,11 @@ enum DefType {
 	// Es provisorio, hay que agregar todos
 	MONTHLY,
 	WEEKLY,
+};
+
+enum PortType {
+	IMPORT,
+	EXPORT
 };
 
 struct Hour{
