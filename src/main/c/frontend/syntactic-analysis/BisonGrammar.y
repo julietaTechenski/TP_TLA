@@ -224,5 +224,5 @@ users_list: id
 	| id COMMA users_list
 	;
 
-ports: id PATH STRING
+ports: id PATH id
 	;
