@@ -64,6 +64,7 @@
 %token <token> DEF_TYPE
 %token <token> HOURS   // -> hours
 %token <token> WEEKDAY
+%token <token> WEEKDAYS // -> weekdays
 %token <token> OPEN_CURLY_BRACE
 %token <token> CLOSE_CURLY_BRACE
 %token <token> OPEN_BRACKET
@@ -83,7 +84,7 @@
 %token <token> END_TIME
 %token <token> TASK
 %token <token> DESCR
-%token <token> USERS   // -> nos quedo sin usar
+%token <token> USERS  
 %token <token> GENERATE
 %token <token> CREATE
 %token <token> FROM
@@ -92,7 +93,6 @@
 %token <token> IMPORT
 %token <token> EXPORT
 %token <token> HYPHEN
-
 %token <token> UNKNOWN
 
 
@@ -171,7 +171,7 @@ initialize: group SEMICOLON user SEMICOLON								{ $$ = InitializeSemanticActio
 group: CREATE GROUP id													{ $$ = GroupSemanticAction($1); }
 	;
 
-user: CREATE USER id ROLE id WEEKDAY weekdays HOURS hour_list			{ $$ = UserSemanticAction($1, $2, $3, $4); }   // ***  esto esta raro WEEKDAY  y WEEKDAY tienen dos significados
+user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSemanticAction($1, $2, $3, $4); }   // ***  esto esta raro WEEKDAY  y WEEKDAY tienen dos significados
 	;
 
 weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
@@ -225,7 +225,7 @@ generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction(
 	| generate SEMICOLON generate_list									{ $$ = GenerateListSemanticAction($1, $2); }
 	;
 
-generate: GENERATE id FROM id TYPE DEF_TYPE users ST_DATE DATE|			{ $$ = GenerateSemanticAction($1, $2, $3, DEF_TYPE, DATE); }
+generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE|			{ $$ = GenerateSemanticAction($1, $2, $3, DEF_TYPE, DATE); }
 	;
 
 users: ALL																{ $$ = UsersSemanticAction(); }			//
