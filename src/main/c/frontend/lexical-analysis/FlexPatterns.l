@@ -17,10 +17,6 @@
  %x MULTILINE_COMMENT
  */
 %x STRING
-%x DATE
-%x HOUR
-%x DEF_TYPE
-
 
 
 
@@ -82,7 +78,7 @@ EXAMPLE
 
 
 \"							        { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
-<STRING>\"					        { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<STRING>\"					        { return EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 <STRING>[[:space:]]+		        { InsideStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>[^"]+				        { InsideStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>.					        { InsideStringLexemeAction(createLexicalAnalyzerContext()); }
@@ -101,20 +97,19 @@ EXAMPLE
     DATE
  */
 
-<DATE>
-
+^\d{4}-\d{2}-\d{2}$                       { return DateLexemeAction(createLexicalAnalyzerContext());        }
 
 /**
     HOUR
  */
 
-<HOUR>
+^\d{2}:\d{2}$                             { return HourLexemeAction(createLexicalAnalyzerContext());        }
 
 /**
     DEF TYPE
  */
 
-<DEF_TYPE>"weekly"|"monthly"|"yearly"           { return DefTypeLexemeAction(createLexicalAnalyzerContext());        } 
+"weekly"|"monthly"|"yearly"                     { return DefTypeLexemeAction(createLexicalAnalyzerContext());        } 
 
 
 

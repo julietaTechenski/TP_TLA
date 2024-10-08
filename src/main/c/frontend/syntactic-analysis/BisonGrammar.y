@@ -12,6 +12,7 @@
 
 	int integer;
 	Token token;
+	char * string;
 
 	/** Non-terminals. */
 
@@ -19,6 +20,28 @@
 	Expression * expression;
 	Factor * factor;
 	Program * program;
+
+	Define * define;
+	Create * create;
+	Id * id;
+	CreateEvent * create_event;
+	CreateTask * create_task;
+	Ports * ports;
+	Weekdays * weekdays;
+	WeekdayList * weekday_list;
+	HourRange * hour_range;
+	HourRanges * hour_ranges;
+	HourList * hour_list;
+	Users * users;
+	UsersList * users_list;
+	Generate * generate;
+	Command * command;
+	Group * group;
+	Initialize * initialize;
+	User * user;
+	UserGroup * user_group;
+	CommandList * command_list;
+	GenerateList * generate_list;
 }
 
 /**
@@ -119,9 +142,7 @@
 %type <initialize> initialize
 %type <user> user
 %type <user_group> user_group
-%type <group> group
 %type <command_list> command_list
-%type <group> group
 %type <generate_list> generate_list
 
 
@@ -131,9 +152,12 @@
  * Precedence and associativity.
  *
  * @see https://www.gnu.org/software/bison/manual/html_node/Precedence.html
+
+ %left ADD SUB
+ %left MUL DIV     // more precedence 
+
  */
-%left ADD SUB
-%left MUL DIV     // more precedence 
+
 
 %%
 
