@@ -148,7 +148,7 @@ typedef struct Id Id;
 typedef struct Group Group;
 typedef struct User User;
 typedef struct Weekdays Weekdays;
-typedef struct WeekdaysList WeekdaysList;
+typedef struct WeekdayList WeekdayList;
 typedef struct HourList HourList;
 typedef struct HourRange HourRange;
 typedef struct CommandList CommandList;
@@ -190,12 +190,12 @@ struct User{
 };
 
 struct Weekdays {
-	WeekdaysList * weekdays_list;
+	WeekdayList * weekdays_list;
 };
 
-struct WeekdaysList{
+struct WeekdayList{
 	Weekday * weekday;
-	WeekdaysList * weekday_list;	//Finish if NULL
+	WeekdayList * weekday_list;	//Finish if NULL
 };
 
 struct HourRange{
