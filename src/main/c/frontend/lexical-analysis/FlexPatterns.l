@@ -25,9 +25,6 @@
 
 %%
 
-/**
-    SYMBOLS
- */
 
 
 "["									{ return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKET); }
@@ -42,44 +39,21 @@
 
 "-"                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), HYPHEN); }
 
-/**
-    STRING
- */
 
 
 <STRING>\"([[:alnum:]]+([[:alnum:]]|[[:space:]]|\.)*[[:alnum:]]+)?\"                       { return StringLexemeAction(createLexicalAnalyzerContext());  }
 
-/**
-    WEEKDAY
- */
 
 <STRING>"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
 
 
-/**
-    DATE en formato ISO 8601 (YYYY/MM/DD)
- */
-
 <STRING>[[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                                    { return DateLexemeAction(createLexicalAnalyzerContext());      }
 
 
-/**
-    HOUR formato: HH:MM
- */
-
 <STRING>[[:digit:]]{2}":"[[:digit:]]{2}                                                     { return HourLexemeAction(createLexicalAnalyzerContext());      }
-
-/**
-    DEF TYPE
- */
 
 <STRING>"weekly"|"monthly"|"yearly"                                                         { return DefTypeLexemeAction(createLexicalAnalyzerContext());    } 
 
-
-
-/**
-    COMMANDS
- */
 
 "event"                             { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), EVENT); }
 
@@ -96,9 +70,7 @@
 "generate"                          { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), GENERATE); }
 
 
-/**
-    COMMANDS' PARAMETERS
- */
+
 
 "hours"                             { return ParametersLexemeAction(createLexicalAnalyzerContext(), HOURS); }
 
@@ -134,7 +106,7 @@
 
 
 "/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>"/*""			{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<MULTILINE_COMMENT>"/*"			{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 <MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 <MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
