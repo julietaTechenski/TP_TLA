@@ -34,7 +34,110 @@ static void _logLexicalAnalyzerContext(const char * functionName, LexicalAnalyze
 	free(escapedLexeme);
 }
 
-/* PUBLIC FUNCTIONS 
+/* PUBLIC FUNCTIONS */
+
+Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+    return token;
+}
+
+Token CurlyBracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+    return token;
+}
+
+Token PunctuationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	lexicalAnalyzerContext->semanticValue->token = token;
+    return token;
+}
+
+Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+	lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);;
+	return STRING;
+}
+
+Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	if(strcmp(lexicalAnalyzerContext->lexeme, "monday") == 0){
+		lexicalAnalyzerContext->semanticValue->weekday = MONDAY;
+	} else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "tuesday") == 0){
+			lexicalAnalyzerContext->semanticValue->weekday = TUESDAY;
+	} else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "wednesday") == 0){
+			lexicalAnalyzerContext->semanticValue->weekday = WEDNESDAY;
+	} else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "thrusday") == 0){
+			lexicalAnalyzerContext->semanticValue->weekday = THURSDAY;
+	} else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "friday") == 0){
+			lexicalAnalyzerContext->semanticValue->weekday = FRIDAY;
+	}else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "saturday") == 0){
+			lexicalAnalyzerContext->semanticValue->weekday = SATURDAY;
+	} else {
+		lexicalAnalyzerContext->semanticValue->weekday = SUNDAY;
+	}
+    return WEEKDAY; 
+}
+
+Token DateLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
+    return DATE; 
+}
+
+Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
+    return HOUR; 
+}
+
+Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	if(strcmp(lexicalAnalyzerContext->lexeme, "weekly") == 0){
+		lexicalAnalyzerContext->semanticValue->def_type = WEEKLY;
+	} else 
+		if(strcmp(lexicalAnalyzerContext->lexeme, "monthly") == 0){
+			lexicalAnalyzerContext->semanticValue->def_type = MONTHLY;
+	} else {
+		lexicalAnalyzerContext->semanticValue->def_type = YEARLY;
+	}   
+	return DEF_TYPE;
+}
+
+Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    lexicalAnalyzerContext->semanticValue->token = token;
+    return token;
+}
+
+Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+    lexicalAnalyzerContext->semanticValue->token = token;
+    return token;
+}
+
+void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	if (_logIgnoredLexemes) {
+		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	}
+}
+
+Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	return UNKNOWN;
+}
+
+/*
+
+EXAMPLE
 
 void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
@@ -68,85 +171,6 @@ Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return INTEGER;
 }
 
-*/
-
-Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = token;
-    return token;
-}
-
-Token CurlyBracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = token;
-    return token;
-}
-
-Token PunctuationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->token = token;
-    return token;
-}
-
-void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
-}
-
-Token EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	if (_logIgnoredLexemes) {
-		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	}
-	return STRING;
-}
-
-void InsideStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    size_t currentLength = strlen(lexicalAnalyzerContext->semanticValue->string);
-    size_t newLength = currentLength + 2; 
-    lexicalAnalyzerContext->semanticValue->string = realloc(lexicalAnalyzerContext->semanticValue->string, newLength);
-    strncat(lexicalAnalyzerContext->semanticValue->string, yytext, 1);
-}
-
-
-Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
-    return WEEKDAY; 
-}
-
-Token DateLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
-    return DATE; 
-}
-
-Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
-    return HOUR; 
-}
-
-Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
-    return DEF_TYPE;
-}
-
-
-Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->token = token;
-    return token;
-}
-
-Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->token = token;
-    return token;
-}
-
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	if (_logIgnoredLexemes) {
 		_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
@@ -157,3 +181,5 @@ Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	return UNKNOWN;
 }
+
+*/

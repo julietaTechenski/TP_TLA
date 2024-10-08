@@ -110,7 +110,8 @@ enum Weekday {
 enum DefType {
 	// Es provisorio, hay que agregar todos
 	MONTHLY,
-	WEEKLY,
+	WEEKLY,	
+	YEARLY
 };
 
 enum PortType {

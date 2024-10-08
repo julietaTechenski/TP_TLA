@@ -10,7 +10,6 @@
 #include "LexicalAnalyzerContext.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /** Initialize module's internal state. */
 void initializeFlexActionsModule();
@@ -22,14 +21,17 @@ void shutdownFlexActionsModule();
  * Flex lexeme processing actions.
  */
 
-void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token BracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token CurlyBracketLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token PunctuationLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token DateLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-
-Token ArithmeticOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-Token IntegerLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
-Token ParenthesisLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 
 #endif

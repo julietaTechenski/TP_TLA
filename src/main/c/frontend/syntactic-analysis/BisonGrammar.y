@@ -9,20 +9,19 @@
 
 %union {
 	/** Terminals. */
-
 	int integer;
 	Token token;
 	char * string;
+	int weekday;
+	int def_type;
+	
 
 	/** Non-terminals. */
-
 	Constant * constant;
 	Expression * expression;
 	Factor * factor;
 	Program * program;
-
 	Define * define;
-	Create * create;
 	Id * id;
 	CreateEvent * create_event;
 	CreateTask * create_task;
@@ -81,13 +80,13 @@
 
 
 /** Terminals. */
-%token <token> STRING
-%token <token> DATE
-%token <token> HOUR    // -> 00, 01, 02, ...
-%token <token> DEF_TYPE
-%token <token> HOURS   // -> hours
-%token <token> WEEKDAY
+%token <string> STRING
+%token <string> DATE
+%token <string> HOUR    // -> 00, 01, 02, ...
+%token <def_type> DEF_TYPE
+%token <weekday> WEEKDAY
 %token <token> WEEKDAYS
+%token <token> HOURS   // -> hours
 %token <token> OPEN_CURLY_BRACE
 %token <token> CLOSE_CURLY_BRACE
 %token <token> OPEN_BRACKET
@@ -124,7 +123,6 @@
 
 %type <define> define
 %type <id> id
-%type <create> create
 %type <create_event> create_event
 %type <create_task> create_task
 %type <ports> ports
