@@ -98,17 +98,17 @@ EXAMPLE
 
 
 /**
-    DATE
+    DATE en formato ISO 8601 (YYYY/MM/DD)
  */
 
-<DATE>
+<DATE>[[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                              { return DateLexemeAction(createLexicalAnalyzerContext()); }
 
 
 /**
-    HOUR
+    HOUR formato: HH:MM
  */
 
-<HOUR>
+<HOUR>[[:digit:]]{2}":"[[:digit:]]{2} 
 
 /**
     DEF TYPE
