@@ -94,16 +94,17 @@ EXAMPLE
 
 
 /**
-    DATE
+    DATE en formato ISO 8601 (YYYY/MM/DD)
  */
 
-^\d{4}-\d{2}-\d{2}$                       { return DateLexemeAction(createLexicalAnalyzerContext());        }
+[[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                              { return DateLexemeAction(createLexicalAnalyzerContext()); }
+
 
 /**
-    HOUR
+    HOUR formato: HH:MM
  */
 
-^\d{2}:\d{2}$                             { return HourLexemeAction(createLexicalAnalyzerContext());        }
+[[:digit:]]{2}":"[[:digit:]]{2} 
 
 /**
     DEF TYPE
