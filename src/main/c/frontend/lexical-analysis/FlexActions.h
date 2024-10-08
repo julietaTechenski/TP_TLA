@@ -31,6 +31,8 @@ Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
+void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 

@@ -14,6 +14,7 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x STRING
+%x MULTILINE_COMMENT
 
 
 /**
@@ -131,6 +132,12 @@
 
 "decription"                        { return ParametersLexemeAction(createLexicalAnalyzerContext(), DESCR); }
 
+
+"/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>"/*""			{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 
 [[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
 .									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
