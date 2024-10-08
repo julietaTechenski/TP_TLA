@@ -12,8 +12,9 @@
 	int integer;
 	Token token;
 	char * string;
-	int weekday;
-	int def_type;
+	Date date;
+	Weekday weekday;
+	DefType def_type;
 	
 
 	/** Non-terminals. */
@@ -81,7 +82,7 @@
 
 /** Terminals. */
 %token <string> STRING
-%token <string> DATE
+%token <date> DATE
 %token <string> HOUR    // -> 00, 01, 02, ...
 %token <def_type> DEF_TYPE
 %token <weekday> WEEKDAY
@@ -247,7 +248,7 @@ generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction(
 	| generate SEMICOLON generate_list									{ $$ = GenerateListSemanticAction($1, $2); }
 	;
 
-generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE|			{ $$ = GenerateSemanticAction($1, $2, $3, DEF_TYPE, DATE); }
+generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE|	{ $$ = GenerateSemanticAction($1, $2, $3, DEF_TYPE, DATE); }
 	;
 
 users: ALL																{ $$ = UsersSemanticAction(); }			//
