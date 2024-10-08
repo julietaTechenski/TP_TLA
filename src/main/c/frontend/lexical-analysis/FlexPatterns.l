@@ -139,9 +139,6 @@
 
 %%
 
-#include "FlexExport.h"
-
-
 /*
 
  %x MULTILINE_COMMENT
@@ -165,4 +162,7 @@ EXAMPLE
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
 
 */
+
+#include "FlexExport.h"
+
 
