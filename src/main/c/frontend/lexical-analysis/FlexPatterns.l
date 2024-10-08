@@ -104,7 +104,7 @@ EXAMPLE
     HOUR formato: HH:MM
  */
 
-[[:digit:]]{2}":"[[:digit:]]{2} 
+[[:digit:]]{2}":"[[:digit:]]{2}                 { return HourLexemeAction(createLexicalAnalyzerContext());}
 
 /**
     DEF TYPE

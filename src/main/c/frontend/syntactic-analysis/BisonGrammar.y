@@ -87,7 +87,7 @@
 %token <token> DEF_TYPE
 %token <token> HOURS   // -> hours
 %token <token> WEEKDAY
-%token <token> WEEKDAYS // -> weekdays
+%token <token> WEEKDAYS
 %token <token> OPEN_CURLY_BRACE
 %token <token> CLOSE_CURLY_BRACE
 %token <token> OPEN_BRACKET
@@ -107,7 +107,7 @@
 %token <token> END_TIME
 %token <token> TASK
 %token <token> DESCR
-%token <token> USERS  
+%token <token> USERS
 %token <token> GENERATE
 %token <token> CREATE
 %token <token> FROM
@@ -215,7 +215,7 @@ hour_ranges: hour_range													{ $$ = HourRangesSemanticAction($1); }
 	;
 
 
-hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction(HOUR, HOUR); }   //
+hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction($1, $3); }   //
 	;
 
 
