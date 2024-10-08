@@ -65,24 +65,24 @@ Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	if(strcmp(lexicalAnalyzerContext->lexeme, "monday") == 0){
-		lexicalAnalyzerContext->semanticValue->weekday = MONDAY;
+		lexicalAnalyzerContext->semanticValue->integer = MONDAY;
 	} else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "tuesday") == 0){
-			lexicalAnalyzerContext->semanticValue->weekday = TUESDAY;
+			lexicalAnalyzerContext->semanticValue->integer = TUESDAY;
 	} else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "wednesday") == 0){
-			lexicalAnalyzerContext->semanticValue->weekday = WEDNESDAY;
+			lexicalAnalyzerContext->semanticValue->integer = WEDNESDAY;
 	} else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "thrusday") == 0){
-			lexicalAnalyzerContext->semanticValue->weekday = THURSDAY;
+			lexicalAnalyzerContext->semanticValue->integer = THURSDAY;
 	} else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "friday") == 0){
-			lexicalAnalyzerContext->semanticValue->weekday = FRIDAY;
+			lexicalAnalyzerContext->semanticValue->integer = FRIDAY;
 	}else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "saturday") == 0){
-			lexicalAnalyzerContext->semanticValue->weekday = SATURDAY;
+			lexicalAnalyzerContext->semanticValue->integer = SATURDAY;
 	} else {
-		lexicalAnalyzerContext->semanticValue->weekday = SUNDAY;
+		lexicalAnalyzerContext->semanticValue->integer = SUNDAY;
 	}
     return WEEKDAY; 
 }
@@ -102,12 +102,12 @@ Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	if(strcmp(lexicalAnalyzerContext->lexeme, "weekly") == 0){
-		lexicalAnalyzerContext->semanticValue->def_type = WEEKLY;
+		lexicalAnalyzerContext->semanticValue->integer = WEEKLY;
 	} else 
 		if(strcmp(lexicalAnalyzerContext->lexeme, "monthly") == 0){
-			lexicalAnalyzerContext->semanticValue->def_type = MONTHLY;
+			lexicalAnalyzerContext->semanticValue->integer = MONTHLY;
 	} else {
-		lexicalAnalyzerContext->semanticValue->def_type = YEARLY;
+		lexicalAnalyzerContext->semanticValue->integer = YEARLY;
 	}   
 	return DEF_TYPE;
 }
