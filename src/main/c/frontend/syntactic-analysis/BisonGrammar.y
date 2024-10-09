@@ -184,33 +184,32 @@ program: initialize command_list generate_list							{ $$ = ProgramSemanticActio
 id: STRING																{ $$ = IdSemanticAction($1); }
 	;
 
-initialize: group SEMICOLON user SEMICOLON								{ $$ = InitializeSemanticAction($1, $2); }
+initialize: group SEMICOLON user SEMICOLON								{ $$ = InitializeSemanticAction($1, $3); }
 	;
 
 group: CREATE GROUP id													{ $$ = GroupSemanticAction($1); }
 	;
 
-user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSemanticAction($1, $2, $3, $4); }   // ***  esto esta raro WEEKDAY  y WEEKDAY tienen dos significados
+user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSemanticAction($3, $5, $7, $9); }
 	;
 
 weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
 	;
 
-weekday_list: WEEKDAY													{ $$ = WeekdayListSemanticAction(WEEKDAY); }		// ***
-	| WEEKDAY COMMA weekday_list										{ $$ = WeekdayListSemanticAction(WEEKDAY, $1); }		//
+weekday_list: WEEKDAY													{ $$ = WeekdayListSemanticAction($1); }		// ***
+	| WEEKDAY COMMA weekday_list										{ $$ = WeekdaysListAddWeekdaySemanticAction($1, $3); }		//
 	;	
 
 
-hour_list: OPEN_BRACKET hour_ranges CLOSE_BRACKET						{ $$ = HourListSemanticAction($1); }
+hour_list: OPEN_BRACKET hour_ranges CLOSE_BRACKET						{ $$ = HourListSemanticAction($2); }
 	;
 
 
-hour_ranges: hour_range													{ $$ = HourRangesSemanticAction($1); }
-	| hour_range COMMA hour_ranges										{ $$ = HourRangesAddHourRangeSemanticAction($1, $3); }
+hour_ranges: hour_range COMMA hour_ranges								{ $$ = HourRangesSemanticAction($1, $3); }							
 	;
 
 
-hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction($1, $3); }   //
+hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction($1, $3); }   
 	;
 
 

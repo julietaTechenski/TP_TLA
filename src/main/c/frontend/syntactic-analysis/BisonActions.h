@@ -28,16 +28,16 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 */
 
 UsersList * UsersListSemanticAction(Id * id);
-UsersList * UsersListAddUserSemanticAction(User * user, UsersList * usersList);
+UsersList * UsersListAddUserSemanticAction(Id * user, UsersList * usersList);   
 Users * UsersListToUsersSemanticAction(UsersList * usersList);
 Users * UsersSemanticAction();      //
-Generate * GenerateSemanticAction(Id * generateId, Id * id, int defType, Users * users, char * date);
+Generate * GenerateSemanticAction(Id * generateId, Id * id, int defType, Users * users, Date * date);
 GenerateList * GenerateListAddGenerateSemanticAction(Generate * generate, GenerateList * generateList);
 GenerateList * GenerateListSemanticAction(Generate * generate);
 UserGroup * UserGroupSemanticAction(Id * id);
 UserGroup * UserGroupFromGroupSemanticAction(Group * group);
-CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, char * date, char * stTime, char * endTime, char * description);  /* Description * description*/
-CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, char * stDate, char * endDate);   // por ahi podemos hacer que el tipo sea Event directamente -> lo miso con los otros create consultar
+CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date, Time * stTime, Time * endTime, char * description); 
+CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate);  
 Command * CommandGroupSemanticAction(Group * group);
 Command * CommandUserSemanticAction(User * user);
 Command * CommandCreateEventSemanticAction(CreateEvent * createEvent);
@@ -47,23 +47,20 @@ Command * CommandDefineSemanticAction(Define * define);
 CommandList * CommandListAddCommandSemanticAction(Command * command, CommandList * commandList);
 CommandList * CommandListSemanticAction(Command * command);
 Define * DefineSemanticAction(Id * id, CommandList * commandList);
-
-
-// faltan de aca para abajo mirar que esten bien 
-
-HourRange * HourRangeSemanticAction(char * hour1, char * hour2);
-HourRange * HourRangesAddHourRangeSemanticAction(HourRange * hourRange, HourRanges * hourRanges);   // TODO: Crear tipo HourRanges y checkear el tipo HOurList
-//HourRange * HourRangesSemanticAction(HourRange * hourRange);   // TODO: Crear tipo HourRanges y checkear el tipo HOurList
+HourRange * HourRangeSemanticAction(Hour * hour1, Hour * hour2);
+HourRanges * HourRangesSemanticAction(HourRange * hourRange, HourRanges * hourRanges);
 HourList * HourListSemanticAction(HourRange * hourRange);
-WeekdayList * WeekdaysListSemanticAction(int Weekday, WeekdayList * weekdaysList);
-//WeekdaysList * WeekdaysListSemanticAction(int Weekday);
-//WeekdaysList * WeekdaysSemanticAction(WeekdaysList * weekdaysList);
-User * UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList * HourList);    // Weekdays + modifique el range a list 
+User * UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList * HourList);
 Group * GroupSemanticAction(Id * id);
 Initialize * InitializeSemanticAction(Group * group, Users * users);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, Initialize * initialize, CommandList * commandList, GenerateList * generateList);
 Ports * PortsSemanticAction(Id * id1, Id * id2);
 
+
+// checkear esto y la definicion de la gramática
+
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday * weekday, WeekdayList * weekdaysList);
+WeekdayList * WeekdaysListSemanticAction(Weekday * Weekday);
 
 #endif

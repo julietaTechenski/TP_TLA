@@ -133,7 +133,7 @@ struct Date{
 	unsigned int year;
 };
 
-struct Time{
+struct Time {
 	Hour * hour;
 	Minute * minute;
 };
@@ -151,6 +151,7 @@ typedef struct Weekdays Weekdays;
 typedef struct WeekdayList WeekdayList;
 typedef struct HourList HourList;
 typedef struct HourRange HourRange;
+typedef struct HourRanges HourRanges;
 typedef struct CommandList CommandList;
 typedef struct Define Define;
 typedef struct Command Command;
@@ -187,6 +188,7 @@ struct User{
 	Id * name;
 	Id * role;
 	Weekdays * weekdays; 
+	HourList * hour_list;
 };
 
 struct Weekdays {
@@ -198,13 +200,19 @@ struct WeekdayList{
 	WeekdayList * weekday_list;	//Finish if NULL
 };
 
-struct HourRange{
-	HourList * hour_list;
+struct HourRange {
+	Time * start;
+	Time * finish;
 };
 
 struct HourList{
-	Hour * hour;
+	HourRanges * hour_ranges;
 	HourList * hour_list;	//Finish if NULL
+};
+
+struct HourRanges {
+	HourRange * hour_range;
+	HourRanges * hour_ranges;	//Finish if NULL
 };
 
 struct Define{
@@ -225,7 +233,7 @@ struct Command {
 		CreateEvent * create_event;
 		CreateTask * create_task;
 		Ports * import_ports;
-		Ports * export_port;
+		Ports * export_ports;
 		Define * define;
 	};
 };
@@ -249,9 +257,10 @@ struct CreateTask {
 	Id * id;
 	UserGroup * user_group;
 	Date * date;
-	Hour * start_time;				// Deberia ser tipo Time
-	Hour * finish_time;				// Deberia ser tipo Time
-};
+	Time * start_time;
+	Time * end_time;	
+	char * description;	
+};			
 
 struct GenerateList {
 	Generate * Generate;
@@ -276,8 +285,9 @@ struct Users {
 	
 };
 
-struct UsersList {
 
+///////////////////
+struct UsersList {
 	Id * id;
 	UsersList * user_list; //Finish if NULL
 };
