@@ -161,7 +161,7 @@ Users *UsersSemanticAction() {
 /**
  * Creates a new Generate structure with the given components.
  */
-Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, Date *date) {
+Generate *GenerateSemanticAction(Id *generateId, Id *id, DefType * defType, Users *users, Date *date) {
 	Generate *generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
 	generate->users = id;
@@ -327,17 +327,17 @@ Define *DefineSemanticAction(Id *id, CommandList *commandList) {
 /**
  * Creates a new HourRange structure with the given hours.
  */
-HourRange *HourRangeSemanticAction(Hour *hour1, Hour *hour2) {
+HourRange *HourRangeSemanticAction(Time * start, Time *finish) {
 	HourRange *hourRange = calloc(1, sizeof(HourRange));
-	hourRange->start = hour1;
-	hourRange->finish = hour2;
+	hourRange->start = start;
+	hourRange->finish = finish;
 	return hourRange;
 }
 
 /**
  * Adds an HourRange to an existing HourRanges.
  */
-HourRanges *HourRangesSemanticAction(HourRange *hourRange, HourRanges *hourRanges) {
+HourRanges *HourRangesAddHourRangeSemanticAction(HourRange *hourRange, HourRanges *hourRanges) {
 	HourRanges *newHourRanges = calloc(1, sizeof(HourRanges));
 	newHourRanges->hour_range = hourRange;
 	newHourRanges->hour_ranges = hourRanges;
@@ -345,13 +345,23 @@ HourRanges *HourRangesSemanticAction(HourRange *hourRange, HourRanges *hourRange
 }
 
 /**
+ * Creates an HourRanges from an HourRange.
+ */
+HourRanges *HourRangesSemanticAction(HourRange *hourRange) {
+	HourRanges *newHourRanges = calloc(1, sizeof(HourRanges));
+	newHourRanges->hour_range = hourRange;
+	newHourRanges->hour_ranges = NULL;
+	return newHourRanges;
+}
+
+
+/**
  * Creates a new HourList with a single HourRange.
  */
 ///////////////////////////
-HourList *HourListSemanticAction(HourRange *hourRange) {
+HourList *HourListSemanticAction(HourRanges *hourRanges) {
 	HourList *hourList = calloc(1, sizeof(HourList));
-	hourList->hour_ranges = hourRange;
-	hourList->hour_list = NULL;
+	hourList->hour_ranges = hourRanges;
 	return hourList;
 }
 

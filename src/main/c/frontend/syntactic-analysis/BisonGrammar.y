@@ -187,11 +187,25 @@ id: STRING																{ $$ = IdSemanticAction($1); }
 initialize: group SEMICOLON user SEMICOLON								{ $$ = InitializeSemanticAction($1, $3); }
 	;
 
-group: CREATE GROUP id													{ $$ = GroupSemanticAction($1); }
+group: CREATE GROUP id													{ $$ = GroupSemanticAction($3); }
 	;
 
 user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSemanticAction($3, $5, $7, $9); }
 	;
+
+
+
+	/*
+	
+	weekdays → OPEN_BRACKET weekday_list CLOSE_BRACKET
+
+weekday_list → WEEKDAY | WEEKDAY COMMA weekday_list
+	
+	create user “Lionel Messi” group “IT” role “admin” weekday [Lunes, Viernes] hours [8:00, 16:00];
+
+
+	
+	*/
 
 weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
 	;
@@ -201,11 +215,13 @@ weekday_list: WEEKDAY													{ $$ = WeekdayListSemanticAction($1); }		// **
 	;	
 
 
+
 hour_list: OPEN_BRACKET hour_ranges CLOSE_BRACKET						{ $$ = HourListSemanticAction($2); }
 	;
 
 
-hour_ranges: hour_range COMMA hour_ranges								{ $$ = HourRangesSemanticAction($1, $3); }							
+hour_ranges: hour_range													{ $$ = HourRangesSemanticAction($1); }
+	| hour_range COMMA hour_ranges										{ $$ = HourRangesAddHourRangeSemanticAction($1, $3); }							
 	;
 
 

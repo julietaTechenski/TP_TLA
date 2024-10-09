@@ -30,8 +30,8 @@
 "["									{ return BracketLexemeAction(createLexicalAnalyzerContext(), OPEN_BRACKET); }
 "]"									{ return BracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_BRACKET); }
 
-"{"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), OPEN_CURLY_BRACKET); }
-"}"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_CURLY_BRACKET); }
+"{"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), OPEN_CURLY_BRACE); }
+"}"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_CURLY_BRACE); }
 
 ";"                                 { return PuntuationLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
 

@@ -207,7 +207,6 @@ struct HourRange {
 
 struct HourList{
 	HourRanges * hour_ranges;
-	HourList * hour_list;	//Finish if NULL
 };
 
 struct HourRanges {
