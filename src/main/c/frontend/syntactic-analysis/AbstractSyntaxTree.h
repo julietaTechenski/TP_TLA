@@ -261,7 +261,7 @@ struct GenerateList {
 struct Generate {
 	Id * id;
 	Id * user_name;
-	int def_type;
+	DefType def_type;
 	Users * users;
 	Date * start_date;
 };
@@ -277,12 +277,14 @@ struct Users {
 };
 
 
-///////////////////
 struct UsersList {
 	Id * id;
 	UsersList * user_list; //Finish if NULL
 };
 
+
+
+////////////////////
 struct Ports{
 	Id * name;
 	Id * path;

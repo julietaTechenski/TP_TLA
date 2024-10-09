@@ -57,8 +57,8 @@ Initialize * InitializeSemanticAction(Group * group, User * user);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, Initialize * initialize, CommandList * commandList, GenerateList * generateList);
 Ports * PortsSemanticAction(Id * id1, Id * id2);
-WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList);
-WeekdayList * WeekdaysListSemanticAction(Weekday Weekday);
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList);
+WeekdayList * WeekdaysListSemanticAction(int weekday);
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);
 
 

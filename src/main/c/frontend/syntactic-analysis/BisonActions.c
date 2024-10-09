@@ -163,7 +163,7 @@ Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *use
 	Generate *generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
 	generate->user_name = id;
-	generate->def_type = defType;
+	generate->def_type = (DefType)defType;  // convierte int a su valor del enum
 	generate->users = users;
 	generate->start_date = date;
 	return generate;
@@ -272,7 +272,8 @@ Command *CommandCreateTaskSemanticAction(CreateTask *createTask) {
 /**
  * Creates a new Command structure for Ports with the given PortType.
  */
-Command *CommandPortsSemanticAction(Ports *ports, PortType portType) {
+/////////////////////////////////////
+Command *CommandPortsSemanticAction(Ports *ports, int portType) {
 	Command *command = calloc(1, sizeof(Command));
 	if(portType == IMPORT_ENUM){
 		command->import_ports = ports;
@@ -406,9 +407,9 @@ Id *IdSemanticAction(const char *value) {
  * Adds a Weekday to an existing WeekdayList.
  */
 
-WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList){
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList){
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
-	newWeekdayList->weekday = weekday;
+	newWeekdayList->weekday = (Weekday)weekday;  // convierte int a su valor del enum
 	newWeekdayList->weekday_list = weekdaysList;
 	return newWeekdayList;
 }
@@ -417,9 +418,9 @@ WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList 
  * Creates a new WeekdayList with a single Weekday.
  */
 
-WeekdayList * WeekdaysListSemanticAction(Weekday weekday){
+WeekdayList * WeekdaysListSemanticAction(int weekday){
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
-	newWeekdayList->weekday = weekday;
+	newWeekdayList->weekday = (Weekday)weekday;
 	newWeekdayList->weekday_list = NULL;
 	return newWeekdayList;
 }
