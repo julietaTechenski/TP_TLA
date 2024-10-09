@@ -27,36 +27,35 @@ Factor * ExpressionFactorSemanticAction(Expression * expression);
 Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression);
 */
 
-
-
-
-
-Ports * PortsSemanticAction(Id * id1, Id * id2);
 UsersList * UsersListSemanticAction(Id * id);
-//UsersList * UsersListSemanticAction(User * user, UsersList * usersList);
-Users * UsersSemanticAction(UsersList * UsersList);
-//Users * UsersSemanticAction();      //
+UsersList * UsersListAddUserSemanticAction(User * user, UsersList * usersList);
+Users * UsersListToUsersSemanticAction(UsersList * usersList);
+Users * UsersSemanticAction();      //
 Generate * GenerateSemanticAction(Id * generateId, Id * id, int defType, Users * users, char * date);
-GenerateList * GenerateListSemanticAction(Generate * generate, GenerateList * generateList);
-//GenerateList * GenerateListSemanticAction(Generate * generate);
+GenerateList * GenerateListAddGenerateSemanticAction(Generate * generate, GenerateList * generateList);
+GenerateList * GenerateListSemanticAction(Generate * generate);
 UserGroup * UserGroupSemanticAction(Id * id);
-//UserGroup * UserGroupSemanticAction(Group * group);
-CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, char * date, char * stTime, char * endTime);  /* Description * description*/
+UserGroup * UserGroupFromGroupSemanticAction(Group * group);
+CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, char * date, char * stTime, char * endTime, char * description);  /* Description * description*/
 CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, char * stDate, char * endDate);   // por ahi podemos hacer que el tipo sea Event directamente -> lo miso con los otros create consultar
-Command * CommandSemanticAction(Group * group);
-//Command * CommandSemanticAction(User * user);
-//Command * CommandSemanticAction(CreateEvent * createEvent);
-//Command * CommandSemanticAction(CreateTask * createTask);
-//Command * CommandSemanticAction(Ports * ports, PortType portType);
-//Command * CommandSemanticAction(Define * define);
-//CommandList * CommandListSemanticAction(Command * command, CommandList * commandList);
-//CommandList * CommandListSemanticAction(Command * command);
+Command * CommandGroupSemanticAction(Group * group);
+Command * CommandUserSemanticAction(User * user);
+Command * CommandCreateEventSemanticAction(CreateEvent * createEvent);
+Command * CommandCreateTaskSemanticAction(CreateTask * createTask);
+Command * CommandPortsSemanticAction(Ports * ports, PortType portType);
+Command * CommandDefineSemanticAction(Define * define);
+CommandList * CommandListAddCommandSemanticAction(Command * command, CommandList * commandList);
+CommandList * CommandListSemanticAction(Command * command);
 Define * DefineSemanticAction(Id * id, CommandList * commandList);
+
+
+// faltan de aca para abajo mirar que esten bien 
+
 HourRange * HourRangeSemanticAction(char * hour1, char * hour2);
-//HourRange * HourRangesSemanticAction(HourRange * hourRange, HourRange * hourRanges);   // TODO: Crear tipo HourRanges y checkear el tipo HOurList
+HourRange * HourRangesAddHourRangeSemanticAction(HourRange * hourRange, HourRanges * hourRanges);   // TODO: Crear tipo HourRanges y checkear el tipo HOurList
 //HourRange * HourRangesSemanticAction(HourRange * hourRange);   // TODO: Crear tipo HourRanges y checkear el tipo HOurList
 HourList * HourListSemanticAction(HourRange * hourRange);
-WeekdaysList * WeekdaysListSemanticAction(int Weekday, WeekdaysList * weekdaysList);
+WeekdayList * WeekdaysListSemanticAction(int Weekday, WeekdayList * weekdaysList);
 //WeekdaysList * WeekdaysListSemanticAction(int Weekday);
 //WeekdaysList * WeekdaysSemanticAction(WeekdaysList * weekdaysList);
 User * UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList * HourList);    // Weekdays + modifique el range a list 
@@ -64,6 +63,7 @@ Group * GroupSemanticAction(Id * id);
 Initialize * InitializeSemanticAction(Group * group, Users * users);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, Initialize * initialize, CommandList * commandList, GenerateList * generateList);
+Ports * PortsSemanticAction(Id * id1, Id * id2);
 
 
 #endif
