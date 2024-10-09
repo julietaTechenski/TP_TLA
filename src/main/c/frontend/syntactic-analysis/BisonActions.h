@@ -31,11 +31,11 @@ UsersList * UsersListSemanticAction(Id * id);
 UsersList * UsersListAddUserSemanticAction(Id * user, UsersList * usersList);   
 Users * UsersListToUsersSemanticAction(UsersList * usersList);
 Users * UsersSemanticAction();      //
-Generate * GenerateSemanticAction(Id * generateId, Id * id, DefType * defType, Users * users, Date * date);
+Generate * GenerateSemanticAction(Id * generateId, Id * id, int defType, Users * users, Date * date);
 GenerateList * GenerateListAddGenerateSemanticAction(Generate * generate, GenerateList * generateList);
 GenerateList * GenerateListSemanticAction(Generate * generate);
-UserGroup * UserGroupSemanticAction(Id * id);
-UserGroup * UserGroupFromGroupSemanticAction(Group * group);
+UserGroup * UserGroupFromUserSemanticAction(Id * user);
+UserGroup * UserGroupFromGroupSemanticAction(Id * group);
 CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date, Time * stTime, Time * endTime, char * description); 
 CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate);  
 Command * CommandGroupSemanticAction(Group * group);
@@ -53,15 +53,13 @@ HourRanges * HourRangesSemanticAction(HourRange * hourRange);
 HourList * HourListSemanticAction(HourRanges * hourRanges);
 User * UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList * HourList);
 Group * GroupSemanticAction(Id * id);
-Initialize * InitializeSemanticAction(Group * group, Users * users);
+Initialize * InitializeSemanticAction(Group * group, User * user);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, Initialize * initialize, CommandList * commandList, GenerateList * generateList);
 Ports * PortsSemanticAction(Id * id1, Id * id2);
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList);
+WeekdayList * WeekdaysListSemanticAction(int Weekday);
+Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);
 
-
-// checkear esto y la definicion de la gramática
-
-WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday * weekday, WeekdayList * weekdaysList);
-WeekdayList * WeekdaysListSemanticAction(Weekday * Weekday);
 
 #endif

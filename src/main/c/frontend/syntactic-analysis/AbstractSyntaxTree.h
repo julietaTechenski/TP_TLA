@@ -115,16 +115,8 @@ enum DefType {
 };
 
 enum PortType {
-	IMPORT,
-	EXPORT
-};
-
-struct Hour{
-	unsigned int hour;
-};
-
-struct Minute {
-	unsigned int minute;
+	IMPORT_ENUM,
+	EXPORT_ENUM
 };
 
 struct Date{
@@ -134,8 +126,8 @@ struct Date{
 };
 
 struct Time {
-	Hour * hour;
-	Minute * minute;
+	unsigned int hour;
+	unsigned int minute;
 };
 
 struct All {
@@ -196,7 +188,7 @@ struct Weekdays {
 };
 
 struct WeekdayList{
-	Weekday * weekday;
+	int weekday;
 	WeekdayList * weekday_list;	//Finish if NULL
 };
 
@@ -240,8 +232,8 @@ struct Command {
 struct UserGroup {
 	union 
 	{
-		User * user;
-		Group * group;
+		Id * user;
+		Id * group;
 	};
 };
 
@@ -269,7 +261,7 @@ struct GenerateList {
 struct Generate {
 	Id * id;
 	Id * user_name;
-	DefType * def_type;
+	int def_type;
 	Users * users;
 	Date * start_date;
 };

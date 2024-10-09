@@ -161,10 +161,10 @@ Users *UsersSemanticAction() {
 /**
  * Creates a new Generate structure with the given components.
  */
-Generate *GenerateSemanticAction(Id *generateId, Id *id, DefType * defType, Users *users, Date *date) {
+Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, Date *date) {
 	Generate *generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
-	generate->users = id;
+	generate->user_name = id;
 	generate->def_type = defType;
 	generate->users = users;
 	generate->start_date = date;
@@ -192,20 +192,20 @@ GenerateList *GenerateListSemanticAction(Generate *generate) {
 }
 
 /**
- * Creates a new UserGroup structure with the given ID.
+ * Creates a new UserGroup structure with the given group ID.
  */
-UserGroup * UserGroupSemanticAction(Id *id) {
+UserGroup * UserGroupFromGroupSemanticAction(Id *group) {
 	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
-	userGroup->group = id;
+	userGroup->group = group;
 	return userGroup;
 }
 
 /**
- * Creates a new UserGroup structure from an existing Group.
+ * Creates a new UserGroup structure with the given user ID.
  */
-UserGroup *UserGroupFromGroupSemanticAction(Group *group) {
-	UserGroup *userGroup = calloc(1, sizeof(UserGroup));
-	userGroup->group = group;
+UserGroup * UserGroupFromUserSemanticAction(Id *user) {
+	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
+	userGroup->user = user;
 	return userGroup;
 }
 
@@ -276,7 +276,7 @@ Command *CommandCreateTaskSemanticAction(CreateTask *createTask) {
  */
 Command *CommandPortsSemanticAction(Ports *ports, PortType portType) {
 	Command *command = calloc(1, sizeof(Command));
-	if(portType == IMPORT){
+	if(portType == IMPORT_ENUM){
 		command->import_ports = ports;
 	}
 	else{
@@ -390,10 +390,10 @@ Group *GroupSemanticAction(Id *id) {
  * Creates a new Initialize structure with the given components.
  */
 /////////////////////////// tipo USer inicializando users
-Initialize *InitializeSemanticAction(Group *group, Users *users) {
+Initialize *InitializeSemanticAction(Group *group, User *user) {
 	Initialize *initialize = calloc(1, sizeof(Initialize));
 	initialize->group = group;
-	initialize->user = users;
+	initialize->user = user;
 	return initialize;
 }
 
@@ -404,4 +404,29 @@ Id *IdSemanticAction(const char *value) {
 	Id *id = calloc(1, sizeof(Id));
 	id->id = strdup(value);
 	return id;
+}
+
+
+
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList){
+	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
+	newWeekdayList->weekday = weekday;
+	newWeekdayList->weekday_list = weekdaysList;
+	return newWeekdayList;
+}
+
+
+
+WeekdayList * WeekdaysListSemanticAction(int Weekday){
+	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
+	newWeekdayList->weekday = Weekday;
+	newWeekdayList->weekday_list = NULL;
+	return newWeekdayList;
+}
+
+
+Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList){
+	Weekdays * weekdays = calloc(1, sizeof(Weekdays));
+	weekdays->weekdays_list = weekdaysList;
+	return weekdays;
 }

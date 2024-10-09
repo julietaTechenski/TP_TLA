@@ -98,7 +98,7 @@
 
 "type"                              { return ParametersLexemeAction(createLexicalAnalyzerContext(), TYPE); }
 
-"all"                               { return ParametersLexemeAction(createLexicalAnalyzerContext(), ALL); }
+"all"                               { return ParametersLexemeAction(createLexicalAnalyzerContext(), EVERY); }
 
 "users"                              { return ParametersLexemeAction(createLexicalAnalyzerContext(), USERS); }
 

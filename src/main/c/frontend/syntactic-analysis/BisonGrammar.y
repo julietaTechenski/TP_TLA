@@ -82,7 +82,7 @@
 %token <string> HOUR    // -> 00, 01, 02, ...
 %token <integer> DEF_TYPE
 %token <integer> WEEKDAY
-%token <token> WEEKDAYS
+%token <token> WEEKDAYS // -> weekdays [Lunes, Viernes]
 %token <token> HOURS   // -> hours
 %token <token> OPEN_CURLY_BRACE
 %token <token> CLOSE_CURLY_BRACE
@@ -108,7 +108,7 @@
 %token <token> CREATE
 %token <token> FROM
 %token <token> TYPE
-%token <token> ALL
+%token <token> EVERY
 %token <token> IMPORT
 %token <token> EXPORT
 %token <token> HYPHEN
@@ -124,7 +124,7 @@
 %type <create_task> create_task
 %type <ports> ports
 %type <weekdays> weekdays
-%type <weekday_list> weekday_list
+%type <weekday_list> weekday_list  // weekday | weekday, weekday_list
 %type <hour_range> hour_range
 %type <hour_ranges> hour_ranges
 %type <hour_list> hour_list
@@ -207,6 +207,7 @@ weekday_list → WEEKDAY | WEEKDAY COMMA weekday_list
 	
 	*/
 
+
 weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
 	;
 
@@ -251,7 +252,7 @@ create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEve
 create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING	{ $$ = CreateTaskSemanticAction($2, $3, $5, $7, $9, $11); }  
 	;
 
-user_group: USER id														{ $$ = UserGroupSemanticAction($2); }
+user_group: USER id														{ $$ = UserGroupFromUserSemanticAction($2); }
 	| GROUP id															{ $$ = UserGroupFromGroupSemanticAction($2); }
 	;
 
@@ -262,7 +263,7 @@ generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction(
 generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE	{ $$ = GenerateSemanticAction($2, $4, $6, $8, $10); }
 	;
 
-users: ALL																{ $$ = UsersSemanticAction(); }			
+users: EVERY																{ $$ = UsersSemanticAction(); }			
 	| OPEN_BRACKET users_list CLOSE_BRACKET								{ $$ = UsersListToUsersSemanticAction($2); }
 	;
 
