@@ -195,24 +195,11 @@ user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSema
 
 
 
-	/*
-	
-	weekdays → OPEN_BRACKET weekday_list CLOSE_BRACKET
-
-weekday_list → WEEKDAY | WEEKDAY COMMA weekday_list
-	
-	create user “Lionel Messi” group “IT” role “admin” weekday [Lunes, Viernes] hours [8:00, 16:00];
-
-
-	
-	*/
-
-
-weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($1); }		//
+weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($2); }		
 	;
 
-weekday_list: WEEKDAY													{ $$ = WeekdayListSemanticAction($1); }		// ***
-	| WEEKDAY COMMA weekday_list										{ $$ = WeekdaysListAddWeekdaySemanticAction($1, $3); }		//
+weekday_list: WEEKDAY													{ $$ = WeekdaysListSemanticAction($1); }		
+	| WEEKDAY COMMA weekday_list										{ $$ = WeekdaysListAddWeekdaySemanticAction($1, $3); }		
 	;	
 
 
@@ -246,7 +233,7 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
 	;
 
-create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEventSemanticAction($2, $3, $4, $6); }	     
+create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEventSemanticAction($2, $3, $5, $7); }	     
 	;
 
 create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING	{ $$ = CreateTaskSemanticAction($2, $3, $5, $7, $9, $11); }  

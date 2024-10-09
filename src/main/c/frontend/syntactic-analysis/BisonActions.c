@@ -31,6 +31,7 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
+/*
 Constant * IntegerConstantSemanticAction(const int value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Constant * constant = calloc(1, sizeof(Constant));
@@ -84,7 +85,7 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 		compilerState->succeed = true;
 	}
 	return program;
-}
+}*/
 
 /*
 FUNCIONES DE SEMANTICA
@@ -108,7 +109,6 @@ Program *ProgramSemanticAction(CompilerState *compilerState, Initialize *initial
 /**
  * Creates a new Ports structure with the given IDs.
  */
-///////////////////////////
 Ports *PortsSemanticAction(Id *id1, Id *id2) {
 	Ports *ports = calloc(1, sizeof(Ports));
 	ports->name = id1;
@@ -130,7 +130,6 @@ UsersList *UsersListSemanticAction(Id *id) {
  * Adds a user to an existing UsersList.
  */
 
-///////////////////////////
 UsersList *UsersListAddUserSemanticAction(Id * user, UsersList *usersList) {
 	UsersList *newUserList = calloc(1, sizeof(UsersList));
 	newUserList->id = user;
@@ -150,7 +149,6 @@ Users * UsersListToUsersSemanticAction(UsersList *usersList) {
 /**
  * Creates a new empty Users structure.
  */
-///////////////////////////    all
 Users *UsersSemanticAction() {
 	Users *users = calloc(1, sizeof(Users));
 	users->all = NULL;
@@ -226,7 +224,7 @@ CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, Date *date, T
 /**
  * Creates a new CreateEvent structure with the given components.
  */
-CreateEvent *CreateEventSemanticAction(Id *id, UserGroup *userGroup, Date *stDate, Date *endDate) {
+CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate) {
 	CreateEvent *createEvent = calloc(1, sizeof(CreateEvent));
 	createEvent->id = id;
 	createEvent->user_group = userGroup;
@@ -358,7 +356,6 @@ HourRanges *HourRangesSemanticAction(HourRange *hourRange) {
 /**
  * Creates a new HourList with a single HourRange.
  */
-///////////////////////////
 HourList *HourListSemanticAction(HourRanges *hourRanges) {
 	HourList *hourList = calloc(1, sizeof(HourList));
 	hourList->hour_ranges = hourRanges;
@@ -389,7 +386,6 @@ Group *GroupSemanticAction(Id *id) {
 /**
  * Creates a new Initialize structure with the given components.
  */
-/////////////////////////// tipo USer inicializando users
 Initialize *InitializeSemanticAction(Group *group, User *user) {
 	Initialize *initialize = calloc(1, sizeof(Initialize));
 	initialize->group = group;
@@ -406,25 +402,31 @@ Id *IdSemanticAction(const char *value) {
 	return id;
 }
 
+/**
+ * Adds a Weekday to an existing WeekdayList.
+ */
 
-
-WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList){
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList){
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
 	newWeekdayList->weekday = weekday;
 	newWeekdayList->weekday_list = weekdaysList;
 	return newWeekdayList;
 }
 
+/**
+ * Creates a new WeekdayList with a single Weekday.
+ */
 
-
-WeekdayList * WeekdaysListSemanticAction(int Weekday){
+WeekdayList * WeekdaysListSemanticAction(Weekday weekday){
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
-	newWeekdayList->weekday = Weekday;
+	newWeekdayList->weekday = weekday;
 	newWeekdayList->weekday_list = NULL;
 	return newWeekdayList;
 }
 
-
+/**
+ * Creates a new Weekdays structure with the given WeekdayList.
+ */
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList){
 	Weekdays * weekdays = calloc(1, sizeof(Weekdays));
 	weekdays->weekdays_list = weekdaysList;

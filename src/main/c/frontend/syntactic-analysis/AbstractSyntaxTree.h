@@ -188,7 +188,7 @@ struct Weekdays {
 };
 
 struct WeekdayList{
-	int weekday;
+	Weekday weekday;
 	WeekdayList * weekday_list;	//Finish if NULL
 };
 
