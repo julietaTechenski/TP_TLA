@@ -115,9 +115,9 @@ Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	if(strcmp(lexicalAnalyzerContext->lexeme, "import") == 0){
-		lexicalAnalyzerContext->semanticValue->integer = IMPORT;
+		lexicalAnalyzerContext->semanticValue->integer = IMPORT_ENUM;
 	} else {
-		lexicalAnalyzerContext->semanticValue->integer = EXPORT;
+		lexicalAnalyzerContext->semanticValue->integer = EXPORT_ENUM;
 	} 
 	return PORT_TYPE;
 }

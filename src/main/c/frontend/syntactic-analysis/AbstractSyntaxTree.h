@@ -157,14 +157,7 @@ typedef struct UsersList UsersList;
 typedef struct Ports Ports;
 
 struct Program {
-	Initialize * initialize;
 	CommandList * command_list;
-	GenerateList * generate_list;
-};
-
-struct Initialize {
-	Group * group;
-	User * user;
 };
 
 struct Id{
@@ -226,6 +219,7 @@ struct Command {
 		Ports * ports;
 		//Ports * export_ports;
 		Define * define;
+		GenerateList * generate_list;
 	};
 };
 

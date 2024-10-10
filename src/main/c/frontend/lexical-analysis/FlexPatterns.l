@@ -14,7 +14,6 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x STRING
-%x MULTILINE_COMMENT
 
 
 /**

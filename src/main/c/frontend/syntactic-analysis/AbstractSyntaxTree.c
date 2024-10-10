@@ -56,6 +56,7 @@ void releaseFactor(Factor * factor) {
 		free(factor);
 	}
 }
+
 /*
 void releaseProgram(Program * program) {
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
