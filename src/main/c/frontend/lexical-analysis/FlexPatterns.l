@@ -39,7 +39,7 @@
 
 "-"                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), HYPHEN); }
 
-<STRING>\"([^\"]*)\"                { return StringLexemeAction(createLexicalAnalyzerContext()); }
+\"([^\"]*)\"                    { return StringLexemeAction(createLexicalAnalyzerContext()); }
 
 
 "monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
