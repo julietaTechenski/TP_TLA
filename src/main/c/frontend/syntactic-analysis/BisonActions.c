@@ -115,6 +115,7 @@ Program * ProgramSemanticAction(CompilerState * compilerState, CommandList * com
  * Creates a new Ports structure with the given IDs.
  */
 Ports *PortsSemanticAction(PortType portType, Id * id1, Id * id2) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Ports *ports = calloc(1, sizeof(Ports));
 	ports->port_type = (PortType)portType;
 	ports->name = id1;
@@ -125,7 +126,8 @@ Ports *PortsSemanticAction(PortType portType, Id * id1, Id * id2) {
 /**
  * Creates a new UsersList structure with a single user ID.
  */
-UsersList *UsersListSemanticAction(Id *id) {
+UsersList *UsersListSemanticAction(Id * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UsersList *usersList = calloc(1, sizeof(UsersList));
 	usersList->id = id;
 	usersList->user_list = NULL;
@@ -136,7 +138,8 @@ UsersList *UsersListSemanticAction(Id *id) {
  * Adds a user to an existing UsersList.
  */
 
-UsersList *UsersListAddUserSemanticAction(Id * user, UsersList *usersList) {
+UsersList *UsersListAddUserSemanticAction(Id * user, UsersList * usersList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UsersList *newUserList = calloc(1, sizeof(UsersList));
 	newUserList->id = user;
 	newUserList->user_list = usersList;
@@ -146,7 +149,8 @@ UsersList *UsersListAddUserSemanticAction(Id * user, UsersList *usersList) {
 /**
  * Converts a UsersList to a Users structure.
  */
-Users * UsersListToUsersSemanticAction(UsersList *usersList) {
+Users * UsersListToUsersSemanticAction(UsersList * usersList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Users *users = calloc(1, sizeof(Users));
 	users->user_list = usersList;
 	return users;
@@ -156,6 +160,7 @@ Users * UsersListToUsersSemanticAction(UsersList *usersList) {
  * Creates a new empty Users structure.
  */
 Users *UsersSemanticAction() {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Users *users = calloc(1, sizeof(Users));
 	users->all = NULL;
 	users->user_list = NULL;
@@ -165,20 +170,22 @@ Users *UsersSemanticAction() {
 /**
  * Creates a new Generate structure with the given components.
  */
-Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, char *date) {
+Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, Users * users, Date * date) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Generate *generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
 	generate->user_name = id;
-	generate->def_type = (DefType)defType;  // convierte int a su valor del enum
+	generate->def_type = defType;  // convierte int a su valor del enum
 	generate->users = users;
-	generate->start_date = StringToDate(date);
+	generate->start_date = date;
 	return generate;
 }
 
 /**
  * Adds a Generate to an existing GenerateList.
  */
-GenerateList *GenerateListAddGenerateSemanticAction(Generate *generate, GenerateList *generateList) {
+GenerateList *GenerateListAddGenerateSemanticAction(Generate * generate, GenerateList * generateList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	GenerateList *newGenerateList = calloc(1, sizeof(GenerateList));
 	newGenerateList->Generate = generate;
 	newGenerateList->generate_list = generateList;
@@ -188,7 +195,8 @@ GenerateList *GenerateListAddGenerateSemanticAction(Generate *generate, Generate
 /**
  * Creates a new GenerateList with a single Generate.
  */
-GenerateList *GenerateListSemanticAction(Generate *generate) {
+GenerateList *GenerateListSemanticAction(Generate * generate) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	GenerateList *generateList = calloc(1, sizeof(GenerateList));
 	generateList->Generate = generate;
 	generateList->generate_list = NULL;
@@ -198,7 +206,8 @@ GenerateList *GenerateListSemanticAction(Generate *generate) {
 /**
  * Creates a new UserGroup structure with the given group ID.
  */
-UserGroup * UserGroupFromGroupSemanticAction(Id *group) {
+UserGroup * UserGroupFromGroupSemanticAction(Id * group) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
 	userGroup->group = group;
 	return userGroup;
@@ -207,7 +216,8 @@ UserGroup * UserGroupFromGroupSemanticAction(Id *group) {
 /**
  * Creates a new UserGroup structure with the given user ID.
  */
-UserGroup * UserGroupFromUserSemanticAction(Id *user) {
+UserGroup * UserGroupFromUserSemanticAction(Id * user) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
 	userGroup->user = user;
 	return userGroup;
@@ -216,13 +226,14 @@ UserGroup * UserGroupFromUserSemanticAction(Id *user) {
 /**
  * Creates a new CreateTask structure with the given components.
  */
-CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, char *date, char * stTime, char * endTime, char * description) {
+CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date, Time * stTime, Time * endTime, char * description) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	CreateTask *createTask = calloc(1, sizeof(CreateTask));
 	createTask->id = id;
 	createTask->user_group = userGroup;
-	createTask->date = StringToDate(date);
-	createTask->start_time = StringToTime(stTime);
-	createTask->end_time = StringToTime(endTime);
+	createTask->date = date;
+	createTask->start_time = stTime;
+	createTask->end_time = endTime;
 	createTask->description = description;
 	return createTask;
 }
@@ -230,19 +241,21 @@ CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, char *date, c
 /**
  * Creates a new CreateEvent structure with the given components.
  */
-CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, char * stDate, char * endDate) {
+CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	CreateEvent *createEvent = calloc(1, sizeof(CreateEvent));
 	createEvent->id = id;
 	createEvent->user_group = userGroup;
-	createEvent->start_date = StringToDate(stDate);
-	createEvent->end_date = StringToDate(endDate);
+	createEvent->start_date = stDate;
+	createEvent->end_date = endDate;
 	return createEvent;
 }
 
 /**
  * Creates a new Command structure from a Group.
  */
-Command *CommandGroupSemanticAction(Group *group) {
+Command *CommandGroupSemanticAction(Group * group) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->group = group;
 	return command;
@@ -251,7 +264,8 @@ Command *CommandGroupSemanticAction(Group *group) {
 /**
  * Creates a new Command structure from a User.
  */
-Command *CommandUserSemanticAction(User *user) {
+Command *CommandUserSemanticAction(User * user) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->user = user;
 	return command;
@@ -260,7 +274,8 @@ Command *CommandUserSemanticAction(User *user) {
 /**
  * Creates a new Command structure from a CreateEvent.
  */
-Command *CommandCreateEventSemanticAction(CreateEvent *createEvent) {
+Command *CommandCreateEventSemanticAction(CreateEvent * createEvent) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->create_event = createEvent;
 	return command;
@@ -269,7 +284,8 @@ Command *CommandCreateEventSemanticAction(CreateEvent *createEvent) {
 /**
  * Creates a new Command structure from a CreateTask.
  */
-Command *CommandCreateTaskSemanticAction(CreateTask *createTask) {
+Command *CommandCreateTaskSemanticAction(CreateTask * createTask) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->create_task = createTask;
 	return command;
@@ -278,7 +294,8 @@ Command *CommandCreateTaskSemanticAction(CreateTask *createTask) {
 /**
  * Creates a new Command structure for Ports.
  */
-Command *CommandPortsSemanticAction(Ports *ports) {
+Command *CommandPortsSemanticAction(Ports * ports) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
     Command *command = calloc(1, sizeof(Command));
 	command->ports = ports;
 	return command;
@@ -287,13 +304,15 @@ Command *CommandPortsSemanticAction(Ports *ports) {
 /**
  * Creates a new Command structure from a Define.
  */
-Command *CommandDefineSemanticAction(Define *define) {
+Command *CommandDefineSemanticAction(Define * define) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->define = define;
 	return command;
 }
 
-Command *CommandGenerateListSemanticAction(GenerateList *generateList){
+Command *CommandGenerateListSemanticAction(GenerateList * generateList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->generate_list = generateList;
     return command;
@@ -302,7 +321,8 @@ Command *CommandGenerateListSemanticAction(GenerateList *generateList){
 /**
  * Adds a Command to an existing CommandList.
  */
-CommandList *CommandListAddCommandSemanticAction(Command *command, CommandList *commandList) {
+CommandList *CommandListAddCommandSemanticAction(Command * command, CommandList * commandList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	CommandList *newCommandList = calloc(1, sizeof(CommandList));
 	newCommandList->command = command;
 	newCommandList->command_list = commandList;
@@ -312,7 +332,8 @@ CommandList *CommandListAddCommandSemanticAction(Command *command, CommandList *
 /**
  * Creates a new CommandList with a single Command.
  */
-CommandList *CommandListSemanticAction(Command *command) {
+CommandList *CommandListSemanticAction(Command * command) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	CommandList *commandList = calloc(1, sizeof(CommandList));
 	commandList->command = command;
 	commandList->command = NULL;
@@ -322,7 +343,8 @@ CommandList *CommandListSemanticAction(Command *command) {
 /**
  * Creates a new Define structure with the given components.
  */
-Define *DefineSemanticAction(Id *id, CommandList *commandList) {
+Define *DefineSemanticAction(Id *id, CommandList * commandList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Define *define = calloc(1, sizeof(Define));
 	define->id = id;
 	define->command_list = commandList;
@@ -332,17 +354,19 @@ Define *DefineSemanticAction(Id *id, CommandList *commandList) {
 /**
  * Creates a new HourRange structure with the given hours.
  */
-HourRange *HourRangeSemanticAction(char * start, char *finish) {
+HourRange *HourRangeSemanticAction(Time * start, Time * finish) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	HourRange *hourRange = calloc(1, sizeof(HourRange));
-	hourRange->start = StringToTime(start);
-	hourRange->finish = StringToTime(finish);;
+	hourRange->start = start;
+	hourRange->finish = finish;
 	return hourRange;
 }
 
 /**
  * Adds an HourRange to an existing HourRanges.
  */
-HourRanges *HourRangesAddHourRangeSemanticAction(HourRange *hourRange, HourRanges *hourRanges) {
+HourRanges *HourRangesAddHourRangeSemanticAction(HourRange * hourRange, HourRanges * hourRanges) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	HourRanges *newHourRanges = calloc(1, sizeof(HourRanges));
 	newHourRanges->hour_range = hourRange;
 	newHourRanges->hour_ranges = hourRanges;
@@ -352,7 +376,8 @@ HourRanges *HourRangesAddHourRangeSemanticAction(HourRange *hourRange, HourRange
 /**
  * Creates an HourRanges from an HourRange.
  */
-HourRanges *HourRangesSemanticAction(HourRange *hourRange) {
+HourRanges *HourRangesSemanticAction(HourRange * hourRange) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	HourRanges *newHourRanges = calloc(1, sizeof(HourRanges));
 	newHourRanges->hour_range = hourRange;
 	newHourRanges->hour_ranges = NULL;
@@ -363,7 +388,8 @@ HourRanges *HourRangesSemanticAction(HourRange *hourRange) {
 /**
  * Creates a new HourList with a single HourRange.
  */
-HourList *HourListSemanticAction(HourRanges *hourRanges) {
+HourList *HourListSemanticAction(HourRanges * hourRanges) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	HourList *hourList = calloc(1, sizeof(HourList));
 	hourList->hour_ranges = hourRanges;
 	return hourList;
@@ -372,7 +398,8 @@ HourList *HourListSemanticAction(HourRanges *hourRanges) {
 /**
  * Creates a new User structure with the given components.
  */
-User *UserSemanticAction(Id *userId, Id *roleId, Weekdays *weekdays, HourList *hourList) {
+User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList * hourList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	User *user = calloc(1, sizeof(User));
 	user->name = userId;
 	user->role = roleId;
@@ -385,6 +412,7 @@ User *UserSemanticAction(Id *userId, Id *roleId, Weekdays *weekdays, HourList *h
  * Creates a new Group structure with the given ID.
  */
 Group *GroupSemanticAction(Id *id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
 	return group;
@@ -393,7 +421,8 @@ Group *GroupSemanticAction(Id *id) {
 /**
  * Creates a new Id structure with the given value.
  */
-Id *IdSemanticAction(const char *value) {
+Id *IdSemanticAction(const char * value) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Id *id = calloc(1, sizeof(Id));
 	id->id = strdup(value);
 	return id;
@@ -403,9 +432,10 @@ Id *IdSemanticAction(const char *value) {
  * Adds a Weekday to an existing WeekdayList.
  */
 
-WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList){
+WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
-	newWeekdayList->weekday = (Weekday)weekday;  // convierte int a su valor del enum
+	newWeekdayList->weekday = weekday;  // convierte int a su valor del enum
 	newWeekdayList->weekday_list = weekdaysList;
 	return newWeekdayList;
 }
@@ -414,9 +444,10 @@ WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * we
  * Creates a new WeekdayList with a single Weekday.
  */
 
-WeekdayList * WeekdaysListSemanticAction(int weekday){
+WeekdayList * WeekdaysListSemanticAction(Weekday weekday){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	WeekdayList * newWeekdayList = calloc(1, sizeof(WeekdayList));
-	newWeekdayList->weekday = (Weekday)weekday;
+	newWeekdayList->weekday = weekday;
 	newWeekdayList->weekday_list = NULL;
 	return newWeekdayList;
 }
@@ -425,45 +456,8 @@ WeekdayList * WeekdaysListSemanticAction(int weekday){
  * Creates a new Weekdays structure with the given WeekdayList.
  */
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Weekdays * weekdays = calloc(1, sizeof(Weekdays));
 	weekdays->weekdays_list = weekdaysList;
 	return weekdays;
-}
-
-
-
-
-
-/*** TYPE CONVERT FUNCTIONS */
-
-/**
- * Converts a string to a Time structure.
- */
-Time *StringToTime(const char *time) {
-	int hours, minutes;
-	if (sscanf(time, "%d:%d", &hours, &minutes) != 2) {
-		fprintf(stderr, "Error: Formato de hora no válido: %s\n", time);
-		return NULL;
-	}
-	Time * time_ = calloc(1, sizeof(Time));
-	time_->hour = hours;
-	time_->minute = minutes;
-	return time_;
-}
-
-/**
- * Converts a string to a Date structure.
- */
-
-Date *StringToDate(const char *date) {
-	int day, month, year;
-	if (sscanf(date, "%d-%d-%d", &day, &month, &year) != 3) {
-		fprintf(stderr, "Error: Formato de fecha no válido: %s\n", date);
-		return NULL;
-	}
-	Date * date_ = calloc(1, sizeof(Date));
-	date_->day = day;
-	date_->month = month;
-	date_->year = year;
-	return date_;
 }

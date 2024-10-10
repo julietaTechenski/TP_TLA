@@ -62,63 +62,33 @@ Token StringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return STRING;
 }
 
-Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token WeekdayLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Weekday weekday) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	if(strcmp(lexicalAnalyzerContext->lexeme, "monday") == 0){
-		lexicalAnalyzerContext->semanticValue->integer = MONDAY;
-	} else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "tuesday") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = TUESDAY;
-	} else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "wednesday") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = WEDNESDAY;
-	} else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "thrusday") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = THURSDAY;
-	} else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "friday") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = FRIDAY;
-	}else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "saturday") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = SATURDAY;
-	} else {
-		lexicalAnalyzerContext->semanticValue->integer = SUNDAY;
-	}
+	lexicalAnalyzerContext->semanticValue->weekday = weekday;
     return WEEKDAY; 
 }
 
 Token DateLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
+    lexicalAnalyzerContext->semanticValue->date = StringToDate(strdup(lexicalAnalyzerContext->lexeme));
     return DATE; 
 }
 
 Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-    lexicalAnalyzerContext->semanticValue->string = strdup(lexicalAnalyzerContext->lexeme);
+    lexicalAnalyzerContext->semanticValue->time = StringToTime(strdup(lexicalAnalyzerContext->lexeme));
     return HOUR; 
 }
 
-Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, DefType deftype) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	if(strcmp(lexicalAnalyzerContext->lexeme, "weekly") == 0){
-		lexicalAnalyzerContext->semanticValue->integer = WEEKLY;
-	} else 
-		if(strcmp(lexicalAnalyzerContext->lexeme, "monthly") == 0){
-			lexicalAnalyzerContext->semanticValue->integer = MONTHLY;
-	} else {
-		lexicalAnalyzerContext->semanticValue->integer = YEARLY;
-	}   
+	lexicalAnalyzerContext->semanticValue->defType = deftype; 
 	return DEF_TYPE;
 }
 
-Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, PortType portType) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	if(strcmp(lexicalAnalyzerContext->lexeme, "import") == 0){
-		lexicalAnalyzerContext->semanticValue->integer = IMPORT_ENUM;
-	} else {
-		lexicalAnalyzerContext->semanticValue->integer = EXPORT_ENUM;
-	} 
+	lexicalAnalyzerContext->semanticValue->portType = portType;
 	return PORT_TYPE;
 }
 
@@ -155,6 +125,41 @@ void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	_logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
 	return UNKNOWN;
+}
+
+
+/*** TYPE CONVERT FUNCTIONS */
+
+/**
+ * Converts a string to a Time structure.
+ */
+Time *StringToTime(const char *time) {
+	int hours, minutes;
+	if (sscanf(time, "%d:%d", &hours, &minutes) != 2) {
+		fprintf(stderr, "Error: Formato de hora no válido: %s\n", time);
+		return NULL;
+	}
+	Time * time_ = calloc(1, sizeof(Time));
+	time_->hour = hours;
+	time_->minute = minutes;
+	return time_;
+}
+
+/**
+ * Converts a string to a Date structure.
+ */
+
+Date *StringToDate(const char *date) {
+	int day, month, year;
+	if (sscanf(date, "%d-%d-%d", &day, &month, &year) != 3) {
+		fprintf(stderr, "Error: Formato de fecha no válido: %s\n", date);
+		return NULL;
+	}
+	Date * date_ = calloc(1, sizeof(Date));
+	date_->day = day;
+	date_->month = month;
+	date_->year = year;
+	return date_;
 }
 
 /*

@@ -12,6 +12,11 @@
 	int integer;
 	Token token;
 	char * string;
+	Weekday weekday;
+	DefType defType;
+	PortType portType;
+	Date * date;
+	Time * time;
 
 	/** Non-terminals. */
 	Constant * constant;
@@ -78,11 +83,11 @@
 
 /** Terminals. */
 %token <string> STRING
-%token <string> DATE
-%token <string> HOUR    // -> 00, 01, 02, ...
-%token <integer> DEF_TYPE
-%token <integer> WEEKDAY
-%token <integer> PORT_TYPE
+%token <date> DATE
+%token <time> HOUR    // -> 00, 01, 02, ...
+%token <defType> DEF_TYPE
+%token <weekday> WEEKDAY
+%token <portType> PORT_TYPE
 %token <token> WEEKDAYS // -> weekdays [Lunes, Viernes]
 %token <token> HOURS   // -> hours
 %token <token> OPEN_CURLY_BRACE
@@ -243,7 +248,7 @@ generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction(
 generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE	{ $$ = GenerateSemanticAction($2, $4, $6, $8, $10); }
 	;
 
-users: EVERY															{ $$ = UsersSemanticAction(); }			
+users: EVERY																{ $$ = UsersSemanticAction(); }			
 	| OPEN_BRACKET users_list CLOSE_BRACKET								{ $$ = UsersListToUsersSemanticAction($2); }
 	;
 

@@ -42,7 +42,13 @@
 <STRING>([^\"]*)                    { return StringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>\"                          { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
-"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
+"monday"                            { return WeekdayLexemeAction(createLexicalAnalyzerContext(), MONDAY);     }
+"tuesday"                           { return WeekdayLexemeAction(createLexicalAnalyzerContext(), TUESDAY);     }
+"wednesday"                         { return WeekdayLexemeAction(createLexicalAnalyzerContext(), WEDNESDAY);     }
+"thursday"                          { return WeekdayLexemeAction(createLexicalAnalyzerContext(), THURSDAY);     }
+"friday"                            { return WeekdayLexemeAction(createLexicalAnalyzerContext(), FRIDAY);     }
+"saturday"                          { return WeekdayLexemeAction(createLexicalAnalyzerContext(), SATURDAY);     }
+"sunday"                            { return WeekdayLexemeAction(createLexicalAnalyzerContext(), SUNDAY);     }
 
 
 [[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                                    { return DateLexemeAction(createLexicalAnalyzerContext());      }
@@ -50,12 +56,13 @@
 
 [[:digit:]]{2}":"[[:digit:]]{2}                                                     { return HourLexemeAction(createLexicalAnalyzerContext());      }
 
-"weekly"|"monthly"|"yearly"                                                         { return DefTypeLexemeAction(createLexicalAnalyzerContext());    } 
+"weekly"                            { return DefTypeLexemeAction(createLexicalAnalyzerContext(), WEEKLY);    } 
+"monthly"                           { return DefTypeLexemeAction(createLexicalAnalyzerContext(), MONTHLY);   } 
+"yearly"                            { return DefTypeLexemeAction(createLexicalAnalyzerContext(), YEARLY);    }                         
 
 
-"import"                            { return PortLexemeAction(createLexicalAnalyzerContext()); }
-
-"export"                            { return PortLexemeAction(createLexicalAnalyzerContext()); }
+"import"                            { return PortLexemeAction(createLexicalAnalyzerContext(), IMPORT_ENUM); }
+"export"                            { return PortLexemeAction(createLexicalAnalyzerContext(), EXPORT_ENUM); }
 
 
 "event"                             { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), EVENT); }
