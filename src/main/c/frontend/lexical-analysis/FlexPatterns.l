@@ -39,20 +39,18 @@
 
 "-"                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), HYPHEN); }
 
+<STRING>\"([^\"]*)\"                { return StringLexemeAction(createLexicalAnalyzerContext()); }
 
 
-<STRING>\"([[:alnum:]]+([[:alnum:]]|[[:space:]]|\.)*[[:alnum:]]+)?\"                       { return StringLexemeAction(createLexicalAnalyzerContext());  }
+"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
 
 
-<STRING>"monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
+[[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                                    { return DateLexemeAction(createLexicalAnalyzerContext());      }
 
 
-<STRING>[[:digit:]]{4}"-"[[:digit:]]{2}"-"[[:digit:]]{2}                                    { return DateLexemeAction(createLexicalAnalyzerContext());      }
+[[:digit:]]{2}":"[[:digit:]]{2}                                                     { return HourLexemeAction(createLexicalAnalyzerContext());      }
 
-
-<STRING>[[:digit:]]{2}":"[[:digit:]]{2}                                                     { return HourLexemeAction(createLexicalAnalyzerContext());      }
-
-<STRING>"weekly"|"monthly"|"yearly"                                                         { return DefTypeLexemeAction(createLexicalAnalyzerContext());    } 
+"weekly"|"monthly"|"yearly"                                                         { return DefTypeLexemeAction(createLexicalAnalyzerContext());    } 
 
 
 "import"                            { return PortLexemeAction(createLexicalAnalyzerContext()); }
@@ -107,17 +105,6 @@
 "decription"                        { return ParametersLexemeAction(createLexicalAnalyzerContext(), DESCR); }
 
 
-"/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>"/*"			{ EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
-<MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-<MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-
-[[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
-.									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
-
-
-
 %%
 
 /*
@@ -141,6 +128,17 @@ EXAMPLE
 ")"									{ return ParenthesisLexemeAction(createLexicalAnalyzerContext(), CLOSE_PARENTHESIS); }
 
 [[:digit:]]+						{ return IntegerLexemeAction(createLexicalAnalyzerContext()); }
+
+
+"/*"								{ BEGIN(MULTILINE_COMMENT); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>"/*"			    { EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<MULTILINE_COMMENT>[[:space:]]+		{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>[^*]+			{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+<MULTILINE_COMMENT>.				{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+
+[[:space:]]+						{ IgnoredLexemeAction(createLexicalAnalyzerContext()); }
+.									{ return UnknownLexemeAction(createLexicalAnalyzerContext()); }
+
 
 */
 
