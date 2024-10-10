@@ -82,6 +82,7 @@
 %token <string> HOUR    // -> 00, 01, 02, ...
 %token <integer> DEF_TYPE
 %token <integer> WEEKDAY
+%token <integer> PORT_TYPE
 %token <token> WEEKDAYS // -> weekdays [Lunes, Viernes]
 %token <token> HOURS   // -> hours
 %token <token> OPEN_CURLY_BRACE
@@ -228,8 +229,7 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| user 																{ $$ = CommandUserSemanticAction($1); }
 	| create_event 														{ $$ = CommandCreateEventSemanticAction($1); }
 	| create_task														{ $$ = CommandCreateTaskSemanticAction($1); }		
-	| IMPORT ports 														{ $$ = CommandPortsSemanticAction($2, $1); }
-	| EXPORT ports														{ $$ = CommandPortsSemanticAction($2, $1); }
+	| ports 															{ $$ = CommandPortsSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
 	;
 
@@ -258,5 +258,5 @@ users_list: id 															{ $$ = UsersListSemanticAction($1); }
 	| id COMMA users_list												{ $$ = UsersListAddUserSemanticAction($1, $3); }
 	;
 
-ports: id PATH id														{ $$ = PortsSemanticAction($1, $3); }
+ports: PORT_TYPE id PATH id														{ $$ = PortsSemanticAction($1, $2, $4); }
 	;

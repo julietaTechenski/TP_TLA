@@ -30,24 +30,24 @@ Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Express
 UsersList * UsersListSemanticAction(Id * id);
 UsersList * UsersListAddUserSemanticAction(Id * user, UsersList * usersList);   
 Users * UsersListToUsersSemanticAction(UsersList * usersList);
-Users * UsersSemanticAction();      //
-Generate * GenerateSemanticAction(Id * generateId, Id * id, int defType, Users * users, Date * date);
+Users * UsersSemanticAction();      
+Generate * GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, char *date);
 GenerateList * GenerateListAddGenerateSemanticAction(Generate * generate, GenerateList * generateList);
 GenerateList * GenerateListSemanticAction(Generate * generate);
 UserGroup * UserGroupFromUserSemanticAction(Id * user);
 UserGroup * UserGroupFromGroupSemanticAction(Id * group);
-CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date, Time * stTime, Time * endTime, char * description); 
-CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate);  
+CreateTask * CreateTaskSemanticAction(Id *id, UserGroup *userGroup, char *date, char * stTime, char * endTime, char * description); 
+CreateEvent * CreateEventSemanticAction(Id * id, UserGroup * userGroup, char * stDate, char * endDate);  
 Command * CommandGroupSemanticAction(Group * group);
 Command * CommandUserSemanticAction(User * user);
 Command * CommandCreateEventSemanticAction(CreateEvent * createEvent);
 Command * CommandCreateTaskSemanticAction(CreateTask * createTask);
-Command * CommandPortsSemanticAction(Ports * ports, PortType portType);
+Command * CommandPortsSemanticAction(Ports * ports);
 Command * CommandDefineSemanticAction(Define * define);
 CommandList * CommandListAddCommandSemanticAction(Command * command, CommandList * commandList);
 CommandList * CommandListSemanticAction(Command * command);
 Define * DefineSemanticAction(Id * id, CommandList * commandList);
-HourRange * HourRangeSemanticAction(Time * hour1, Time * hour2);
+HourRange * HourRangeSemanticAction(char * hour1, char * hour2);
 HourRanges * HourRangesAddHourRangeSemanticAction(HourRange * hourRange, HourRanges * hourRanges);
 HourRanges * HourRangesSemanticAction(HourRange * hourRange);
 HourList * HourListSemanticAction(HourRanges * hourRanges);
@@ -56,10 +56,14 @@ Group * GroupSemanticAction(Id * id);
 Initialize * InitializeSemanticAction(Group * group, User * user);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, Initialize * initialize, CommandList * commandList, GenerateList * generateList);
-Ports * PortsSemanticAction(Id * id1, Id * id2);
+Ports * PortsSemanticAction(PortType portType ,Id * id1, Id * id2);
 WeekdayList * WeekdaysListAddWeekdaySemanticAction(int weekday, WeekdayList * weekdaysList);
 WeekdayList * WeekdaysListSemanticAction(int weekday);
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);
 
+
+/* Type convert functions */
+Time * StringToTime(const char * time);
+Date * StringToDate(const char * date);
 
 #endif

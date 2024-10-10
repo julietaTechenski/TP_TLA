@@ -223,8 +223,8 @@ struct Command {
 		User * user;
 		CreateEvent * create_event;
 		CreateTask * create_task;
-		Ports * import_ports;
-		Ports * export_ports;
+		Ports * ports;
+		//Ports * export_ports;
 		Define * define;
 	};
 };
@@ -288,6 +288,7 @@ struct UsersList {
 struct Ports{
 	Id * name;
 	Id * path;
+	PortType port_type;
 };
 
 /**

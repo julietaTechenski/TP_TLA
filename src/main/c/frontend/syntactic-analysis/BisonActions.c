@@ -109,8 +109,9 @@ Program *ProgramSemanticAction(CompilerState *compilerState, Initialize *initial
 /**
  * Creates a new Ports structure with the given IDs.
  */
-Ports *PortsSemanticAction(Id *id1, Id *id2) {
+Ports *PortsSemanticAction(PortType portType, Id * id1, Id * id2) {
 	Ports *ports = calloc(1, sizeof(Ports));
+	ports->port_type = (PortType)portType;
 	ports->name = id1;
 	ports->path = id2;
 	return ports;
@@ -159,13 +160,13 @@ Users *UsersSemanticAction() {
 /**
  * Creates a new Generate structure with the given components.
  */
-Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, Date *date) {
+Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, char *date) {
 	Generate *generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
 	generate->user_name = id;
 	generate->def_type = (DefType)defType;  // convierte int a su valor del enum
 	generate->users = users;
-	generate->start_date = date;
+	generate->start_date = StringToDate(date);
 	return generate;
 }
 
@@ -210,13 +211,13 @@ UserGroup * UserGroupFromUserSemanticAction(Id *user) {
 /**
  * Creates a new CreateTask structure with the given components.
  */
-CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, Date *date, Time * stTime, Time * endTime, char * description) {
+CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, char *date, char * stTime, char * endTime, char * description) {
 	CreateTask *createTask = calloc(1, sizeof(CreateTask));
 	createTask->id = id;
 	createTask->user_group = userGroup;
-	createTask->date = date;
-	createTask->start_time = stTime;
-	createTask->end_time = endTime;
+	createTask->date = StringToDate(date);
+	createTask->start_time = StringToTime(stTime);
+	createTask->end_time = StringToTime(endTime);
 	createTask->description = description;
 	return createTask;
 }
@@ -224,12 +225,12 @@ CreateTask *CreateTaskSemanticAction(Id *id, UserGroup *userGroup, Date *date, T
 /**
  * Creates a new CreateEvent structure with the given components.
  */
-CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate) {
+CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, char * stDate, char * endDate) {
 	CreateEvent *createEvent = calloc(1, sizeof(CreateEvent));
 	createEvent->id = id;
 	createEvent->user_group = userGroup;
-	createEvent->start_date = stDate;
-	createEvent->end_date = endDate;
+	createEvent->start_date = StringToDate(stDate);
+	createEvent->end_date = StringToDate(endDate);
 	return createEvent;
 }
 
@@ -270,17 +271,11 @@ Command *CommandCreateTaskSemanticAction(CreateTask *createTask) {
 }
 
 /**
- * Creates a new Command structure for Ports with the given PortType.
+ * Creates a new Command structure for Ports.
  */
-/////////////////////////////////////
-Command *CommandPortsSemanticAction(Ports *ports, int portType) {
-	Command *command = calloc(1, sizeof(Command));
-	if(portType == IMPORT_ENUM){
-		command->import_ports = ports;
-	}
-	else{
-		command->export_ports = ports;
-	}
+Command *CommandPortsSemanticAction(Ports *ports) {
+    Command *command = calloc(1, sizeof(Command));
+	command->ports = ports;
 	return command;
 }
 
@@ -326,10 +321,10 @@ Define *DefineSemanticAction(Id *id, CommandList *commandList) {
 /**
  * Creates a new HourRange structure with the given hours.
  */
-HourRange *HourRangeSemanticAction(Time * start, Time *finish) {
+HourRange *HourRangeSemanticAction(char * start, char *finish) {
 	HourRange *hourRange = calloc(1, sizeof(HourRange));
-	hourRange->start = start;
-	hourRange->finish = finish;
+	hourRange->start = StringToTime(start);
+	hourRange->finish = StringToTime(finish);;
 	return hourRange;
 }
 
@@ -432,4 +427,42 @@ Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList){
 	Weekdays * weekdays = calloc(1, sizeof(Weekdays));
 	weekdays->weekdays_list = weekdaysList;
 	return weekdays;
+}
+
+
+
+
+
+/*** TYPE CONVERT FUNCTIONS */
+
+/**
+ * Converts a string to a Time structure.
+ */
+Time *StringToTime(const char *time) {
+	int hours, minutes;
+	if (sscanf(time, "%d:%d", &hours, &minutes) != 2) {
+		fprintf(stderr, "Error: Formato de hora no válido: %s\n", time);
+		return NULL;
+	}
+	Time * time_ = calloc(1, sizeof(Time));
+	time_->hour = hours;
+	time_->minute = minutes;
+	return time_;
+}
+
+/**
+ * Converts a string to a Date structure.
+ */
+
+Date *StringToDate(const char *date) {
+	int day, month, year;
+	if (sscanf(date, "%d-%d-%d", &day, &month, &year) != 3) {
+		fprintf(stderr, "Error: Formato de fecha no válido: %s\n", date);
+		return NULL;
+	}
+	Date * date_ = calloc(1, sizeof(Date));
+	date_->day = day;
+	date_->month = month;
+	date_->year = year;
+	return date_;
 }

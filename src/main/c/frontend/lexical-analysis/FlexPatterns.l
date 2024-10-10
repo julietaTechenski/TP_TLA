@@ -33,7 +33,7 @@
 "{"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), OPEN_CURLY_BRACE); }
 "}"									{ return CurlyBracketLexemeAction(createLexicalAnalyzerContext(), CLOSE_CURLY_BRACE); }
 
-";"                                 { return PuntuationLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
+";"                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), SEMICOLON); }
 
 ","                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), COMMA); }
 
