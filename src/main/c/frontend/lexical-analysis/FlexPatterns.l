@@ -55,13 +55,15 @@
 <STRING>"weekly"|"monthly"|"yearly"                                                         { return DefTypeLexemeAction(createLexicalAnalyzerContext());    } 
 
 
+"import"                            { return PortLexemeAction(createLexicalAnalyzerContext()); }
+
+"export"                            { return PortLexemeAction(createLexicalAnalyzerContext()); }
+
+
 "event"                             { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), EVENT); }
 
 "define"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), DEF); }
 
-"import"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), IMPORT); }
-
-"export"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), EXPORT); }
 
 "create"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), CREATE); }
 

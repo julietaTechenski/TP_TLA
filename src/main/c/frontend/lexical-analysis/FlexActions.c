@@ -112,6 +112,16 @@ Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
 	return DEF_TYPE;
 }
 
+Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext) {
+    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
+	if(strcmp(lexicalAnalyzerContext->lexeme, "import") == 0){
+		lexicalAnalyzerContext->semanticValue->integer = IMPORT;
+	} else {
+		lexicalAnalyzerContext->semanticValue->integer = EXPORT;
+	} 
+	return PORT_TYPE;
+}
+
 Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
     lexicalAnalyzerContext->semanticValue->token = token;
