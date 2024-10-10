@@ -31,7 +31,7 @@ UsersList * UsersListSemanticAction(Id * id);
 UsersList * UsersListAddUserSemanticAction(Id * user, UsersList * usersList);   
 Users * UsersListToUsersSemanticAction(UsersList * usersList);
 Users * UsersSemanticAction();      
-Generate * GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *users, char *date);
+Generate * GenerateSemanticAction(Id *generateId, Id *id, DefType defType, Users *users, Date *date);
 UserGroup * UserGroupFromUserSemanticAction(Id * user);
 UserGroup * UserGroupFromGroupSemanticAction(Id * group);
 CreateTask * CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date, Time * stTime, Time * endTime, char * description); 
