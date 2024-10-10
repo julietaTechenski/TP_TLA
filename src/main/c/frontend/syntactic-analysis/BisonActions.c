@@ -94,11 +94,9 @@ FUNCIONES DE SEMANTICA
 /**
  * Creates a new Program structure with the given components.
  */
-Program *ProgramSemanticAction(CompilerState *compilerState, Initialize *initialize, CommandList *commandList, GenerateList *generateList) {
+Program * ProgramSemanticAction(CompilerState * compilerState, CommandList * commandList){
 	Program *program = calloc(1, sizeof(Program));
-	program->initialize = initialize;
 	program->command_list = commandList;
-	program->generate_list = generateList;
 	compilerState->abstractSyntaxtTree = program;
 	return program;
 }
@@ -288,6 +286,12 @@ Command *CommandDefineSemanticAction(Define *define) {
 	return command;
 }
 
+Command *CommandGenerateListSemanticAction(GenerateList *generateList){
+	Command *command = calloc(1, sizeof(Command));
+	command->generate_list = generateList;
+    return command;
+}
+
 /**
  * Adds a Command to an existing CommandList.
  */
@@ -377,16 +381,6 @@ Group *GroupSemanticAction(Id *id) {
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
 	return group;
-}
-
-/**
- * Creates a new Initialize structure with the given components.
- */
-Initialize *InitializeSemanticAction(Group *group, User *user) {
-	Initialize *initialize = calloc(1, sizeof(Initialize));
-	initialize->group = group;
-	initialize->user = user;
-	return initialize;
 }
 
 /**

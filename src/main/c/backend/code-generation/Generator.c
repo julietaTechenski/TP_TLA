@@ -16,8 +16,10 @@ void shutdownGeneratorModule() {
 	}
 }
 
+
 /** PRIVATE FUNCTIONS */
 
+/*
 static const char _expressionTypeToCharacter(const ExpressionType type);
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant);
 static void _generateEpilogue(const int value);
@@ -27,11 +29,12 @@ static void _generateProgram(Program * program);
 static void _generatePrologue(void);
 static char * _indentation(const unsigned int indentationLevel);
 static void _output(const unsigned int indentationLevel, const char * const format, ...);
-
+*/
 /**
  * Converts and expression type to the proper character of the operation
  * involved, or returns '\0' if that's not possible.
  */
+/*
 static const char _expressionTypeToCharacter(const ExpressionType type) {
 	switch (type) {
 		case ADDITION: return '+';
@@ -43,20 +46,21 @@ static const char _expressionTypeToCharacter(const ExpressionType type) {
 			return '\0';
 	}
 }
-
+*/
 /**
  * Generates the output of a constant.
- */
+ *//*
 static void _generateConstant(const unsigned int indentationLevel, Constant * constant) {
 	_output(indentationLevel, "%s", "[ $C$, circle, draw, black!20\n");
 	_output(1 + indentationLevel, "%s%d%s", "[ $", constant->value, "$, circle, draw ]\n");
 	_output(indentationLevel, "%s", "]\n");
-}
+}*/
 
 /**
  * Creates the epilogue of the generated output, that is, the final lines that
  * completes a valid Latex document.
  */
+/*
 static void _generateEpilogue(const int value) {
 	_output(0, "%s%d%s",
 		"            [ $", value, "$, circle, draw, blue ]\n"
@@ -64,11 +68,12 @@ static void _generateEpilogue(const int value) {
 		"    \\end{forest}\n"
 		"\\end{document}\n\n"
 	);
-}
+}*/
 
 /**
  * Generates the output of an expression.
  */
+/*
 static void _generateExpression(const unsigned int indentationLevel, Expression * expression) {
 	_output(indentationLevel, "%s", "[ $E$, circle, draw, black!20\n");
 	switch (expression->type) {
@@ -88,11 +93,12 @@ static void _generateExpression(const unsigned int indentationLevel, Expression 
 			break;
 	}
 	_output(indentationLevel, "%s", "]\n");
-}
+}*/
 
 /**
  * Generates the output of a factor.
  */
+/*
 static void _generateFactor(const unsigned int indentationLevel, Factor * factor) {
 	_output(indentationLevel, "%s", "[ $F$, circle, draw, black!20\n");
 	switch (factor->type) {
@@ -110,39 +116,21 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 	}
 	_output(indentationLevel, "%s", "]\n");
 }
-
+*/
 /**
  * Generates the output of the program.
- */
-/*static void _generateProgram(Program * program) {
+ *//*
+static void _generateProgram(Program * program) {
 	_generateExpression(3, program->expression);
 }*/
 
-
-static void _generateProgram(Program * program) {
-	if (program->command_list != NULL) {
-        CommandList *commandList = program->command_list;
-        while (commandList != NULL) {
-            //TODO: llamado a funciones para las salidas de los comandos
-            commandList = commandList->command_list;
-        }
-    }
-
-	if (program->generate_list != NULL) {
-        GenerateList *generateList = program->generate_list;
-        while (generateList != NULL) {
-            //TODO: llamado a funciones para las salidas de los elementos
-            generateList = generateList->generate_list;
-        }
-    }
-}
 
 /**
  * Creates the prologue of the generated output, a Latex document that renders
  * a tree thanks to the Forest package.
  *
  * @see https://ctan.dcc.uchile.cl/graphics/pgf/contrib/forest/forest-doc.pdf
- */
+ *//*
 static void _generatePrologue(void) {
 	_output(0, "%s",
 		"\\documentclass{standalone}\n\n"
@@ -156,20 +144,21 @@ static void _generatePrologue(void) {
 		"    \\begin{forest}\n"
 		"        [ \\text{$=$}, circle, draw, purple\n"
 	);
-}
+}*/
 
 /**
  * Generates an indentation string for the specified level.
  */
+/*
 static char * _indentation(const unsigned int level) {
 	return indentation(_indentationCharacter, level, _indentationSize);
 }
-
+*/
 /**
  * Outputs a formatted string to standard output. The "fflush" instruction
  * allows to see the output even close to a failure, because it drops the
  * buffering.
- */
+ *//*
 static void _output(const unsigned int indentationLevel, const char * const format, ...) {
 	va_list arguments;
 	va_start(arguments, format);
@@ -180,10 +169,10 @@ static void _output(const unsigned int indentationLevel, const char * const form
 	free(effectiveFormat);
 	free(indentation);
 	va_end(arguments);
-}
+}*/
 
 /** PUBLIC FUNCTIONS */
-
+/*
 void generate(CompilerState * compilerState) {
 	logDebugging(_logger, "Generating final output...");
 	_generatePrologue();
@@ -191,3 +180,4 @@ void generate(CompilerState * compilerState) {
 	_generateEpilogue(compilerState->value);
 	logDebugging(_logger, "Generation is done.");
 }
+*/
