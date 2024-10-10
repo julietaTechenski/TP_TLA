@@ -94,7 +94,6 @@ typedef struct Hour Hour;
 typedef struct Date Date;
 typedef struct Minute Minute;
 typedef struct Time Time;
-typedef struct All All;
 typedef enum PortType PortType;
 
 enum Weekday {
@@ -130,9 +129,6 @@ struct Time {
 	unsigned int minute;
 };
 
-struct All {
-	unsigned int value;
-};
 //---------------------------------------------------
 typedef struct Program Program;
 typedef struct Initialize Initialize;
@@ -150,7 +146,6 @@ typedef struct Command Command;
 typedef struct UserGroup UserGroup;
 typedef struct CreateEvent CreateEvent;
 typedef struct CreateTask CreateTask;
-typedef struct GenerateList GenerateList;
 typedef struct Generate Generate;
 typedef struct Users Users;
 typedef struct UsersList UsersList;
@@ -219,7 +214,7 @@ struct Command {
 		Ports * ports;
 		//Ports * export_ports;
 		Define * define;
-		GenerateList * generate_list;
+		Generate * generate;
 	};
 };
 
@@ -247,10 +242,7 @@ struct CreateTask {
 	char * description;	
 };			
 
-struct GenerateList {
-	Generate * Generate;
-	GenerateList * generate_list; //Finish if NULL
-};
+
 
 struct Generate {
 	Id * id;
@@ -264,7 +256,7 @@ struct Generate {
 struct Users {
 	union 
 	{
-		All * all;
+		unsigned int all;
 		UsersList * user_list;
 	};
 	
