@@ -39,9 +39,9 @@
 
 "-"                                 { return PunctuationLexemeAction(createLexicalAnalyzerContext(), HYPHEN); }
 
-\"                                  { BEGIN(STRING); BeginMultilineCommentLexemeAction(createLexicalAnalyzerContext()); }
+\"                                  { BEGIN(STRING); BeginStringLexemeAction(createLexicalAnalyzerContext()); }
 <STRING>([^\"]*)                    { return StringLexemeAction(createLexicalAnalyzerContext()); }
-<STRING>\"                          { EndMultilineCommentLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
+<STRING>\"                          { EndStringLexemeAction(createLexicalAnalyzerContext()); BEGIN(INITIAL); }
 
 "monday"|"tuesday"|"wednesday"|"thursday"|"friday"|"saturday"|"sunday"              { return WeekdayLexemeAction(createLexicalAnalyzerContext());     }
 
