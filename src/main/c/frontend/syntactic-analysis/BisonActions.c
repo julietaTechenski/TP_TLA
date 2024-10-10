@@ -157,8 +157,7 @@ Users * UsersListToUsersSemanticAction(UsersList *usersList) {
  */
 Users *UsersSemanticAction() {
 	Users *users = calloc(1, sizeof(Users));
-	users->all = NULL;
-	users->user_list = NULL;
+	users->all = 1;
 	return users;
 }
 
@@ -175,25 +174,7 @@ Generate *GenerateSemanticAction(Id *generateId, Id *id, int defType, Users *use
 	return generate;
 }
 
-/**
- * Adds a Generate to an existing GenerateList.
- */
-GenerateList *GenerateListAddGenerateSemanticAction(Generate *generate, GenerateList *generateList) {
-	GenerateList *newGenerateList = calloc(1, sizeof(GenerateList));
-	newGenerateList->Generate = generate;
-	newGenerateList->generate_list = generateList;
-	return newGenerateList;
-}
 
-/**
- * Creates a new GenerateList with a single Generate.
- */
-GenerateList *GenerateListSemanticAction(Generate *generate) {
-	GenerateList *generateList = calloc(1, sizeof(GenerateList));
-	generateList->Generate = generate;
-	generateList->generate_list = NULL;
-	return generateList;
-}
 
 /**
  * Creates a new UserGroup structure with the given group ID.
@@ -293,9 +274,9 @@ Command *CommandDefineSemanticAction(Define *define) {
 	return command;
 }
 
-Command *CommandGenerateListSemanticAction(GenerateList *generateList){
+Command *CommandGenerateSemanticAction(Generate *generate){
 	Command *command = calloc(1, sizeof(Command));
-	command->generate_list = generateList;
+	command->generate = generate;
     return command;
 }
 

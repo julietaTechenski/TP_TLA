@@ -37,7 +37,6 @@
 	User * user;
 	UserGroup * user_group;
 	CommandList * command_list;
-	GenerateList * generate_list;
 }
 
 /**
@@ -136,7 +135,6 @@
 %type <user> user
 %type <user_group> user_group
 %type <command_list> command_list
-%type <generate_list> generate_list
 
 
 
@@ -223,7 +221,7 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| create_task														{ $$ = CommandCreateTaskSemanticAction($1); }		
 	| ports 															{ $$ = CommandPortsSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
-	| generate_list														{ $$ = CommandGenerateListSemanticAction($1); }
+	| generate															{ $$ = CommandGenerateSemanticAction($1); }
 	;
 
 create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEventSemanticAction($2, $3, $5, $7); }	     
@@ -234,10 +232,6 @@ create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESC
 
 user_group: USER id														{ $$ = UserGroupFromUserSemanticAction($2); }
 	| GROUP id															{ $$ = UserGroupFromGroupSemanticAction($2); }
-	;
-
-generate_list: generate SEMICOLON 						 		 		{ $$ = GenerateListSemanticAction($1); }
-	| generate SEMICOLON generate_list									{ $$ = GenerateListAddGenerateSemanticAction($1, $3); }
 	;
 
 generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE	{ $$ = GenerateSemanticAction($2, $4, $6, $8, $10); }
