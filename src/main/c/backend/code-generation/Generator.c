@@ -119,20 +119,13 @@ static void _generateFactor(const unsigned int indentationLevel, Factor * factor
 }*/
 
 
+
 static void _generateProgram(Program * program) {
 	if (program->command_list != NULL) {
         CommandList *commandList = program->command_list;
         while (commandList != NULL) {
             //TODO: llamado a funciones para las salidas de los comandos
             commandList = commandList->command_list;
-        }
-    }
-
-	if (program->generate_list != NULL) {
-        GenerateList *generateList = program->generate_list;
-        while (generateList != NULL) {
-            //TODO: llamado a funciones para las salidas de los elementos
-            generateList = generateList->generate_list;
         }
     }
 }
