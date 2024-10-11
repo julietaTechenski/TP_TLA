@@ -1,0 +1,6 @@
+create group "Selección Argentina";
+create group "Club Atletico River Plate";
+create group "Inter de Miami";
+create group "Aston Villa Futbol Club";
+
+

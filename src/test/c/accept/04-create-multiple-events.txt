@@ -1,0 +1,5 @@
+event "Qatar World Cup 2022" group "Selección Argentina" start_date 2022-11-20 end_date 2022-12-18;
+event "Copa América 2024" group "Selección Argentina" start_date 2024-06-20 end_date 2024-07-14;
+event "Copa Libertadores 2024" user "German Pezzela" start_date 2024-04-02 end_date 2024-11-28;
+event "Copa Libertadores 2018" user "Julian Álvarez" start_date 2018-04-01 end_date 2018-12-09;
+event "World Cup Qualifiers" group "Selección Argentina" start_date 2024-01-20 end_date 2024-12-20;

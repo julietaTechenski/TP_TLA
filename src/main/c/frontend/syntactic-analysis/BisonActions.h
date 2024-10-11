@@ -43,6 +43,7 @@ Command * CommandCreateTaskSemanticAction(CreateTask * createTask);
 Command * CommandPortsSemanticAction(Ports * ports);
 Command * CommandDefineSemanticAction(Define * define);
 Command * CommandGenerateSemanticAction(Generate * generateList);
+Command * CommandAddSemanticAction(Add * add);
 CommandList * CommandListAddCommandSemanticAction(Command * command, CommandList * commandList);
 CommandList * CommandListSemanticAction(Command * command);
 Define * DefineSemanticAction(Id * id, CommandList * commandList);
@@ -58,5 +59,10 @@ Ports * PortsSemanticAction(PortType portType ,Id * id1, Id * id2);
 WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList);
 WeekdayList * WeekdaysListSemanticAction(Weekday weekday);
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);
+Add * AddSemanticAction(Id * user, Groups * groups);
+GroupsList * GroupsListSemanticAction(Id * id);
+GroupsList * GroupsListAddGroupSemanticAction(Id * group, GroupsList * groupsList);   
+Groups * GroupsListToGroupsSemanticAction(GroupsList * groupsList);
+Groups * GroupsSemanticAction();     
 
 #endif

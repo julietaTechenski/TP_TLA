@@ -42,6 +42,9 @@
 	User * user;
 	UserGroup * user_group;
 	CommandList * command_list;
+	Add * add;
+	Groups * groups;
+	GroupsList * groups_list;
 }
 
 /**
@@ -116,6 +119,10 @@
 %token <token> EVERY
 %token <token> HYPHEN
 %token <token> UNKNOWN
+%token <token> ADD
+%token <token> TO
+%token <token> GROUPS
+
 
 
 
@@ -140,7 +147,9 @@
 %type <user> user
 %type <user_group> user_group
 %type <command_list> command_list
-
+%type <add> add
+%type <groups> groups
+%type <groups_list> groups_list
 
 
 
@@ -192,7 +201,6 @@ user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSema
 	;
 
 
-
 weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($2); }		
 	;
 
@@ -227,12 +235,14 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| ports 															{ $$ = CommandPortsSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
 	| generate															{ $$ = CommandGenerateSemanticAction($1); }
+	| add																{ $$ = CommandAddSemanticAction($1); }
 	;
 
 create_event: EVENT id user_group ST_DATE DATE END_DATE DATE	 		{ $$ = CreateEventSemanticAction($2, $3, $5, $7); }	     
 	;
 
-create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR END_TIME HOUR DESCR STRING	{ $$ = CreateTaskSemanticAction($2, $3, $5, $7, $9, $11); }  
+create_task: TASK id user_group SINGLE_DATE DATE ST_TIME HOUR 
+			END_TIME HOUR DESCR STRING									{ $$ = CreateTaskSemanticAction($2, $3, $5, $7, $9, $11); }  
 	;
 
 user_group: USER id														{ $$ = UserGroupFromUserSemanticAction($2); }
@@ -240,9 +250,10 @@ user_group: USER id														{ $$ = UserGroupFromUserSemanticAction($2); }
 	;
 
 generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE	{ $$ = GenerateSemanticAction($2, $4, $6, $8, $10); }
+	| GENERATE id TYPE DEF_TYPE USERS users ST_DATE DATE
 	;
 
-users: EVERY																{ $$ = UsersSemanticAction(); }			
+users: EVERY															{ $$ = UsersSemanticAction(); }			
 	| OPEN_BRACKET users_list CLOSE_BRACKET								{ $$ = UsersListToUsersSemanticAction($2); }
 	;
 
@@ -250,6 +261,15 @@ users_list: id 															{ $$ = UsersListSemanticAction($1); }
 	| id COMMA users_list												{ $$ = UsersListAddUserSemanticAction($1, $3); }
 	;
 
-ports: PORT_TYPE id PATH id														{ $$ = PortsSemanticAction($1, $2, $4); }
+ports: PORT_TYPE id PATH id												{ $$ = PortsSemanticAction($1, $2, $4); }
 	;
 
+add: ADD USER id TO GROUPS groups 										{ $$ = AddSemanticAction($3, $6); }
+	;	
+
+groups: EVERY															{ $$ = GroupsSemanticAction(); }			
+	| OPEN_BRACKET groups_list CLOSE_BRACKET							{ $$ = GroupsListToGroupsSemanticAction($2); }
+	;
+
+groups_list: id															{ $$ = GroupsListSemanticAction($1); }
+	| id COMMA groups_list 												{ $$ = GroupsListAddGroupSemanticAction($1, $3); }

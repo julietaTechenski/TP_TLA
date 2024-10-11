@@ -150,6 +150,9 @@ typedef struct Generate Generate;
 typedef struct Users Users;
 typedef struct UsersList UsersList;
 typedef struct Ports Ports;
+typedef struct Add Add;
+typedef struct Groups Groups;
+typedef struct GroupsList GroupsList;
 
 struct Program {
 	CommandList * command_list;
@@ -215,6 +218,7 @@ struct Command {
 		//Ports * export_ports;
 		Define * define;
 		Generate * generate;
+		Add * add;
 	};
 };
 
@@ -262,13 +266,30 @@ struct Users {
 	
 };
 
-
 struct UsersList {
 	Id * id;
 	UsersList * user_list; //Finish if NULL
 };
 
+struct Add {
+	Id * user;
+	Groups * groups;
+};
 
+struct Groups {
+	union 
+	{
+		unsigned int all;
+		GroupsList * group_list;
+	};
+	
+};
+
+
+struct GroupsList {
+	Id * id;
+	GroupsList * group_list; //Finish if NULL
+};
 
 ////////////////////
 struct Ports{

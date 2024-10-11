@@ -1,0 +1,9 @@
+define "create groups block" {
+    create group "Selección Argentina";
+    create group "Club Atletico River Plate";
+    create group "Inter de Miami";
+    create group "Aston Villa Futbol Club";
+
+    event "Qatar World Cup 2022" group "Selección Argentina" start_date 2022-11-20 end_date 2022-12-18;
+    event "World Cup Qualifiers" group "Selección Argentina" start_date 2024-01-20 end_date 2024-12-20;
+

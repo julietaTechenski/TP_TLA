@@ -1,0 +1,2 @@
+create user "Lionel Messi" role "captain" weekdays [Monday, tuesday, thursday, friday] hours [8:00-15:00];
+

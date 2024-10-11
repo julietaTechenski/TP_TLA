@@ -69,13 +69,13 @@
 
 "define"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), DEF); }
 
-
 "create"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), CREATE); }
 
 "task"                              { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), TASK); }
 
 "generate"                          { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), GENERATE); }
 
+"add"                               { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), ADD); }
 
 
 
@@ -107,9 +107,14 @@
 
 "all"                               { return ParametersLexemeAction(createLexicalAnalyzerContext(), EVERY); }
 
-"users"                              { return ParametersLexemeAction(createLexicalAnalyzerContext(), USERS); }
+"users"                             { return ParametersLexemeAction(createLexicalAnalyzerContext(), USERS); }
 
-"decription"                        { return ParametersLexemeAction(createLexicalAnalyzerContext(), DESCR); }
+"groups"                             { return ParametersLexemeAction(createLexicalAnalyzerContext(), GROUPS); }
+
+"description"                        { return ParametersLexemeAction(createLexicalAnalyzerContext(), DESCR); }
+
+"to"                                { return ParametersLexemeAction(createLexicalAnalyzerContext(), TO); }
+
 
 
 %%

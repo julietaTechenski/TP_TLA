@@ -1,0 +1,2 @@
+create task "Winning World Cup 2022 Final" groups "Selección Argentina" date 2022-12-18 start_time 10:00 end_time 14:00 description 'Leave it all on the field';
+

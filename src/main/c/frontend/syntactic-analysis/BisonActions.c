@@ -167,6 +167,49 @@ Users *UsersSemanticAction() {
 }
 
 /**
+ * Creates a new GroupsList structure with a single group ID.
+ */
+GroupsList * GroupsListSemanticAction(Id * id) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	GroupsList * groupsList = calloc(1, sizeof(GroupsList));
+	groupsList->id = id;
+	groupsList->group_list = NULL;
+	return groupsList;
+}
+
+/**
+ * Adds a group to an existing GroupsList.
+ */
+
+GroupsList * GroupsListAddGroupSemanticAction(Id * group, GroupsList * groupsList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	GroupsList * newGroupsList = calloc(1, sizeof(GroupsList));
+	newGroupsList->id = group;
+	newGroupsList->group_list = groupsList;
+	return newGroupsList;
+}
+
+/**
+ * Converts a GroupsList to a Groups structure.
+ */
+Groups * GroupsListToGroupsSemanticAction(GroupsList * groupsList) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Groups * groups = calloc(1, sizeof(Groups));
+	groups->group_list = groupsList;
+	return groups;
+}
+
+/**
+ * Creates a new empty Groups structure.
+ */
+Groups * GroupsSemanticAction(){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Groups * groups = calloc(1, sizeof(Groups));
+	groups->all = 1;
+	return groups;
+}
+
+/**
  * Creates a new Generate structure with the given components.
  */
 Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, Users * users, Date * date) {
@@ -228,6 +271,17 @@ CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * st
 	createEvent->start_date = stDate;
 	createEvent->end_date = endDate;
 	return createEvent;
+}
+
+/**
+ * Creates a new Add structure with the given components.
+ */
+Add * AddSemanticAction(Id * user, Groups * groups) {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Add * add = calloc(1, sizeof(Add));
+	add->user = user;
+	add->groups = groups;
+	return add;
 }
 
 /**
@@ -293,6 +347,12 @@ Command *CommandDefineSemanticAction(Define * define) {
 Command *CommandGenerateSemanticAction(Generate *generate){
 	Command *command = calloc(1, sizeof(Command));
 	command->generate = generate;
+    return command;
+}
+
+Command *CommandAddSemanticAction(Add * add){
+	Command *command = calloc(1, sizeof(Command));
+	command->add = add;
     return command;
 }
 
