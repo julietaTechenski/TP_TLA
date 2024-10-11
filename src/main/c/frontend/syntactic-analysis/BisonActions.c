@@ -153,6 +153,7 @@ Users * UsersListToUsersSemanticAction(UsersList * usersList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Users *users = calloc(1, sizeof(Users));
 	users->user_list = usersList;
+	users->type = USERS_LIST;
 	return users;
 }
 
@@ -162,7 +163,7 @@ Users * UsersListToUsersSemanticAction(UsersList * usersList) {
 Users *UsersSemanticAction() {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Users *users = calloc(1, sizeof(Users));
-	users->all = 1;
+	users->type = USERS_ALL;
 	return users;
 }
 
@@ -196,6 +197,7 @@ Groups * GroupsListToGroupsSemanticAction(GroupsList * groupsList) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Groups * groups = calloc(1, sizeof(Groups));
 	groups->group_list = groupsList;
+	groups->type = GROUPS_LIST;
 	return groups;
 }
 
@@ -205,7 +207,7 @@ Groups * GroupsListToGroupsSemanticAction(GroupsList * groupsList) {
 Groups * GroupsSemanticAction(){
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Groups * groups = calloc(1, sizeof(Groups));
-	groups->all = 1;
+	groups->type = ALL;
 	return groups;
 }
 
@@ -232,6 +234,7 @@ UserGroup * UserGroupFromGroupSemanticAction(Id * group) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
 	userGroup->group = group;
+	userGroup->type = GROUP_GROUP;
 	return userGroup;
 }
 
@@ -242,6 +245,7 @@ UserGroup * UserGroupFromUserSemanticAction(Id * user) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	UserGroup * userGroup = calloc(1, sizeof(UserGroup));
 	userGroup->user = user;
+	userGroup->type = GROUP_USER;
 	return userGroup;
 }
 
@@ -291,6 +295,7 @@ Command *CommandGroupSemanticAction(Group * group) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->group = group;
+	command->type = C_GROUP;
 	return command;
 }
 
@@ -301,6 +306,7 @@ Command *CommandUserSemanticAction(User * user) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->user = user;
+	command->type = C_USER;
 	return command;
 }
 
@@ -311,6 +317,7 @@ Command *CommandCreateEventSemanticAction(CreateEvent * createEvent) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->create_event = createEvent;
+	command->type = C_EVENT;
 	return command;
 }
 
@@ -321,6 +328,7 @@ Command *CommandCreateTaskSemanticAction(CreateTask * createTask) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->create_task = createTask;
+	command->type = C_TASK;
 	return command;
 }
 
@@ -331,6 +339,7 @@ Command *CommandPortsSemanticAction(Ports * ports) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     Command *command = calloc(1, sizeof(Command));
 	command->ports = ports;
+	command->type = C_PORTS;
 	return command;
 }
 
@@ -341,18 +350,23 @@ Command *CommandDefineSemanticAction(Define * define) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->define = define;
+	command->type = C_DEFINE;
 	return command;
 }
 
 Command *CommandGenerateSemanticAction(Generate *generate){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->generate = generate;
+	command->type = C_GENERATE;
     return command;
 }
 
-Command *CommandAddSemanticAction(Add * add){
+Command *CommandAddSemanticAction(Add * add){	
+	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Command *command = calloc(1, sizeof(Command));
 	command->add = add;
+	command->type = C_ADD;
     return command;
 }
 
