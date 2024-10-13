@@ -30,7 +30,6 @@ Token DateLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token HourLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, DefType deftype);
 Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
-Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, PortType portype);
 Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);

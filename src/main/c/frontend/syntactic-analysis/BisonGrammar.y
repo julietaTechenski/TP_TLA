@@ -14,7 +14,6 @@
 	char * string;
 	Weekday weekday;
 	DefType defType;
-	PortType portType;
 	Date * date;
 	Time * time;
 
@@ -27,7 +26,7 @@
 	Id * id;
 	CreateEvent * create_event;
 	CreateTask * create_task;
-	Ports * ports;
+	Import * import;
 	Weekdays * weekdays;
 	WeekdayList * weekday_list;
 	HourRange * hour_range;
@@ -89,7 +88,7 @@
 %token <time> HOUR    // -> 00, 01, 02, ...
 %token <defType> DEF_TYPE
 %token <weekday> WEEKDAY
-%token <portType> PORT_TYPE
+%token <token> IMPORT
 %token <token> WEEKDAYS // -> weekdays [Lunes, Viernes]
 %token <token> HOURS   // -> hours
 %token <token> OPEN_CURLY_BRACE
@@ -132,7 +131,7 @@
 %type <id> id
 %type <create_event> create_event
 %type <create_task> create_task
-%type <ports> ports
+%type <import> import
 %type <weekdays> weekdays
 %type <weekday_list> weekday_list  // weekday | weekday, weekday_list
 %type <hour_range> hour_range
@@ -232,7 +231,7 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| user 																{ $$ = CommandUserSemanticAction($1); }
 	| create_event 														{ $$ = CommandCreateEventSemanticAction($1); }
 	| create_task														{ $$ = CommandCreateTaskSemanticAction($1); }		
-	| ports 															{ $$ = CommandPortsSemanticAction($1); }
+	| import 															{ $$ = CommandPortsSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
 	| generate															{ $$ = CommandGenerateSemanticAction($1); }
 	| add																{ $$ = CommandAddSemanticAction($1); }
@@ -261,7 +260,7 @@ users_list: id 															{ $$ = UsersListSemanticAction($1); }
 	| id COMMA users_list												{ $$ = UsersListAddUserSemanticAction($1, $3); }
 	;
 
-ports: PORT_TYPE id PATH id												{ $$ = PortsSemanticAction($1, $2, $4);	}
+import: IMPORT id PATH command_list									{ $$ = PortsSemanticAction($1, $2, $4);	}
 	;
 
 add: ADD USER id TO GROUPS groups 										{ $$ = AddSemanticAction($3, $6); }

@@ -86,12 +86,6 @@ Token DefTypeLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, DefTy
 	return DEF_TYPE;
 }
 
-Token PortLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, PortType portType) {
-    _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
-	lexicalAnalyzerContext->semanticValue->portType = portType;
-	return PORT_TYPE;
-}
-
 Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token) {
     _logLexicalAnalyzerContext(__FUNCTION__, lexicalAnalyzerContext);
     lexicalAnalyzerContext->semanticValue->token = token;

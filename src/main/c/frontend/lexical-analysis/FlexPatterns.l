@@ -64,9 +64,7 @@ static YY_BUFFER_STATE importedExpressionBufferState = NULL;
 "yearly"                            { return DefTypeLexemeAction(createLexicalAnalyzerContext(), YEARLY);    }                         
 
 
-"import"                            { return PortLexemeAction(createLexicalAnalyzerContext(), IMPORT_ENUM); }
-"export"                            { return PortLexemeAction(createLexicalAnalyzerContext(), EXPORT_ENUM); }
-
+"import"                            { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), IMPORT); }
 
 "event"                             { return CommandOperatorLexemeAction(createLexicalAnalyzerContext(), EVENT); }
 
@@ -118,7 +116,7 @@ static YY_BUFFER_STATE importedExpressionBufferState = NULL;
 
 "to"                                { return ParametersLexemeAction(createLexicalAnalyzerContext(), TO); }
 
-"<"									{
+"<" 								{
 										printf("%s", "Context-switch to IMPORT_EXPRESSION.\n");
 										BEGIN(IMPORT_EXPRESSION);
 									}
