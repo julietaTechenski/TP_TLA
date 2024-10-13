@@ -40,7 +40,7 @@ Command * CommandGroupSemanticAction(Group * group);
 Command * CommandUserSemanticAction(User * user);
 Command * CommandCreateEventSemanticAction(CreateEvent * createEvent);
 Command * CommandCreateTaskSemanticAction(CreateTask * createTask);
-Command * CommandPortsSemanticAction(Ports * ports);
+Command * CommandImportSemanticAction(Import * import);
 Command * CommandDefineSemanticAction(Define * define);
 Command * CommandGenerateSemanticAction(Generate * generateList);
 Command * CommandAddSemanticAction(Add * add);
@@ -55,7 +55,7 @@ User * UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourLis
 Group * GroupSemanticAction(Id * id);
 Id * IdSemanticAction(const char * value);
 Program * ProgramSemanticAction(CompilerState * compilerState, CommandList * commandList);
-Ports * PortsSemanticAction(PortType portType ,Id * id1, Id * id2);
+Import * ImportSemanticAction(CommandList * command_list);
 WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList);
 WeekdayList * WeekdaysListSemanticAction(Weekday weekday);
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);

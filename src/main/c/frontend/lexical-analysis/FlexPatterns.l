@@ -88,8 +88,6 @@ static YY_BUFFER_STATE importedExpressionBufferState = NULL;
 
 "weekdays"                          { return ParametersLexemeAction(createLexicalAnalyzerContext(), WEEKDAYS); }
 
-"path"                              { return ParametersLexemeAction(createLexicalAnalyzerContext(), PATH); }
-
 "role"                              { return ParametersLexemeAction(createLexicalAnalyzerContext(), ROLE); }
 
 "start_date"                        { return ParametersLexemeAction(createLexicalAnalyzerContext(), ST_DATE); }

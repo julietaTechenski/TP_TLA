@@ -101,8 +101,8 @@ void releaseCommand(Command * command){
 			case C_TASK:
 				releaseCreateTask(command->create_task);
 				break;
-			case C_PORTS:
-				releasePorts(command->ports);
+			case C_IMPORT:
+				releaseImport(command->import);
 				break;
 			case C_DEFINE:
 				releaseDefine(command->define);
@@ -176,16 +176,13 @@ void releaseCreateTask(CreateTask * createTask){
 }
 
 
-void releasePorts(Ports * ports){
+void releaseImport(Import * import){
 	logDebugging(_logger, "Executing destructor: %s", __FUNCTION__);
-	if (ports != NULL) {
-		if(ports->name != NULL) {
-			releaseId(ports->name);
+	if (import != NULL) {
+		if(import->command_list != NULL) {
+			releaseCommandList(import->command_list);
 		}
-		if(ports->path != NULL) {
-			releaseId(ports->path);
-		}
-		free(ports);
+		free(import);
 	}
 }
 

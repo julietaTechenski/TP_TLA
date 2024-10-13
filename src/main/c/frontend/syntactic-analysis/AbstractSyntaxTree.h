@@ -117,17 +117,13 @@ enum DefType {
 	YEARLY
 };
 
-enum PortType {
-	IMPORT_ENUM,
-	EXPORT_ENUM
-};
 
 enum CommandType {
 	C_GROUP,
 	C_USER,
 	C_EVENT,
 	C_TASK,
-	C_PORTS,
+	C_IMPORT,
 	C_DEFINE,
 	C_GENERATE,
 	C_ADD
@@ -181,7 +177,7 @@ typedef struct CreateTask CreateTask;
 typedef struct Generate Generate;
 typedef struct Users Users;
 typedef struct UsersList UsersList;
-typedef struct Ports Ports;
+typedef struct Import Import;
 typedef struct Add Add;
 typedef struct Groups Groups;
 typedef struct GroupsList GroupsList;
@@ -246,7 +242,7 @@ struct Command {
 		User * user;
 		CreateEvent * create_event;
 		CreateTask * create_task;
-		Ports * ports;
+		Import * import;
 		Define * define;
 		Generate * generate;
 		Add * add;
@@ -316,11 +312,8 @@ struct GroupsList {
 	GroupsList * group_list; //Finish if NULL
 };
 
-////////////////////
-struct Ports{
-	Id * name;
-	Id * path;
-	PortType port_type;
+struct Import {
+	CommandList * command_list;
 };
 
 /**
@@ -338,7 +331,7 @@ void releaseGroup(Group * group);
 void releaseUser(User * user);
 void releaseCreateEvent(CreateEvent * createEvent);
 void releaseCreateTask(CreateTask * createTask);
-void releasePorts(Ports * ports);
+void releaseImport(Import * import);
 void releaseDefine(Define * define);
 void releaseGenerate(Generate * generate);
 void releaseAdd(Add * add);

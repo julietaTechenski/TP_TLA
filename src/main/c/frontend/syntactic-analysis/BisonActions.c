@@ -114,13 +114,11 @@ Program * ProgramSemanticAction(CompilerState * compilerState, CommandList * com
 /**
  * Creates a new Ports structure with the given IDs.
  */
-Ports *PortsSemanticAction(PortType portType, Id * id1, Id * id2) {
+Import *ImportSemanticAction(CommandList * command_list) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Ports *ports = calloc(1, sizeof(Ports));
-	ports->port_type = (PortType)portType;
-	ports->name = id1;
-	ports->path = id2;
-	return ports;
+	Import *import = calloc(1, sizeof(Import));
+	import->command_list= command_list;
+	return import;
 }
 
 /**
@@ -335,11 +333,11 @@ Command *CommandCreateTaskSemanticAction(CreateTask * createTask) {
 /**
  * Creates a new Command structure for Ports.
  */
-Command *CommandPortsSemanticAction(Ports * ports) {
+Command *CommandImportSemanticAction(Import * import) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
     Command *command = calloc(1, sizeof(Command));
-	command->ports = ports;
-	command->type = C_PORTS;
+	command->import = import;
+	command->type = C_IMPORT;
 	return command;
 }
 

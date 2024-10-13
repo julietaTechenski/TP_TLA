@@ -99,7 +99,6 @@
 %token <token> EVENT
 %token <token> DEF
 %token <token> SEMICOLON // -> recomendación: Si es algo que siempre se debe agregar, conviene ponerlo en el no-terminal padre que las agrupa
-%token <token> PATH
 %token <token> GROUP
 %token <token> USER
 %token <token> ROLE
@@ -231,7 +230,7 @@ command: group															{ $$ = CommandGroupSemanticAction($1); }
 	| user 																{ $$ = CommandUserSemanticAction($1); }
 	| create_event 														{ $$ = CommandCreateEventSemanticAction($1); }
 	| create_task														{ $$ = CommandCreateTaskSemanticAction($1); }		
-	| import 															{ $$ = CommandPortsSemanticAction($1); }
+	| import 															{ $$ = CommandImportSemanticAction($1); }
 	| define															{ $$ = CommandDefineSemanticAction($1); }
 	| generate															{ $$ = CommandGenerateSemanticAction($1); }
 	| add																{ $$ = CommandAddSemanticAction($1); }
@@ -249,7 +248,7 @@ user_group: USER id														{ $$ = UserGroupFromUserSemanticAction($2); }
 	;
 
 generate: GENERATE id FROM id TYPE DEF_TYPE USERS users ST_DATE DATE	{ $$ = GenerateSemanticAction($2, $4, $6, $8, $10); }
-	| GENERATE id TYPE DEF_TYPE USERS users ST_DATE DATE
+	| GENERATE id TYPE DEF_TYPE USERS users ST_DATE DATE				{ $$ = GenerateSemanticAction($2, NULL, $4, $6, $8); }
 	;
 
 users: EVERY															{ $$ = UsersSemanticAction(); }			
@@ -260,7 +259,7 @@ users_list: id 															{ $$ = UsersListSemanticAction($1); }
 	| id COMMA users_list												{ $$ = UsersListAddUserSemanticAction($1, $3); }
 	;
 
-import: IMPORT id PATH command_list									{ $$ = PortsSemanticAction($1, $2, $4);	}
+import: IMPORT command_list												{ $$ = ImportSemanticAction($2);	}
 	;
 
 add: ADD USER id TO GROUPS groups 										{ $$ = AddSemanticAction($3, $6); }
