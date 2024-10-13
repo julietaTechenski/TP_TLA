@@ -199,7 +199,8 @@ user: CREATE USER id ROLE id WEEKDAYS weekdays HOURS hour_list			{ $$ = UserSema
 	;
 
 
-weekdays: OPEN_BRACKET weekday_list CLOSE_BRACKET						{ $$ = WeekdaysSemanticAction($2); }		
+weekdays: EVERY															{ $$ = WeekdaysEverySemanticAction(); }
+	| OPEN_BRACKET weekday_list CLOSE_BRACKET							{ $$ = WeekdaysSemanticAction($2); }		
 	;
 
 weekday_list: WEEKDAY													{ $$ = WeekdaysListSemanticAction($1); }		

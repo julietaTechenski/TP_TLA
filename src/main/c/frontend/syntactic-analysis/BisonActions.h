@@ -59,6 +59,7 @@ Import * ImportSemanticAction(CommandList * command_list);
 WeekdayList * WeekdaysListAddWeekdaySemanticAction(Weekday weekday, WeekdayList * weekdaysList);
 WeekdayList * WeekdaysListSemanticAction(Weekday weekday);
 Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList);
+Weekdays * WeekdaysEverySemanticAction();
 Add * AddSemanticAction(Id * user, Groups * groups);
 GroupsList * GroupsListSemanticAction(Id * id);
 GroupsList * GroupsListAddGroupSemanticAction(Id * group, GroupsList * groupsList);   

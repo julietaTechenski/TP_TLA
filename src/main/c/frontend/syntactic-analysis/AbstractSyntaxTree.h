@@ -108,6 +108,7 @@ enum Weekday {
 	FRIDAY,
 	SATURDAY,
 	SUNDAY,
+	DAYS_COUNT		//Counter
 };
 
 enum DefType {

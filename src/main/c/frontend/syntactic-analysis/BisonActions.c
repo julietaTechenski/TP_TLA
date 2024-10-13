@@ -511,3 +511,17 @@ Weekdays * WeekdaysSemanticAction(WeekdayList * weekdaysList){
 	weekdays->weekdays_list = weekdaysList;
 	return weekdays;
 }
+
+/**
+ * Creates a new Weekdays structure with all the weekdays
+ */
+Weekdays * WeekdaysEverySemanticAction(){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	Weekdays * weekdays = calloc(1, sizeof(Weekdays));
+
+	weekdays->weekdays_list = WeekdaysListSemanticAction(MONDAY);
+	for(int day = TUESDAY; day < DAYS_COUNT; day++){
+		weekdays->weekdays_list= WeekdaysListAddWeekdaySemanticAction(day,weekdays->weekdays_list);
+	}
+	return weekdays;
+}
