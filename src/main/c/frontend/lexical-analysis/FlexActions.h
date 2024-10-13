@@ -33,6 +33,8 @@ Token CommandOperatorLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContex
 Token ParametersLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext, Token token);
 void BeginStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void EndStringLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+void BeginMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
+void EndMultilineCommentLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 void IgnoredLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 Token UnknownLexemeAction(LexicalAnalyzerContext * lexicalAnalyzerContext);
 

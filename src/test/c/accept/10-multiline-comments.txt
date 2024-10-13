@@ -1,0 +1,13 @@
+/* Esto es un comentario multilinea para indicar que estamos creando un grupo 
+    si o si tengo que tener comandos validos en el codigo, no solo comentarios
+*/ 
+
+create group "Selección Argentina";
+
+/* 
+
+Esto es otro comentario multilinea 
+
+*/ /*Ultimo comentario multilinea para indicar que estamos creando un grupo*/ 
+
+

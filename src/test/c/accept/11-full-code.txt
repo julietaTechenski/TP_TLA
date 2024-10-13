@@ -1,9 +1,13 @@
+/* Block to define the different groups in the code */
 define "create groups block" {
     import <src/test/c/accept/01-create-multiple-groups.txt>;
     create group "Tottenham FUtbol Club";
     create group "Atletico de Madrid";
     create group "Chelsea FUtbol Club";
 };
+
+
+/* Creaton of users */
 
 create user "Cuti Romero" role "defender" weekdays [monday, tuesday, wednesday] hours [08:00-13:00, 18:00-21:00];
 create user "Rodrigo De Paul" role "midfielder" weekdays [monday, tuesday, wednesday, thursday, friday, saturday] hours [07:30-11:00, 17:00-20:00];
@@ -19,19 +23,29 @@ add user "Enzo Fernandéz" to groups ["Club Atletico River Plate", "Selección A
 add user "Julian Álvarez" to groups ["Club Atletico River Plate", "Atletico de Madrid"];
 
 
+/* Creation of events */
+
 event "Qatar World Cup 2022" group "Selección Argentina" start_date 2022-11-20 end_date 2022-12-18;
 event "Copa América 2024" group "Selección Argentina" start_date 2024-06-20 end_date 2024-07-14;
 event "Copa Libertadores 2024" user "German Pezzela" start_date 2024-04-02 end_date 2024-11-28;
 
+
+/* Creation of tasks */
+
 task "Match against Bolivia" group "Selección Argentina" date 2024-10-15 start_time 18:00 end_time 21:00 description "We need to win in order";
 task "Match against Venezuela" group "Selección Argentina" date 2024-10-10 start_time 18:00 end_time 20:40 description "Come on team. We are all in this together!";
 task "Trainning" user "Cuti Romero" date 2024-09-15 start_time 09:00 end_time 12:00 description "No one has to pass the central defender!";
+
+
+/* Block of code to define Lionel Messi´s timetable */
 
 define "Messi's timetable" {
     task "Winning World Cup 2022 Final" group "Selección Argentina" date 2022-12-18 start_time 10:00 end_time 14:00 description "Leave it all on the field";
     task "Trainning" user "Lionel Messi" date 2024-09-15 start_time 09:00 end_time 12:00 description "The GOAT has to train";
 };
 
+
+/* Generation of timetable */
 
 generate "all the file" type yearly users ["German Pezzela", "Enzo Fernandéz"] start_date 2024-01-01;
 generate "only in block" from "create groups block" type weekly users ["German Pezzela", "Enzo Fernandéz"] start_date 2024-01-01;
