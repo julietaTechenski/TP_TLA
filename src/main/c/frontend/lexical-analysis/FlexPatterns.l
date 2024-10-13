@@ -2,6 +2,8 @@
 
 #include "FlexActions.h"
 
+static YY_BUFFER_STATE importedExpressionBufferState = NULL;
+
 %}
 
 /**
@@ -14,6 +16,7 @@
  * @see https://westes.github.io/flex/manual/Start-Conditions.html
  */
 %x STRING
+%x IMPORT_EXPRESSION
 
 
 /**
@@ -115,7 +118,36 @@
 
 "to"                                { return ParametersLexemeAction(createLexicalAnalyzerContext(), TO); }
 
+"<"									{
+										printf("%s", "Context-switch to IMPORT_EXPRESSION.\n");
+										BEGIN(IMPORT_EXPRESSION);
+									}
 
+<IMPORT_EXPRESSION>[^<>]+			{
+										LexicalAnalyzerContext * lexicalAnalyzerContext = createLexicalAnalyzerContext();
+										printf("Creating next buffer to consume from file '%s'.\n", lexicalAnalyzerContext->lexeme);
+										yyin = fopen(lexicalAnalyzerContext->lexeme, "r");
+										importedExpressionBufferState = yy_create_buffer(yyin, YY_BUF_SIZE);
+									}
+
+<IMPORT_EXPRESSION>">"				{
+										printf("%s", "Loading next buffer from imported expression.\n");
+										yypush_buffer_state(importedExpressionBufferState);
+										BEGIN(INITIAL);
+									}
+
+<IMPORT_EXPRESSION>.				{
+										printf("%s", "Syntax error inside import expression.\n");
+										return UnknownLexemeAction(createLexicalAnalyzerContext());
+									}
+
+<<EOF>>								{
+										printf("%s", "EOF, poping buffer.\n");
+										yypop_buffer_state();
+										if (!YY_CURRENT_BUFFER) {
+											yyterminate();
+										}
+									}
 
 %%
 

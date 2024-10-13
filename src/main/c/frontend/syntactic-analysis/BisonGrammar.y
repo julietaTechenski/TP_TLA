@@ -261,7 +261,7 @@ users_list: id 															{ $$ = UsersListSemanticAction($1); }
 	| id COMMA users_list												{ $$ = UsersListAddUserSemanticAction($1, $3); }
 	;
 
-ports: PORT_TYPE id PATH id												{ $$ = PortsSemanticAction($1, $2, $4); }
+ports: PORT_TYPE id PATH id												{ $$ = PortsSemanticAction($1, $2, $4);	}
 	;
 
 add: ADD USER id TO GROUPS groups 										{ $$ = AddSemanticAction($3, $6); }
