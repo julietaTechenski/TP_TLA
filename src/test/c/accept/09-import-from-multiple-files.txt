@@ -1,0 +1,11 @@
+import <src/test/c/accept/01-create-multiple-groups.txt>;
+import <src/test/c/accept/02-create-multiple-users.txt>;
+import <src/test/c/accept/03-add-multiple-users-to-group.txt>;
+import <src/test/c/accept/04-create-multiple-events.txt>;
+import <src/test/c/accept/05-create-multiple-tasks.txt>;
+import <src/test/c/accept/06-define-multiple-block-codes.txt>;
+import <src/test/c/accept/07-generate-multiple-files.txt>;
+import <src/test/c/accept/08-import-from-single-file>;
+
+
+
