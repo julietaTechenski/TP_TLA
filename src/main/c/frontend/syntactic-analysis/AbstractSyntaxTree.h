@@ -90,11 +90,15 @@ struct Expression {
 
 typedef enum Weekday Weekday;
 typedef enum DefType DefType;
+typedef enum PortType PortType;
+typedef enum CommandType CommandType;
+typedef enum UsersType UsersType;
+typedef enum UserGroupType UserGroupType;
+typedef enum GroupsType GroupsType;
 typedef struct Hour Hour;
 typedef struct Date Date;
 typedef struct Minute Minute;
 typedef struct Time Time;
-typedef enum PortType PortType;
 
 enum Weekday {
 	MONDAY,
@@ -118,6 +122,32 @@ enum PortType {
 	EXPORT_ENUM
 };
 
+enum CommandType {
+	C_GROUP,
+	C_USER,
+	C_EVENT,
+	C_TASK,
+	C_PORTS,
+	C_DEFINE,
+	C_GENERATE,
+	C_ADD
+};
+
+enum UsersType {
+	USERS_ALL,
+	USERS_LIST
+};
+
+enum UserGroupType {
+	GROUP_USER,
+	GROUP_GROUP
+};
+
+enum GroupsType {
+	GROUPS_ALL,
+	GROUPS_LIST
+};
+
 struct Date{
 	unsigned int day;
 	unsigned int month;
@@ -128,6 +158,8 @@ struct Time {
 	unsigned int hour;
 	unsigned int minute;
 };
+
+
 
 //---------------------------------------------------
 typedef struct Program Program;
@@ -215,11 +247,11 @@ struct Command {
 		CreateEvent * create_event;
 		CreateTask * create_task;
 		Ports * ports;
-		//Ports * export_ports;
 		Define * define;
 		Generate * generate;
 		Add * add;
 	};
+	CommandType type;
 };
 
 struct UserGroup {
@@ -228,6 +260,7 @@ struct UserGroup {
 		Id * user;
 		Id * group;
 	};
+	UserGroupType type;
 };
 
 struct CreateEvent {
@@ -258,12 +291,8 @@ struct Generate {
 
 
 struct Users {
-	union 
-	{
-		unsigned int all;
-		UsersList * user_list;
-	};
-	
+	UsersList * user_list;
+	UsersType type;
 };
 
 struct UsersList {
@@ -277,12 +306,8 @@ struct Add {
 };
 
 struct Groups {
-	union 
-	{
-		unsigned int all;
-		GroupsList * group_list;
-	};
-	
+	GroupsList * group_list;
+	GroupsType type;
 };
 
 
@@ -301,9 +326,33 @@ struct Ports{
 /**
  * Node recursive destructors.
  */
+/*
 void releaseConstant(Constant * constant);
 void releaseExpression(Expression * expression);
 void releaseFactor(Factor * factor);
+*/
 void releaseProgram(Program * program);
-
+void releaseCommandList(CommandList * commandList);
+void releaseCommand(Command * command);
+void releaseGroup(Group * group);
+void releaseUser(User * user);
+void releaseCreateEvent(CreateEvent * createEvent);
+void releaseCreateTask(CreateTask * createTask);
+void releasePorts(Ports * ports);
+void releaseDefine(Define * define);
+void releaseGenerate(Generate * generate);
+void releaseAdd(Add * add);
+void releaseWeekdays(Weekdays * weekdays);
+void releaseWeekdayList(WeekdayList * weekdayList);
+void releaseHourList(HourList * hourList);
+void releaseUsers(Users * users);
+void releaseUserGroup(UserGroup * userGroup);
+void releaseDate(Date * date);
+void releaseTime(Time * time);
+void releaseGroups(Groups * groups);
+void releaseUsersList(UsersList * usersList);
+void releaseGroupsList(GroupsList * groupsList);
+void releaseHourRanges(HourRanges * hourRanges);
+void releaseHourRange(HourRange * hourRange);
+void releaseId(Id * id);
 #endif
