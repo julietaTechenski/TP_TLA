@@ -16,6 +16,16 @@ typedef struct GroupEntry GroupEntry;
 typedef struct GenerateEntry GenerateEntry;
 
 
+void addUser(GenerateEntry *entry, char *userId, UserEntry *userData);
+UserEntry *findUser(GenerateEntry * entry, char * userId);
+void deleteUser(GenerateEntry * entry, char * userId);
+void addGroup(GenerateEntry * entry, char * groupId, GroupEntry * groupData);
+GroupEntry *findGroup(GenerateEntry * entry, char * groupId);
+void deleteGroup(GenerateEntry * entry, char * groupId);
+
+UserHashEntry * copyUsersMap(UserHashEntry * usersMap);
+GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap);
+
 // Definition of nodes
 struct KeyNode {
 	char * key;
@@ -69,14 +79,16 @@ struct GroupEntry{
 struct GenerateEntry {
 	char * fileId;                  
     UserHashEntry * usersMap;      
-    GroupHashEntry * groupMap;      
+    GroupHashEntry * groupsMap;      
     DefType type;
-    KeyNode * usersListFisrt;
+    KeyNode * usersListFirst;
     Date * startDate;
 };
 
 
 GenerateEntryNode * generateListFirst;
+UserHashEntry * usersTableMap;
+GroupHashEntry * groupsTableMap;
 
 
 #endif
