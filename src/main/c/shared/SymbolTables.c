@@ -60,10 +60,24 @@ void addGenerateEntry(char * fileId, DefType type, KeyNode * usersListFirst, Dat
 }
 
 //copiar contenido hashmap
-UserHashEntry * copyUsersMap(UserHashEntry * usersMap){
-
+UserHashEntry *copyUsersMap(UserHashEntry *usersMap) {
+    UserHashEntry *newMap = NULL, *currentUser, *tmp;
+    HASH_ITER(hh, usersMap, currentUser, tmp) {
+        UserHashEntry *newUser = malloc(sizeof(UserHashEntry));
+        newUser->userId = strdup(currentUser->userId);
+        newUser->userData = currentUser->userData; // save pointer to the data
+        HASH_ADD_KEYPTR(hh, newMap, newUser->userId, strlen(newUser->userId), newUser);
+    }
+    return newMap;
 }
 
-GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap){
-
+GroupHashEntry *copyGroupsMap(GroupHashEntry *groupsMap) {
+    GroupHashEntry *newMap = NULL, *currentGroup, *tmp;
+    HASH_ITER(hh, groupsMap, currentGroup, tmp) {
+        GroupHashEntry *newGroup = malloc(sizeof(GroupHashEntry));
+        newGroup->groupId = strdup(currentGroup->groupId);
+        newGroup->groupData = currentGroup->groupData; // save pointer to the data
+        HASH_ADD_KEYPTR(hh, newMap, newGroup->groupId, strlen(newGroup->groupId), newGroup);
+    }
+    return newMap;
 }
