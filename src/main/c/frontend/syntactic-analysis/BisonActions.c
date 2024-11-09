@@ -455,6 +455,10 @@ User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList
 	user->role = roleId;
 	user->weekdays = weekdays;
 	user->hour_list = hourList;
+
+	// saving user id in the symbol table
+	createUserEntry(user);
+
 	return user;
 }
 
@@ -465,6 +469,10 @@ Group *GroupSemanticAction(Id *id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
+
+	// saving group id in the symbol table
+	createGroupEntry(group);
+
 	return group;
 }
 

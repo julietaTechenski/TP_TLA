@@ -1,11 +1,23 @@
 #include "SymbolTables.h"
 
+// static variables
 
-void addUser(GenerateEntry *entry, char *userId, UserEntry *userData) {
+static GenerateEntry *firstGenerate = NULL;
+static GenerateEntry *lastGenerate = NULL;
+
+// static hashmap fro users
+static UserHashEntry *usersTableMap = NULL;
+static GroupHashEntry *groupsTableMap = NULL;
+// statis hashmap for groups
+
+
+/** Data management functions  **/
+
+void addUser(UserHashEntry *entry, char *userId, UserEntry *userData) {
     UserHashEntry *newUser = malloc(sizeof(UserHashEntry));
     newUser->userId = strdup(userId);  
     newUser->userData = userData;
-    HASH_ADD_KEYPTR(hh, entry->usersMap, newUser->userId, strlen(newUser->userId), newUser);
+    HASH_ADD_KEYPTR(hh, entry, newUser->userId, strlen(newUser->userId), newUser);
 }
 
 UserEntry *findUser(GenerateEntry * entry, char * userId) {
@@ -24,11 +36,11 @@ void deleteUser(GenerateEntry * entry, char * userId) {
     }
 }
 
-void addGroup(GenerateEntry * entry, char * groupId, GroupEntry * groupData) {
+void addGroup(GroupHashEntry * entry, char * groupId, GroupEntry * groupData) {
     GroupHashEntry * newGroup = malloc(sizeof(GroupHashEntry));
     newGroup->groupId = strdup(groupId);  
     newGroup->groupData = groupData;
-    HASH_ADD_KEYPTR(hh, entry->groupsMap, newGroup->groupId, strlen(newGroup->groupId), newGroup);
+    HASH_ADD_KEYPTR(hh, entry, newGroup->groupId, strlen(newGroup->groupId), newGroup);
 }
 
 GroupEntry *findGroup(GenerateEntry * entry, char * groupId) {
@@ -81,3 +93,61 @@ GroupHashEntry *copyGroupsMap(GroupHashEntry *groupsMap) {
     }
     return newMap;
 }
+
+
+
+/** Node/Entry creation functions **/
+
+GenerateEntry * createGenerateEntry(char * fileId, DefType type, KeyNode * usersListFirst, Date * startDate) {
+    GenerateEntry *newEntry = malloc(sizeof(GenerateEntry));
+    newEntry->fileId = strdup(fileId);
+    
+    newEntry->type = type;
+    newEntry->usersListFirst = usersListFirst;
+    newEntry->startDate = startDate;
+
+    // copy current static hash maps
+    newEntry->usersMap = copyUsersMap(usersTableMap);
+    newEntry->groupsMap = copyGroupsMap(groupsTableMap);
+
+
+    // add to static generateList
+    if (firstGenerate == NULL) {
+        firstGenerate = newEntry;
+    } else {
+        lastGenerate->next = newEntry;
+    }
+
+    return newEntry;
+}
+
+GroupEntry *createGroupEntry(Group * group) {
+    GroupEntry *newGroup = malloc(sizeof(GroupEntry));
+    newGroup->groupId = strdup(group->name);  //name -> id
+    newGroup->tasksListFirst = NULL;
+    newGroup->eventsListFirst = NULL;
+
+    newGroup->group = group;  // --- check this
+
+    // add group to static hash map
+    addGroup(groupsTableMap, newGroup->groupId, newGroup);
+
+    return newGroup;
+}
+
+UserEntry *createUserEntry(User * user) {
+    UserEntry *newUser = malloc(sizeof(UserEntry));
+    newUser->userId = strdup(user->name);
+
+    newUser->user = user;  // --- check this
+
+    newUser->tasksListFirst = NULL;
+    newUser->eventsListFirst = NULL;
+    newUser->groupFirst = NULL;
+
+    // add user to static hash map
+    addUser(usersTableMap, newUser->userId, newUser);
+
+    return newUser;
+}
+
