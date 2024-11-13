@@ -22,25 +22,50 @@ typedef struct GenerateEntry GenerateEntry;
 // Generate List managment functions
 void addGenerateEntry(Generate * generate);
 void freeGenerateEntryNodeList();
+UserHashEntry * copyUsersMap(UserHashEntry * usersMap);
+UserEntry * copyUserEntry(UserEntry * originalEntry);
+GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap);
+GroupEntry * copyGroupEntry(GroupEntry * originalEntry);
+TaskNode * copyTaskList(TaskNode * originalTask);
+EventNode * copyEventList(EventNode * originalEvent);
+KeyNode * copyGroupList(KeyNode *originalGroup);
+void freeGenerateEntry(struct GenerateEntry *entry);
 
 
 // User Map managment functions
 void addUser(User * user);
-UserEntry * findUser(char * userId);
+UserEntry * createUserEntry(User * user);
+UserEntry * findUser(const char * userId);
 void addTaskToUser(const char * userId, CreateTask * task);
 void addEventToUser(const char * userId, CreateEvent * event);
 void addGroupsToUser(const char * userId, Groups * groups);
-void destroyUsersTableMap();
+void destroyUsersMap(UserHashEntry * usersMap);
 void deleteUser(char * userId);
+void freeUserEntry(UserEntry *entry);
 
 
 // Group Map managment functions
 void addGroup(Group * group);
-GroupEntry * findGroup(char * groupId);
+GroupEntry * createGroupEntry(Group * group);
+GroupEntry * findGroup(const char * groupId);
 void addTaskToGroup(const char * groupId, CreateTask * task);
 void addEventToGroup(const char * groupId, CreateEvent * event);
-void destroyGroupsTableMap();
+void destroyGroupsMap(GroupHashEntry * groupsMap);
 void deleteGroup(char * groupId);
+void freeGroupEntry(GroupEntry * entry);
+
+
+// Add to items to lists
+void addTaskNode(TaskNode ** head, CreateTask * task);
+void addEventNode(EventNode ** head, CreateEvent * event);
+void addKeyNode(KeyNode ** head, char * key);
+
+
+// Free functions
+void freeTaskList(TaskNode * taskList);
+void freeEventList(EventNode * eventList);
+void freeGroupList(KeyNode * groupList);
+
 
 
 // Definition of nodes

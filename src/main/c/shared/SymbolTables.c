@@ -10,10 +10,6 @@ static UserHashEntry * usersTableMap = NULL;
 static GroupHashEntry * groupsTableMap = NULL;
 
 
-UserEntry * createUserEntry(User * user);
-GroupEntry * createGroupEntry(Group * group);
-
-
  /** ------------------------- Generate List managment functions ------------------------- **/
 
 /** Add an entry to the Generate List  **/
@@ -21,7 +17,7 @@ void addGenerateEntry(Generate * generate){
     struct GenerateEntry * entry = malloc(sizeof(struct GenerateEntry));
     entry->generate = generate;
     entry->usersMap = copyUsersMap(usersTableMap);   
-    entry->groupsMap = copyGroupsMap(usersTableMap); 
+    entry->groupsMap = copyGroupsMap(groupsTableMap); 
 
     struct GenerateEntryNode * newNode = malloc(sizeof(struct GenerateEntryNode));
     newNode->entry = entry;
@@ -144,8 +140,8 @@ void freeGenerateEntryNodeList() {
 
 void freeGenerateEntry(struct GenerateEntry *entry) {
     if (entry) {
-        freeUsersMap(entry->usersMap);
-        freeGroupsMap(entry->groupsMap);
+        destroyUsersMap(entry->usersMap);
+        destroyGroupsMap(entry->groupsMap);
         free(entry);
     }
 }
@@ -157,7 +153,7 @@ void freeGenerateEntry(struct GenerateEntry *entry) {
 /** Add an entry to the Users Map  **/
 void addUser(User * user) {
     UserHashEntry * newUser = malloc(sizeof(UserHashEntry));
-    newUser->userId = strdup(user->name);  
+    newUser->userId = strdup(user->name->id);  
     newUser->userData = createUserEntry(user);
     HASH_ADD_KEYPTR(hh, usersTableMap, newUser->userId, strlen(newUser->userId), newUser);
 } 
@@ -175,7 +171,7 @@ UserEntry * createUserEntry(User * user) {
 
 
 /** Find an entry in the Users Map  **/
-UserEntry * findUser(char * userId) {
+UserEntry * findUser(const char * userId) {
     UserHashEntry * userEntry;
     HASH_FIND_STR(usersTableMap, userId, userEntry);
     return userEntry ? userEntry->userData : NULL;
@@ -184,31 +180,31 @@ UserEntry * findUser(char * userId) {
 
 /** Adding a task for a User in the Users Map  **/
 void addTaskToUser(const char * userId, CreateTask * task) {
-    UserHashEntry * userEntry = findUserById(userId);
+    UserEntry * userEntry = findUser(userId);
     
     if (userEntry == NULL) {
         return;
     }
 
-    addTaskNode(&userEntry->userData->tasksListFirst, task);
+    addTaskNode(&userEntry->tasksListFirst, task);
 }
 
 
 /** Adding a event for a User in the Users Map  **/
 void addEventToUser(const char * userId, CreateEvent * event) {
-    UserHashEntry * userEntry = findUserById(userId);
+    UserEntry * userEntry = findUser(userId);
     
     if (userEntry == NULL) {
         return;
     }
 
-    addTaskNode(&userEntry->userData->eventsListFirst, event);
+    addEventNode(&userEntry->eventsListFirst, event);
 }
 
 
 /** Adding a event for a User in the Users Map  **/
 void addGroupsToUser(const char * userId, Groups * groups){
-    UserHashEntry * userEntry = findUserById(userId);
+    UserEntry * userEntry = findUser(userId);
     
     if (userEntry == NULL) {
         return;
@@ -217,7 +213,7 @@ void addGroupsToUser(const char * userId, Groups * groups){
     if (groups->group_list != NULL) {
             struct GroupsList * currentGroup = groups->group_list;
             while (currentGroup != NULL) {
-                addTaskNode(&userEntry->userData->groupFirst, &(currentGroup->id));
+                addKeyNode(&userEntry->groupFirst, currentGroup->id->id);
                 currentGroup = currentGroup->group_list;
             }
         }
@@ -226,17 +222,17 @@ void addGroupsToUser(const char * userId, Groups * groups){
 
 
 /** Free Functions for Users Map  **/
-void destroyUsersTableMap() {
+void destroyUsersMap(UserHashEntry * usersMap) {
     UserHashEntry * currentEntry, * tmp;
 
-    HASH_ITER(hh, usersTableMap, currentEntry, tmp) {
+    HASH_ITER(hh, usersMap, currentEntry, tmp) {
         if (currentEntry->userId) {
             free(currentEntry->userId); 
         }
         if (currentEntry->userData) {
             freeUserEntry(currentEntry->userData);
         }
-        HASH_DEL(usersTableMap, currentEntry);
+        HASH_DEL(usersMap, currentEntry);
         free(currentEntry); 
     }
 }
@@ -252,7 +248,8 @@ void deleteUser(char * userId) {
     }
 }
 
-void freeUserEntry(UserEntry *entry) {
+
+void freeUserEntry(UserEntry * entry) {
     if (entry == NULL) {
         return;
     }
@@ -271,7 +268,7 @@ void freeUserEntry(UserEntry *entry) {
 /** Add an entry to the Groups Map  **/
 void addGroup(Group * group) {
     GroupHashEntry * newGroup = malloc(sizeof(GroupHashEntry));
-    newGroup->groupId = strdup(group->name);  
+    newGroup->groupId = strdup(group->name->id);  
     newGroup->groupData = createGroupEntry(group);
     HASH_ADD_KEYPTR(hh, groupsTableMap, newGroup->groupId, strlen(newGroup->groupId), newGroup);
 } 
@@ -288,7 +285,7 @@ GroupEntry * createGroupEntry(Group * group) {
 
 
 /** Find an entry in the Groups Map  **/
-GroupEntry * findGroup(char * groupId) {
+GroupEntry * findGroup(const char * groupId) {
     GroupHashEntry * groupEntry;
     HASH_FIND_STR(groupsTableMap, groupId, groupEntry);
     return groupEntry ? groupEntry->groupData : NULL;
@@ -297,40 +294,40 @@ GroupEntry * findGroup(char * groupId) {
 
 /** Adding a task for a Group in the Groups Map  **/
 void addTaskToGroup(const char * groupId, CreateTask * task) {
-    GroupHashEntry * groupEntry = findUserById(groupId);
+    GroupEntry * groupEntry = findGroup(groupId);
     
     if (groupEntry == NULL) {
         return;
     }
 
-    addTaskNode(&groupEntry->groupData->tasksListFirst, task);
+    addTaskNode(&groupEntry->tasksListFirst, task);
 }
 
 
 /** Adding a event for a Group in the Groups Map  **/
 void addEventToGroup(const char * groupId, CreateEvent * event) {
-    GroupHashEntry * groupEntry = findUserById(groupId);
+    GroupEntry * groupEntry = findGroup(groupId);
     
     if (groupEntry == NULL) {
         return;
     }
 
-    addTaskNode(&groupEntry->groupData->eventsListFirst, event);
+    addEventNode(&groupEntry->eventsListFirst, event);
 }
 
 
 /** Free Functions for Groups Map  **/
-void destroyGroupsTableMap() {
+void destroyGroupsMap(GroupHashEntry * groupsMap) {
     GroupHashEntry * currentEntry, * tmp;
 
-    HASH_ITER(hh, groupsTableMap, currentEntry, tmp) {
+    HASH_ITER(hh, groupsMap, currentEntry, tmp) {
         if (currentEntry->groupId) {
             free(currentEntry->groupId); 
         }
         if (currentEntry->groupData) {
             freeGroupEntry(currentEntry->groupData);
         }
-        HASH_DEL(usersTableMap, currentEntry);
+        HASH_DEL(groupsMap, currentEntry);
         free(currentEntry); 
     }
 }
