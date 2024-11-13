@@ -1,5 +1,4 @@
 #include "AbstractSyntaxTree.h"
-
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;

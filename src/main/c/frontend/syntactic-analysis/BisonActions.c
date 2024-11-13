@@ -1,5 +1,6 @@
 #include "BisonActions.h"
 
+
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;
@@ -214,12 +215,15 @@ Groups * GroupsSemanticAction(){
  */
 Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, Users * users, Date * date) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Generate *generate = calloc(1, sizeof(Generate));
+	Generate * generate = calloc(1, sizeof(Generate));
 	generate->id = generateId;
 	generate->user_name = id;
 	generate->def_type = defType;  // convierte int a su valor del enum
 	generate->users = users;
 	generate->start_date = date;
+
+	// TODO: check that the users/user_name are all in the UsersTableMap
+	addGenerateEntry(generate);
 	return generate;
 }
 
@@ -259,6 +263,15 @@ CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date
 	createTask->start_time = stTime;
 	createTask->end_time = endTime;
 	createTask->description = description;
+
+	if(userGroup->type == GROUP_USER){
+		// TODO: check if user exists 
+		addTaskToUser(userGroup->user->id, createTask);
+	} else {
+		// TODO: check if group exists 
+		addTaskToGroup(userGroup->group->id, createTask);
+	}
+
 	return createTask;
 }
 
@@ -267,11 +280,20 @@ CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date
  */
 CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * stDate, Date * endDate) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	CreateEvent *createEvent = calloc(1, sizeof(CreateEvent));
+	CreateEvent * createEvent = calloc(1, sizeof(CreateEvent));
 	createEvent->id = id;
 	createEvent->user_group = userGroup;
 	createEvent->start_date = stDate;
 	createEvent->end_date = endDate;
+
+	if(userGroup->type == GROUP_USER){
+		// TODO: check if user exists 
+		addEventToUser(userGroup->user->id, createEvent);
+	} else {
+		// TODO: check if group exists 
+		addEventToGroup(userGroup->group->id, createEvent);
+	}
+
 	return createEvent;
 }
 
@@ -283,6 +305,9 @@ Add * AddSemanticAction(Id * user, Groups * groups) {
 	Add * add = calloc(1, sizeof(Add));
 	add->user = user;
 	add->groups = groups;
+
+	// TODO: check that all the groups are in the GroupsTableMap
+	addGroupsToUser(user->id, groups);
 	return add;
 }
 
@@ -456,9 +481,8 @@ User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList
 	user->weekdays = weekdays;
 	user->hour_list = hourList;
 
-	// saving user id in the symbol table
-	createUserEntry(user);
-
+	// TODO: check that another user with the same ID is not already in the UsersMapTable
+	addUser(user);
 	return user;
 }
 
@@ -470,9 +494,8 @@ Group *GroupSemanticAction(Id *id) {
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
 
-	// saving group id in the symbol table
-	createGroupEntry(group);
-
+	// TODO: check that another group with the same ID is not already in the GroupsMapTable
+	addGroup(group);
 	return group;
 }
 

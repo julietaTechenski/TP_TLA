@@ -1,7 +1,7 @@
 #ifndef SYMBOL_TABLES_HEADER
 #define SYMBOL_TABLES_HEADER
 
-#include "../../frontend/syntactic-analysis/AbstractSyntaxTree.h"
+#include "../frontend/syntactic-analysis/AbstractSyntaxTree.h"
 #include "uthash.h"
 
 
@@ -19,23 +19,29 @@ typedef struct GroupEntry GroupEntry;
 typedef struct GenerateEntry GenerateEntry;
 
 
-// Data management functions
+// Generate List managment functions
+void addGenerateEntry(Generate * generate);
+void freeGenerateEntryNodeList();
 
-void addUser(GenerateEntry *entry, char *userId, UserEntry *userData);
-UserEntry *findUser(GenerateEntry * entry, char * userId);
-void deleteUser(GenerateEntry * entry, char * userId);
-void addGroup(GenerateEntry * entry, char * groupId, GroupEntry * groupData);
-GroupEntry *findGroup(GenerateEntry * entry, char * groupId);
-void deleteGroup(GenerateEntry * entry, char * groupId);
 
-UserHashEntry * copyUsersMap(UserHashEntry * usersMap);
-GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap);
+// User Map managment functions
+void addUser(User * user);
+UserEntry * findUser(char * userId);
+void addTaskToUser(const char * userId, CreateTask * task);
+void addEventToUser(const char * userId, CreateEvent * event);
+void addGroupsToUser(const char * userId, Groups * groups);
+void destroyUsersTableMap();
+void deleteUser(char * userId);
 
-// Node/Entry creation functions
 
-GroupEntry * createGroupEntry(Group * group);
-UserEntry * createUserEntry(User * user);
-GenerateEntry * createGenerateEntry(char * fileId, DefType type, KeyNode * usersListFirst, Date * startDate);
+// Group Map managment functions
+void addGroup(Group * group);
+GroupEntry * findGroup(char * groupId);
+void addTaskToGroup(const char * groupId, CreateTask * task);
+void addEventToGroup(const char * groupId, CreateEvent * event);
+void destroyGroupsTableMap();
+void deleteGroup(char * groupId);
+
 
 // Definition of nodes
 struct KeyNode {
@@ -80,7 +86,6 @@ struct GroupHashEntry{
 
 // Definition of entries
 struct UserEntry{
-    char * userId;
     User * user;
     TaskNode * tasksListFirst;
     EventNode * eventsListFirst;
@@ -88,26 +93,16 @@ struct UserEntry{
 };
 
 struct GroupEntry{
-    char * groupId;
     Group * group;
     TaskNode * tasksListFirst;
     EventNode * eventsListFirst;
 };
 
 struct GenerateEntry {
-	char * fileId;                  
+    Generate * generate;
     UserHashEntry * usersMap;      
     GroupHashEntry * groupsMap;      
-    DefType type;
-    UserEntryNode * usersListFirst;
-    Date * startDate;
     GenerateEntryNode * next;
 };
-
-
-GenerateEntryNode * generateListFirst;
-UserHashEntry * usersTableMap;
-GroupHashEntry * groupsTableMap;
-
 
 #endif

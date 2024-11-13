@@ -1,13 +1,14 @@
 #ifndef BISON_ACTIONS_HEADER
 #define BISON_ACTIONS_HEADER
 
+#include "../../shared/SymbolTables.h"
 #include "../../shared/CompilerState.h"
 #include "../../shared/Logger.h"
 #include "../../shared/Type.h"
 #include "AbstractSyntaxTree.h"
 #include "SyntacticAnalyzer.h"
 #include <stdlib.h>
-#include "../../shared/SymbolTables.h"
+
 
 /** Initialize module's internal state. */
 void initializeBisonActionsModule();
