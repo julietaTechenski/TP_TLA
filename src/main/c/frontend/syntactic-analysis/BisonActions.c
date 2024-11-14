@@ -382,8 +382,6 @@ Command *CommandDefineSemanticAction(Define * define) {
 	Command *command = calloc(1, sizeof(Command));
 	command->define = define;
 	command->type = C_DEFINE;
-	
-	addCodeBlockEntry(define->id);
 	return command;
 }
 
@@ -433,6 +431,7 @@ Define *DefineSemanticAction(Id *id, CommandList * commandList) {
 	Define *define = calloc(1, sizeof(Define));
 	define->id = id;
 	define->command_list = commandList;
+
 	return define;
 }
 
@@ -567,4 +566,9 @@ Weekdays * WeekdaysEverySemanticAction(){
 		weekdays->weekdays_list= WeekdaysListAddWeekdaySemanticAction(day,weekdays->weekdays_list);
 	}
 	return weekdays;
+}
+
+void ImprimirSemantic(char * mensaje){
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	logDebugging(_logger, "hola");
 }

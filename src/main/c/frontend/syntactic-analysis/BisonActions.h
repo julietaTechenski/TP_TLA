@@ -67,4 +67,6 @@ GroupsList * GroupsListAddGroupSemanticAction(Id * group, GroupsList * groupsLis
 Groups * GroupsListToGroupsSemanticAction(GroupsList * groupsList);
 Groups * GroupsSemanticAction();     
 
+
+void ImprimirSemantic(char * mensaje);
 #endif
