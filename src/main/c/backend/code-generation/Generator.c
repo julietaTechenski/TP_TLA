@@ -20,11 +20,11 @@ void shutdownGeneratorModule() {
 
 
  /** ------------------------- Definition of private functions ------------------------- **/
-static void _generateType(GenerateEntry * generateEntry);
-static void _generateWeekly(GenerateEntry * generateEntry);
-static void _generateMonthly(GenerateEntry * generateEntry);
-static void _generateYearly(GenerateEntry * generateEntry);
-static void _generateInfo(GenerateEntry * generateEntry);
+static void _generateType(GenerateEntry * generateEntry, FILE *file);
+static void _generateWeekly(GenerateEntry * generateEntry, FILE *file);
+static void _generateMonthly(GenerateEntry * generateEntry, FILE *file);
+static void _generateYearly(GenerateEntry * generateEntry, FILE *file);
+static void _generateInfo(GenerateEntry * generateEntry, FILE *file);
 static void _generatePrologue(FILE *file);
 void _generateEpilogue(FILE *file);
 
@@ -32,22 +32,22 @@ void _generateEpilogue(FILE *file);
  /** ------------------------- Implementation of private functions ------------------------- **/
 
 
-static void _generateType(GenerateEntry * generateEntry) {
+static void _generateType(GenerateEntry * generateEntry, FILE *file) {
 	switch(generateEntry->generate->def_type) {
 		case(WEEKLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating WEEKLY calendar...");
-			_generateWeekly(generateEntry);
+			_generateWeekly(generateEntry, file);
 			break;
 		case(MONTHLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating MONTHLY calendar...");
-			_generateMonthly(generateEntry);
+			_generateMonthly(generateEntry, file);
 			break;
 		case(YEARLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating YEARLY calendar\n");
-			_generateYearly(generateEntry);
+			_generateYearly(generateEntry, file);
 			break;
 		default:
 			printf("Invalid option...\n");
@@ -55,18 +55,18 @@ static void _generateType(GenerateEntry * generateEntry) {
 	}
 }
 
-static void _generateWeekly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
-static void _generateMonthly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
-void _generateYearly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+void _generateYearly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
@@ -133,7 +133,7 @@ void generate(CompilerState * compilerState) {
         }
 
         _generatePrologue(file);
-		_generateType(current->entry);
+		_generateType(current->entry, file);
 		_generateEpilogue(file);
 
 		current = current->next;
