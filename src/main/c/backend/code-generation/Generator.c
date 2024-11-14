@@ -31,19 +31,16 @@ static void _generateInfo(GenerateEntry * generateEntry);
 void _generateType(GenerateEntry * generateEntry) {
 	switch(generateEntry->generate->def_type) {
 		case(WEEKLY):
-			_generateWeekly(generateEntry);
 			// CHANGE LOG FOR PROD
-			logInformation(_logger, "Generating WEEKLY calendar...\n");
+			logInformation(_logger, "Generating WEEKLY calendar...");
 			_generateWeekly(generateEntry);
 			break;
 		case(MONTHLY):
-			_generateMonthly(generateEntry);
 			// CHANGE LOG FOR PROD
-			logInformation(_logger, "Generating MONTHLY calendar...\n");
+			logInformation(_logger, "Generating MONTHLY calendar...");
 			_generateMonthly(generateEntry);
 			break;
 		case(YEARLY):
-			_generateYearly(generateEntry);
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating YEARLY calendar\n");
 			_generateYearly(generateEntry);
