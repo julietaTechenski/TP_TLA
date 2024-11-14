@@ -6,8 +6,6 @@ const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
 
-static FILE *file = NULL; 
-
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
 }
@@ -20,11 +18,11 @@ void shutdownGeneratorModule() {
 
 
  /** ------------------------- Definition of private functions ------------------------- **/
-static void _generateType(GenerateEntry * generateEntry);
-static void _generateWeekly(GenerateEntry * generateEntry);
-static void _generateMonthly(GenerateEntry * generateEntry);
-static void _generateYearly(GenerateEntry * generateEntry);
-static void _generateInfo(GenerateEntry * generateEntry);
+static void _generateType(GenerateEntry * generateEntry, FILE *file);
+static void _generateWeekly(GenerateEntry * generateEntry, FILE *file);
+static void _generateMonthly(GenerateEntry * generateEntry, FILE *file);
+static void _generateYearly(GenerateEntry * generateEntry, FILE *file);
+static void _generateInfo(GenerateEntry * generateEntry, FILE *file);
 static void _generatePrologue(FILE *file);
 void _generateEpilogue(FILE *file);
 
@@ -32,22 +30,22 @@ void _generateEpilogue(FILE *file);
  /** ------------------------- Implementation of private functions ------------------------- **/
 
 
-static void _generateType(GenerateEntry * generateEntry) {
+static void _generateType(GenerateEntry * generateEntry, FILE *file) {
 	switch(generateEntry->generate->def_type) {
 		case(WEEKLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating WEEKLY calendar...");
-			_generateWeekly(generateEntry);
+			_generateWeekly(generateEntry, file);
 			break;
 		case(MONTHLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating MONTHLY calendar...");
-			_generateMonthly(generateEntry);
+			_generateMonthly(generateEntry, file);
 			break;
 		case(YEARLY):
 			// CHANGE LOG FOR PROD
 			logInformation(_logger, "Generating YEARLY calendar\n");
-			_generateYearly(generateEntry);
+			_generateYearly(generateEntry, file);
 			break;
 		default:
 			printf("Invalid option...\n");
@@ -55,22 +53,22 @@ static void _generateType(GenerateEntry * generateEntry) {
 	}
 }
 
-static void _generateWeekly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
-static void _generateMonthly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
-void _generateYearly(GenerateEntry * generateEntry){
-	_generateInfo(generateEntry);
+void _generateYearly(GenerateEntry * generateEntry, FILE *file){
+	_generateInfo(generateEntry, file);
 	return;
 }
 
-void _generateInfo(GenerateEntry * generateEntry){
+void _generateInfo(GenerateEntry * generateEntry, FILE *file){
 	Generate * generate = generateEntry->generate;
 	UserHashEntry * usersMap = generateEntry->usersMap;
 	GroupHashEntry * groupsMap = generateEntry->groupsMap;
@@ -94,21 +92,19 @@ void _generatePrologue(FILE *file){
             "</head>\n"
             "<body>\n"
             "    <div id='calendar'></div>\n"
-            "    <script>\n");
+            "</body>\n"
+			"<script>\n");
 	logDebugging(_logger, "Prologue generated.");
 }
 
 
 void _generateEpilogue(FILE *file) {
     fprintf(file,
-        "        });\n"
-        "        calendar.render();\n"
-        "    });\n"
-        "    </script>\n"
-        "</body>\n"
+        "</script>\n"
         "</html>\n");
 
 	fclose(file);
+	logDebugging(_logger, "Epilogue generated.");
 }
 
  /** ------------------------- Implementation of public functions ------------------------- **/
@@ -118,13 +114,12 @@ void generate(CompilerState * compilerState) {
 	logInformation(_logger, "Generating final output...");
 
 	GenerateEntryNode * current = getGenerateList();
+    
+	int i = 1;
 
-	
-
-    int i = 1;
 	while(current != NULL) {
-		char filename[25];
-        snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
+		char filename[50];
+        snprintf(filename, sizeof(filename), "calendar_%d.html", i);
 
 		FILE *file = fopen(filename, "w");
         if (file == NULL) {
@@ -133,7 +128,7 @@ void generate(CompilerState * compilerState) {
         }
 
         _generatePrologue(file);
-		_generateType(current->entry);
+		_generateType(current->entry, file);
 		_generateEpilogue(file);
 
 		current = current->next;
