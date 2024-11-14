@@ -6,6 +6,8 @@ const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
 
+static FILE *file = NULL; 
+
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
 }
@@ -23,12 +25,14 @@ static void _generateWeekly(GenerateEntry * generateEntry);
 static void _generateMonthly(GenerateEntry * generateEntry);
 static void _generateYearly(GenerateEntry * generateEntry);
 static void _generateInfo(GenerateEntry * generateEntry);
+static void _generatePrologue(FILE *file);
+void _generateEpilogue(FILE *file);
 
 
  /** ------------------------- Implementation of private functions ------------------------- **/
 
 
-void _generateType(GenerateEntry * generateEntry) {
+static void _generateType(GenerateEntry * generateEntry) {
 	switch(generateEntry->generate->def_type) {
 		case(WEEKLY):
 			// CHANGE LOG FOR PROD
@@ -51,12 +55,12 @@ void _generateType(GenerateEntry * generateEntry) {
 	}
 }
 
-void _generateWeekly(GenerateEntry * generateEntry){
+static void _generateWeekly(GenerateEntry * generateEntry){
 	_generateInfo(generateEntry);
 	return;
 }
 
-void _generateMonthly(GenerateEntry * generateEntry){
+static void _generateMonthly(GenerateEntry * generateEntry){
 	_generateInfo(generateEntry);
 	return;
 }
@@ -78,7 +82,34 @@ void _generateInfo(GenerateEntry * generateEntry){
 
 }
 
+void _generatePrologue(FILE *file){
+	fprintf(file,
+            "<!DOCTYPE html>\n"
+            "<html lang='es'>\n"
+            "<head>\n"
+            "    <meta charset='utf-8'>\n"
+            "    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css' rel='stylesheet'>\n"
+            "    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js'></script>\n"
+            "    <title>Calendario</title>\n"
+            "</head>\n"
+            "<body>\n"
+            "    <div id='calendar'></div>\n"
+            "    <script>\n");
+	logDebugging(_logger, "Prologue generated.");
+}
 
+
+void _generateEpilogue(FILE *file) {
+    fprintf(file,
+        "        });\n"
+        "        calendar.render();\n"
+        "    });\n"
+        "    </script>\n"
+        "</body>\n"
+        "</html>\n");
+
+	fclose(file);
+}
 
  /** ------------------------- Implementation of public functions ------------------------- **/
 
@@ -88,9 +119,25 @@ void generate(CompilerState * compilerState) {
 
 	GenerateEntryNode * current = getGenerateList();
 
+	
+
+    int i = 1;
 	while(current != NULL) {
+		char filename[25];
+        snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
+
+		FILE *file = fopen(filename, "w");
+        if (file == NULL) {
+            printf("Error opening file %s\n", filename);
+            exit(1);
+        }
+
+        _generatePrologue(file);
 		_generateType(current->entry);
+		_generateEpilogue(file);
+
 		current = current->next;
+		logInformation(_logger, "Calendar %d generated.", i++);
 	}
 
 	destroyGenerateList();
