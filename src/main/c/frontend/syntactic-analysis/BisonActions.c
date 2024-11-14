@@ -382,6 +382,8 @@ Command *CommandDefineSemanticAction(Define * define) {
 	Command *command = calloc(1, sizeof(Command));
 	command->define = define;
 	command->type = C_DEFINE;
+	
+	addCodeBlockEntry(define->id);
 	return command;
 }
 

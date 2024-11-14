@@ -25,7 +25,7 @@ typedef struct CodeBlocksEntry CodeBlocksEntry;
 
 // Generate List managment functions
 int addGenerateEntry(Generate * generate);
-void freeGenerateEntryNodeList();
+void destroyGenerateList();
 GenerateEntryNode * getGenerateList();
 
 
@@ -47,6 +47,12 @@ int addEventToGroup(const char * groupId, CreateEvent * event);
 void destroyGroupsTableMap();
 void deleteGroup(char * groupId);
 
+// Code Blocks List managment functions
+int addUserToCodeBlockUsersMap(const char * codeBlockId, User * user);
+int addGroupToCodeBlockUsersMap(const char * codeBlockId, Group * group);
+int addCodeBlockEntry(const char * codeBlockId);
+int addGenerateEntryToCodeBlock(const char * codeBlockId, Generate * generate);
+void destroyCodeBlock();
 
 
 // Definition of nodes
@@ -95,7 +101,7 @@ struct GroupHashEntry{
 
 struct CodeBlocksHashEntry{
     char * codeBlocksId;         
-    CodeBlocksEntry * groupData;      
+    CodeBlocksEntry * codeBlocksData;      
     UT_hash_handle hh;     
 };
 

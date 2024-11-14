@@ -14,6 +14,9 @@ static CodeBlocksHashEntry * clodeBlocksTableMap = NULL;
 
 
  /** ------------------------- Definition of private functions ------------------------- **/
+
+ // Generate List managment functions
+int addGenerateEntryInGenerateList(Generate * generate, GenerateEntryNode ** generateLi, UserHashEntry * usersMap, GroupHashEntry * groupsMap);
 static UserHashEntry * copyUsersMap(UserHashEntry * usersMap);
 static UserEntry * copyUserEntry(UserEntry * originalEntry);
 static GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap);
@@ -22,8 +25,7 @@ static TaskNode * copyTaskList(TaskNode * originalTask);
 static EventNode * copyEventList(EventNode * originalEvent);
 static KeyNode * copyGroupList(KeyNode * originalGroup);
 static void freeGenerateEntry(struct GenerateEntry * entry);
-static void destroyUsersMap(UserHashEntry * usersMap);
-static void destroyGroupsMap(GroupHashEntry * groupsMap);
+void freeGenerateEntryNodeList(GenerateEntryNode * generateLi);
 
 
 // User Map managment functions
@@ -35,7 +37,6 @@ static int addGroupsToUserInUsersMap(const char * userId, Groups * groups, UserH
 static int addTaskToUserInUsersMap(const char * userId, CreateTask * task, UserHashEntry ** usersMap);
 static void destroyUsersMap(UserHashEntry * usersMap);
 static void deleteUserInUserMap(char * userId, UserHashEntry * usersMap);
-static void deleteGroupInGroupMap(char * groupId, GroupHashEntry * groupsMap);
 static void freeUserEntry(UserEntry *entry);
 
 
@@ -45,7 +46,14 @@ static GroupEntry * createGroupEntry(Group * group);
 static GroupEntry * findGroupInMap(const char * groupId, GroupHashEntry * groupsMap);
 static int addTaskToGroupInGroupsMap(const char * groupId, CreateTask * task, GroupHashEntry ** groupsMap);
 static int addEventToGroupInGroupsMap(const char * groupId, CreateEvent * event, GroupHashEntry ** groupsMap);
+static void destroyGroupsMap(GroupHashEntry * groupsMap);
+static void deleteGroupInGroupMap(char * groupId, GroupHashEntry * groupsMap);
 static void freeGroupEntry(GroupEntry * entry);
+
+
+// Code Blocks List managment functions
+CodeBlocksEntry * createCodeBlocksEntry(const char * codeBlockId);
+CodeBlocksEntry * findCodeBlock(const char * codeBlockId);
 
 
 // Add to items to lists
@@ -64,9 +72,12 @@ static void freeGroupList(KeyNode * groupList);
 
 /** Add an entry to the Generate List  **/
 int addGenerateEntry(Generate * generate){
-    // TODO : verify is block of code exists
+    return addGenerateEntryInGenerateList(generate, &(generateList), usersTableMap, groupsTableMap);
+}
 
-    UserHashEntry *current_user, *tmp;
+int addGenerateEntryInGenerateList(Generate * generate, GenerateEntryNode ** generateLi, UserHashEntry * usersMap, GroupHashEntry * groupsMap){
+    // TODO : verify is block of code exists
+    UserHashEntry * current_user, *tmp;
     
     HASH_ITER(hh, usersTableMap, current_user, tmp) {
         printf("User ID: %s, User Data: %s\n", current_user->userId, current_user->userData->user->role->id);
@@ -75,7 +86,7 @@ int addGenerateEntry(Generate * generate){
     // Verify that the generate users exist
     UsersList * current = generate->users->user_list;
     while(current != NULL) {
-        UserEntry * userEntry = findUserInMap(current->id->id, usersTableMap);
+        UserEntry * userEntry = findUserInMap(current->id->id, usersMap);
 		if(userEntry == NULL) {
             // TODO: finish excecution ; as of now, it does not create the generate
             printf("User with ID %s not found in usersTableMap\n", current->id->id);
@@ -86,17 +97,17 @@ int addGenerateEntry(Generate * generate){
 
     struct GenerateEntry * entry = malloc(sizeof(struct GenerateEntry));
     entry->generate = generate;
-    entry->usersMap = copyUsersMap(usersTableMap);   
-    entry->groupsMap = copyGroupsMap(groupsTableMap); 
+    entry->usersMap = copyUsersMap(usersMap);   
+    entry->groupsMap = copyGroupsMap(groupsMap); 
 
     struct GenerateEntryNode * newNode = malloc(sizeof(struct GenerateEntryNode));
     newNode->entry = entry;
     newNode->next = NULL;
 
-    if (generateList == NULL) {
-        generateList = newNode;
+    if (*generateLi == NULL) {
+        *generateLi = newNode;
     } else {
-        struct GenerateEntryNode * current = generateList;
+        struct GenerateEntryNode * current = *generateLi;
         while (current->next != NULL) {
             current = current->next;
         }
@@ -105,7 +116,6 @@ int addGenerateEntry(Generate * generate){
 
     return SUCCESS;
 }
-
 
 /** Profound copy of User Map **/
 UserHashEntry * copyUsersMap(UserHashEntry * usersMap) {
@@ -205,18 +215,22 @@ GenerateEntryNode * getGenerateList() {
 
 
 /** Free Generate List  **/
-void freeGenerateEntryNodeList() {
-    struct GenerateEntryNode * current = generateList;
+void freeGenerateEntryNodeList(GenerateEntryNode * generateLi) {
+    struct GenerateEntryNode * current = generateLi;
     while (current) {
         struct GenerateEntryNode * temp = current;
         freeGenerateEntry(current->entry);
         current = current->next;
         free(temp);
     }
-    generateList = NULL;
+    generateLi = NULL;
 }
 
-void freeGenerateEntry(struct GenerateEntry *entry) {
+void destroyGenerateList(){
+    freeGenerateEntryNodeList(generateList);
+}
+
+void freeGenerateEntry(struct GenerateEntry * entry) {
     if (entry) {
         destroyUsersMap(entry->usersMap);
         destroyGroupsMap(entry->groupsMap);
@@ -528,6 +542,83 @@ void freeGroupEntry(GroupEntry * entry) {
     freeEventList(entry->eventsListFirst);
 
     free(entry);
+}
+
+
+/** ------------------------- Code Blocks List managment functions ------------------------- **/
+
+int addCodeBlockEntry(const char * codeBlockId) {
+    CodeBlocksHashEntry * entry = NULL;
+
+    HASH_FIND_STR(clodeBlocksTableMap, codeBlockId, entry);
+    if (entry != NULL) {
+        return ERROR; 
+    }
+
+    entry = malloc(sizeof(CodeBlocksHashEntry));
+    entry->codeBlocksId = strdup(codeBlockId);
+    entry->codeBlocksData = createCodeBlocksEntry(codeBlockId); 
+
+    HASH_ADD_KEYPTR(hh, clodeBlocksTableMap, entry->codeBlocksId, strlen(entry->codeBlocksId), entry);
+
+    return SUCCESS;
+}
+
+CodeBlocksEntry * createCodeBlocksEntry(const char * codeBlockId) {
+    CodeBlocksEntry * newEntry = malloc(sizeof(CodeBlocksEntry));
+    newEntry->id = strdup(codeBlockId);
+    newEntry->generateList = NULL;     
+    newEntry->usersTableMap = NULL;
+    newEntry->groupsTableMap = NULL;
+
+    return newEntry;
+}
+
+CodeBlocksEntry * findCodeBlock(const char * codeBlockId) {
+    CodeBlocksHashEntry * codeBlockEntry;
+    HASH_FIND_STR(clodeBlocksTableMap, codeBlockId, codeBlockEntry);
+    return codeBlockEntry ? codeBlockEntry->codeBlocksData : NULL;
+}
+
+int addUserToCodeBlockUsersMap(const char * codeBlockId, User * user) {
+    CodeBlocksEntry * codeBlock = findCodeBlock(codeBlockId);
+    if (codeBlock == NULL) {
+        return ERROR;
+    }
+
+    return addUserToUserMap(user, &(codeBlock->usersTableMap));
+}
+
+int addGroupToCodeBlockUsersMap(const char * codeBlockId, Group * group) {
+    CodeBlocksEntry * codeBlock = findCodeBlock(codeBlockId);
+    if (codeBlock == NULL) {
+        return ERROR;
+    }
+
+    return addGroupToGroupMap(group, &(codeBlock->groupsTableMap));
+}
+
+int addGenerateEntryToCodeBlock(const char * codeBlockId, Generate * generate) {
+    CodeBlocksEntry * codeBlock = findCodeBlock(codeBlockId);
+    if (codeBlock == NULL) {
+        return ERROR;
+    }
+    
+    return addGenerateEntryInGenerateList(generate, &(codeBlock->generateList), codeBlock->usersTableMap, codeBlock->groupsTableMap);
+}
+
+void destroyCodeBlock() {
+    CodeBlocksHashEntry * current, * tmp;
+    HASH_ITER(hh, clodeBlocksTableMap, current, tmp) {
+        HASH_DEL(clodeBlocksTableMap, current);
+
+        free(current->codeBlocksId);  
+        destroyGenerateList(current->codeBlocksData->generateList);
+        destroyUsersMap(current->codeBlocksData->usersTableMap);
+        destroyGroupsMap(current->codeBlocksData->groupsTableMap);
+        free(current->codeBlocksData);
+        free(current); 
+    }
 }
 
 
