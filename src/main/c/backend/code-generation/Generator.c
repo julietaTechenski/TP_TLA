@@ -1,6 +1,6 @@
 #include "Generator.h"
 
-/* MODULE INTERNAL STATE */
+ /** ------------------------- Module Internal State ------------------------- **/
 
 const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
@@ -16,171 +16,90 @@ void shutdownGeneratorModule() {
 	}
 }
 
-/** PRIVATE FUNCTIONS */
 
-static const char _expressionTypeToCharacter(const ExpressionType type);
-static void _generateConstant(const unsigned int indentationLevel, Constant * constant);
-static void _generateEpilogue(const int value);
-static void _generateExpression(const unsigned int indentationLevel, Expression * expression);
-static void _generateFactor(const unsigned int indentationLevel, Factor * factor);
-static void _generateProgram(Program * program);
-static void _generatePrologue(void);
-static char * _indentation(const unsigned int indentationLevel);
-static void _output(const unsigned int indentationLevel, const char * const format, ...);
+ /** ------------------------- Definition of private functions ------------------------- **/
+static void _generateType(GenerateEntry * generateEntry);
+static void _generateWeekly(GenerateEntry * generateEntry);
+static void _generateMonthly(GenerateEntry * generateEntry);
+static void _generateYearly(GenerateEntry * generateEntry);
+static void _generateInfo(GenerateEntry * generateEntry);
 
-/**
- * Converts and expression type to the proper character of the operation
- * involved, or returns '\0' if that's not possible.
- */
-static const char _expressionTypeToCharacter(const ExpressionType type) {
-	switch (type) {
-		case ADDITION: return '+';
-		case DIVISION: return '/';
-		case MULTIPLICATION: return '*';
-		case SUBTRACTION: return '-';
+
+ /** ------------------------- Implementation of private functions ------------------------- **/
+
+
+void _generateType(GenerateEntry * generateEntry) {
+	switch(generateEntry->generate->def_type) {
+		case(WEEKLY):
+			_generateWeekly(generateEntry);
+			// CHANGE LOG FOR PROD
+			logInformation(_logger, "Generating WEEKLY calendar...\n");
+			_generateWeekly(generateEntry);
+			break;
+		case(MONTHLY):
+			_generateMonthly(generateEntry);
+			// CHANGE LOG FOR PROD
+			logInformation(_logger, "Generating MONTHLY calendar...\n");
+			_generateMonthly(generateEntry);
+			break;
+		case(YEARLY):
+			_generateYearly(generateEntry);
+			// CHANGE LOG FOR PROD
+			logInformation(_logger, "Generating YEARLY calendar\n");
+			_generateYearly(generateEntry);
+			break;
 		default:
-			logError(_logger, "The specified expression type cannot be converted into character: %d", type);
-			return '\0';
+			printf("Invalid option...\n");
+            break;
 	}
 }
 
-/**
- * Generates the output of a constant.
- */
-static void _generateConstant(const unsigned int indentationLevel, Constant * constant) {
-	_output(indentationLevel, "%s", "[ $C$, circle, draw, black!20\n");
-	_output(1 + indentationLevel, "%s%d%s", "[ $", constant->value, "$, circle, draw ]\n");
-	_output(indentationLevel, "%s", "]\n");
+void _generateWeekly(GenerateEntry * generateEntry){
+	_generateInfo(generateEntry);
+	return;
 }
 
-/**
- * Creates the epilogue of the generated output, that is, the final lines that
- * completes a valid Latex document.
- */
-static void _generateEpilogue(const int value) {
-	_output(0, "%s%d%s",
-		"            [ $", value, "$, circle, draw, blue ]\n"
-		"        ]\n"
-		"    \\end{forest}\n"
-		"\\end{document}\n\n"
-	);
+void _generateMonthly(GenerateEntry * generateEntry){
+	_generateInfo(generateEntry);
+	return;
 }
 
-/**
- * Generates the output of an expression.
- */
-static void _generateExpression(const unsigned int indentationLevel, Expression * expression) {
-	_output(indentationLevel, "%s", "[ $E$, circle, draw, black!20\n");
-	switch (expression->type) {
-		case ADDITION:
-		case DIVISION:
-		case MULTIPLICATION:
-		case SUBTRACTION:
-			_generateExpression(1 + indentationLevel, expression->leftExpression);
-			_output(1 + indentationLevel, "%s%c%s", "[ $", _expressionTypeToCharacter(expression->type), "$, circle, draw, purple ]\n");
-			_generateExpression(1 + indentationLevel, expression->rightExpression);
-			break;
-		case FACTOR:
-			_generateFactor(1 + indentationLevel, expression->factor);
-			break;
-		default:
-			logError(_logger, "The specified expression type is unknown: %d", expression->type);
-			break;
-	}
-	_output(indentationLevel, "%s", "]\n");
+void _generateYearly(GenerateEntry * generateEntry){
+	_generateInfo(generateEntry);
+	return;
 }
 
-/**
- * Generates the output of a factor.
- */
-static void _generateFactor(const unsigned int indentationLevel, Factor * factor) {
-	_output(indentationLevel, "%s", "[ $F$, circle, draw, black!20\n");
-	switch (factor->type) {
-		case CONSTANT:
-			_generateConstant(1 + indentationLevel, factor->constant);
-			break;
-		case EXPRESSION:
-			_output(1 + indentationLevel, "%s", "[ $($, circle, draw, purple ]\n");
-			_generateExpression(1 + indentationLevel, factor->expression);
-			_output(1 + indentationLevel, "%s", "[ $)$, circle, draw, purple ]\n");
-			break;
-		default:
-			logError(_logger, "The specified factor type is unknown: %d", factor->type);
-			break;
-	}
-	_output(indentationLevel, "%s", "]\n");
+void _generateInfo(GenerateEntry * generateEntry){
+	Generate * generate = generateEntry->generate;
+	UserHashEntry * usersMap = generateEntry->usersMap;
+	GroupHashEntry * groupsMap = generateEntry->groupsMap;
+
+	logInformation(_logger, "Generate id %s", generate->id->id);
+	logInformation(_logger ,"Generate start date %d - %d - %d", generate->start_date->day, generate->start_date->month, generate->start_date->year);
+	logInformation(_logger, "Generate user name %s", generate->user_name != NULL ? generate->user_name->id : "NO CODE BLOCK");
+	logInformation(_logger, "Generate the first of the list %s", generate->users->user_list->id->id);
+
 }
 
-/**
- * Generates the output of the program.
- */
-/*static void _generateProgram(Program * program) {
-	_generateExpression(3, program->expression);
-}*/
 
 
-
-static void _generateProgram(Program * program) {
-	if (program->command_list != NULL) {
-        CommandList *commandList = program->command_list;
-        while (commandList != NULL) {
-            //TODO: llamado a funciones para las salidas de los comandos
-            commandList = commandList->command_list;
-        }
-    }
-}
-
-/**
- * Creates the prologue of the generated output, a Latex document that renders
- * a tree thanks to the Forest package.
- *
- * @see https://ctan.dcc.uchile.cl/graphics/pgf/contrib/forest/forest-doc.pdf
- */
-static void _generatePrologue(void) {
-	_output(0, "%s",
-		"\\documentclass{standalone}\n\n"
-		"\\usepackage[utf8]{inputenc}\n"
-		"\\usepackage[T1]{fontenc}\n"
-		"\\usepackage{amsmath}\n"
-		"\\usepackage{forest}\n"
-		"\\usepackage{microtype}\n\n"
-		"\\begin{document}\n"
-		"    \\centering\n"
-		"    \\begin{forest}\n"
-		"        [ \\text{$=$}, circle, draw, purple\n"
-	);
-}
-
-/**
- * Generates an indentation string for the specified level.
- */
-static char * _indentation(const unsigned int level) {
-	return indentation(_indentationCharacter, level, _indentationSize);
-}
-
-/**
- * Outputs a formatted string to standard output. The "fflush" instruction
- * allows to see the output even close to a failure, because it drops the
- * buffering.
- */
-static void _output(const unsigned int indentationLevel, const char * const format, ...) {
-	va_list arguments;
-	va_start(arguments, format);
-	char * indentation = _indentation(indentationLevel);
-	char * effectiveFormat = concatenate(2, indentation, format);
-	vfprintf(stdout, effectiveFormat, arguments);
-	fflush(stdout);
-	free(effectiveFormat);
-	free(indentation);
-	va_end(arguments);
-}
-
-/** PUBLIC FUNCTIONS */
+ /** ------------------------- Implementation of public functions ------------------------- **/
 
 void generate(CompilerState * compilerState) {
-	logDebugging(_logger, "Generating final output...");
-	_generatePrologue();
-	_generateProgram(compilerState->abstractSyntaxtTree);
-	_generateEpilogue(compilerState->value);
-	logDebugging(_logger, "Generation is done.");
+	// CHANGE LOG FOR PROD
+	logInformation(_logger, "Generating final output...");
+
+	GenerateEntryNode * current = getGenerateList();
+
+	while(current != NULL) {
+		_generateType(current->entry);
+		current = current->next;
+	}
+
+	freeGenerateEntryNodeList();
+	destroyUsersTableMap();
+	destroyGroupsTableMap();
+
+	// CHANGE LOG FOR PROD
+	logInformation(_logger, "Generation is done.");
 }

@@ -222,8 +222,11 @@ Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, User
 	generate->users = users;
 	generate->start_date = date;
 
-	// TODO: check that the users/user_name are all in the UsersTableMap
-	addGenerateEntry(generate);
+	if(	addGenerateEntry(generate) == ERROR) {
+		logError(_logger, "Error creating Generate Entry");
+	} else {
+		logInformation(_logger, "Succesful creation of Generate Entry");
+	}
 	return generate;
 }
 
@@ -265,11 +268,13 @@ CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date
 	createTask->description = description;
 
 	if(userGroup->type == GROUP_USER){
-		// TODO: check if user exists 
-		addTaskToUser(userGroup->user->id, createTask);
+		if(addTaskToUser(userGroup->user->id, createTask) == ERROR) {
+			logError(_logger, "Error creating and asigning Task to User");
+		}
 	} else {
-		// TODO: check if group exists 
-		addTaskToGroup(userGroup->group->id, createTask);
+		if(addTaskToGroup(userGroup->group->id, createTask) == ERROR) {
+			logError(_logger, "Error creating and asigning Task to Group");
+		}
 	}
 
 	return createTask;
@@ -287,11 +292,13 @@ CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * st
 	createEvent->end_date = endDate;
 
 	if(userGroup->type == GROUP_USER){
-		// TODO: check if user exists 
-		addEventToUser(userGroup->user->id, createEvent);
+		if(addEventToUser(userGroup->user->id, createEvent) == ERROR) {
+			logError(_logger, "Error creating and asigning Event to User");
+		}
 	} else {
-		// TODO: check if group exists 
-		addEventToGroup(userGroup->group->id, createEvent);
+		if(addEventToGroup(userGroup->group->id, createEvent) == ERROR) {
+			logError(_logger, "Error creating and asigning Event to Group");
+		}
 	}
 
 	return createEvent;
@@ -306,8 +313,9 @@ Add * AddSemanticAction(Id * user, Groups * groups) {
 	add->user = user;
 	add->groups = groups;
 
-	// TODO: check that all the groups are in the GroupsTableMap
-	addGroupsToUser(user->id, groups);
+	if(addGroupsToUser(user->id, groups) == ERROR) {
+		logError(_logger, "Error adding User to Group");
+	}
 	return add;
 }
 
@@ -481,28 +489,30 @@ User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList
 	user->weekdays = weekdays;
 	user->hour_list = hourList;
 
-	// TODO: check that another user with the same ID is not already in the UsersMapTable
-	addUser(user);
+	if(addUser(user) == ERROR) {
+		logError(_logger, "A User with this ID already exists");
+	}
 	return user;
 }
 
 /**
  * Creates a new Group structure with the given ID.
  */
-Group *GroupSemanticAction(Id *id) {
+Group * GroupSemanticAction(Id *id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
 
-	// TODO: check that another group with the same ID is not already in the GroupsMapTable
-	addGroup(group);
+	if(addGroup(group) == ERROR) {
+		logError(_logger, "A Group with this ID already exists");
+	}
 	return group;
 }
 
 /**
  * Creates a new Id structure with the given value.
  */
-Id *IdSemanticAction(const char * value) {
+Id * IdSemanticAction(const char * value) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	Id *id = calloc(1, sizeof(Id));
 	id->id = strdup(value);

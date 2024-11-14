@@ -4,67 +4,48 @@
 #include "../frontend/syntactic-analysis/AbstractSyntaxTree.h"
 #include "uthash.h"
 
+#define ERROR 1
+#define SUCCESS 0
 
 typedef struct TaskNode TaskNode;
 typedef struct EventNode EventNode;
-
+typedef struct CodeBlocksEntryNode CodeBlocksEntryNode;
 typedef struct KeyNode KeyNode;
 typedef struct GenerateEntryNode GenerateEntryNode;
 typedef struct UserEntryNode UserEntryNode;
 
 typedef struct UserHashEntry UserHashEntry;
 typedef struct GroupHashEntry GroupHashEntry;
+typedef struct CodeBlocksHashEntry CodeBlocksHashEntry;
 typedef struct UserEntry UserEntry;
 typedef struct GroupEntry GroupEntry;
 typedef struct GenerateEntry GenerateEntry;
+typedef struct CodeBlocksEntry CodeBlocksEntry;
 
 
 // Generate List managment functions
-void addGenerateEntry(Generate * generate);
+int addGenerateEntry(Generate * generate);
 void freeGenerateEntryNodeList();
-UserHashEntry * copyUsersMap(UserHashEntry * usersMap);
-UserEntry * copyUserEntry(UserEntry * originalEntry);
-GroupHashEntry * copyGroupsMap(GroupHashEntry * groupsMap);
-GroupEntry * copyGroupEntry(GroupEntry * originalEntry);
-TaskNode * copyTaskList(TaskNode * originalTask);
-EventNode * copyEventList(EventNode * originalEvent);
-KeyNode * copyGroupList(KeyNode *originalGroup);
-void freeGenerateEntry(struct GenerateEntry *entry);
+GenerateEntryNode * getGenerateList();
 
 
 // User Map managment functions
-void addUser(User * user);
-UserEntry * createUserEntry(User * user);
+int addUser(User * user);
 UserEntry * findUser(const char * userId);
-void addTaskToUser(const char * userId, CreateTask * task);
-void addEventToUser(const char * userId, CreateEvent * event);
-void addGroupsToUser(const char * userId, Groups * groups);
-void destroyUsersMap(UserHashEntry * usersMap);
+int addTaskToUser(const char * userId, CreateTask * task);
+int addEventToUser(const char * userId, CreateEvent * event);
+int addGroupsToUser(const char * userId, Groups * groups);
+void destroyUsersTableMap();
 void deleteUser(char * userId);
-void freeUserEntry(UserEntry *entry);
 
 
 // Group Map managment functions
-void addGroup(Group * group);
-GroupEntry * createGroupEntry(Group * group);
+int addGroup(Group * group);
 GroupEntry * findGroup(const char * groupId);
-void addTaskToGroup(const char * groupId, CreateTask * task);
-void addEventToGroup(const char * groupId, CreateEvent * event);
-void destroyGroupsMap(GroupHashEntry * groupsMap);
+int addTaskToGroup(const char * groupId, CreateTask * task);
+int addEventToGroup(const char * groupId, CreateEvent * event);
+void destroyGroupsTableMap();
 void deleteGroup(char * groupId);
-void freeGroupEntry(GroupEntry * entry);
-
-
-// Add to items to lists
-void addTaskNode(TaskNode ** head, CreateTask * task);
-void addEventNode(EventNode ** head, CreateEvent * event);
-void addKeyNode(KeyNode ** head, char * key);
-
-
-// Free functions
-void freeTaskList(TaskNode * taskList);
-void freeEventList(EventNode * eventList);
-void freeGroupList(KeyNode * groupList);
 
 
 
@@ -94,6 +75,10 @@ struct UserEntryNode {
     struct GenerateEntryNode * next;
 };
 
+struct CodeBlocksEntryNode {
+    CodeBlocksEntry * block;
+    CodeBlocksEntryNode * next;
+};
 
 // Definition of HashMap entries
 struct UserHashEntry{
@@ -105,6 +90,12 @@ struct UserHashEntry{
 struct GroupHashEntry{
     char * groupId;         
     GroupEntry * groupData;      
+    UT_hash_handle hh;     
+};
+
+struct CodeBlocksHashEntry{
+    char * codeBlocksId;         
+    CodeBlocksEntry * groupData;      
     UT_hash_handle hh;     
 };
 
@@ -129,5 +120,14 @@ struct GenerateEntry {
     GroupHashEntry * groupsMap;      
     GenerateEntryNode * next;
 };
+
+struct CodeBlocksEntry {
+    char * id;
+    struct GenerateEntryNode * generateList;
+    UserHashEntry * usersTableMap;     
+    GroupHashEntry * groupsTableMap;   
+};
+
+
 
 #endif

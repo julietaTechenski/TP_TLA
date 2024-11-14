@@ -280,7 +280,7 @@ struct CreateTask {
 
 struct Generate {
 	Id * id;
-	Id * user_name;
+	Id * user_name;		// This is the name of the block of code that references
 	DefType def_type;
 	Users * users;
 	Date * start_date;
