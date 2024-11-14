@@ -118,20 +118,6 @@ void generate(CompilerState * compilerState) {
 	GenerateEntryNode * current = getGenerateList();
     
 	int i = 1;
-	
-	char filename[25];
-	snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
-
-	FILE *file = fopen(filename, "w");
-	if (file == NULL) {
-		printf("Error opening file %s\n", filename);
-		exit(1);
-	}
-
-	_generatePrologue(file);
-	_generateType(current->entry, file);
-	_generateEpilogue(file);
-
 
 	while(current != NULL) {
 		char filename[25];
