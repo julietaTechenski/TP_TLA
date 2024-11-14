@@ -60,7 +60,7 @@ static void _generateWeekly(GenerateEntry * generateEntry){
 	return;
 }
 
-ststic void _generateMonthly(GenerateEntry * generateEntry){
+static void _generateMonthly(GenerateEntry * generateEntry){
 	_generateInfo(generateEntry);
 	return;
 }
