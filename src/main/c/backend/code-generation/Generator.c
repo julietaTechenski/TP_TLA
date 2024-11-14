@@ -6,8 +6,6 @@ const char _indentationCharacter = ' ';
 const char _indentationSize = 4;
 static Logger * _logger = NULL;
 
-static FILE *file = NULL; 
-
 void initializeGeneratorModule() {
 	_logger = createLogger("Generator");
 }
@@ -70,7 +68,7 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 	return;
 }
 
-void _generateInfo(GenerateEntry * generateEntry){
+void _generateInfo(GenerateEntry * generateEntry, FILE *file){
 	Generate * generate = generateEntry->generate;
 	UserHashEntry * usersMap = generateEntry->usersMap;
 	GroupHashEntry * groupsMap = generateEntry->groupsMap;
@@ -118,10 +116,23 @@ void generate(CompilerState * compilerState) {
 	logInformation(_logger, "Generating final output...");
 
 	GenerateEntryNode * current = getGenerateList();
-
+    
+	int i = 1;
 	
+	char filename[25];
+	snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
 
-    int i = 1;
+	FILE *file = fopen(filename, "w");
+	if (file == NULL) {
+		printf("Error opening file %s\n", filename);
+		exit(1);
+	}
+
+	_generatePrologue(file);
+	_generateType(current->entry, file);
+	_generateEpilogue(file);
+
+
 	while(current != NULL) {
 		char filename[25];
         snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
