@@ -93,9 +93,10 @@ void generate(CompilerState * compilerState) {
 		current = current->next;
 	}
 
-	freeGenerateEntryNodeList();
+	destroyGenerateList();
 	destroyUsersTableMap();
 	destroyGroupsTableMap();
+	destroyCodeBlock();
 
 	// CHANGE LOG FOR PROD
 	logInformation(_logger, "Generation is done.");
