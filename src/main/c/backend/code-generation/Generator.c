@@ -92,21 +92,19 @@ void _generatePrologue(FILE *file){
             "</head>\n"
             "<body>\n"
             "    <div id='calendar'></div>\n"
-            "    <script>\n");
+            "</body>\n"
+			"<script>\n");
 	logDebugging(_logger, "Prologue generated.");
 }
 
 
 void _generateEpilogue(FILE *file) {
     fprintf(file,
-        "        });\n"
-        "        calendar.render();\n"
-        "    });\n"
-        "    </script>\n"
-        "</body>\n"
+        "</script>\n"
         "</html>\n");
 
 	fclose(file);
+	logDebugging(_logger, "Epilogue generated.");
 }
 
  /** ------------------------- Implementation of public functions ------------------------- **/
@@ -120,8 +118,8 @@ void generate(CompilerState * compilerState) {
 	int i = 1;
 
 	while(current != NULL) {
-		char filename[25];
-        snprintf(filename, sizeof(filename), "../../../../calendar_%d.html", i);
+		char filename[50];
+        snprintf(filename, sizeof(filename), "calendar_%d.html", i);
 
 		FILE *file = fopen(filename, "w");
         if (file == NULL) {
