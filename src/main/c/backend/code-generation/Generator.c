@@ -54,6 +54,53 @@ static void _generateType(GenerateEntry * generateEntry, FILE *file) {
 }
 
 static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
+	fprintf(file,
+    "    document.addEventListener('DOMContentLoaded', function() {\n"
+    "        var calendarEl = document.getElementById('calendar');\n\n"
+    "        var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+    "            timeZone: 'UTC',\n"
+    "            initialView: 'timeGridWeek',\n"
+    "            locale: 'es',\n"
+    "            headerToolbar: {\n"
+    "                left: '',\n"
+    "                center: 'title',\n"
+    "                right: ''\n"
+    "            },\n"
+    "            views: {\n"
+    "                timeGridWeek: {\n"
+    "                    dayHeaderFormat: { weekday: 'long' },\n"
+    "                    titleFormat: { year: 'numeric', month: 'long' }\n"
+    "                }\n"
+    "            },\n"
+    "            events: [\n");
+
+	// iteracion en la lista de eventos del generate
+	
+	int first = 1;
+	while(/*events*/0){
+		if(!first){
+			fprintf(file,",\n");
+		} else {
+			first = 0;
+		}
+		fprintf(file,"                { title: 'Tarea 1', daysOfWeek: [1], startTime: '10:00', endTime: '12:00' }");
+	}
+
+	fprintf(file,
+    "            ]\n"
+    "        });\n\n"
+    "        calendar.render();\n"
+    "    });\n\n"
+    "    <style>\n"
+    "    .fc-col-header-cell-cushion {\n"
+    "        display: none;\n"
+    "    }\n\n"
+    "    .fc-day-number {\n"
+    "        display: none;\n"
+    "    }\n"
+    "    </style>\n"
+	);
+	
 	_generateInfo(generateEntry, file);
 	return;
 }
