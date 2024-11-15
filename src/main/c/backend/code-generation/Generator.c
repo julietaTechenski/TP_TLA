@@ -100,12 +100,46 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
     "    }\n"
     "    </style>\n"
 	);
-	
+
 	_generateInfo(generateEntry, file);
 	return;
 }
 
 static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
+	printf(
+    "document.addEventListener('DOMContentLoaded', function() {\n"
+    "    var calendarEl = document.getElementById('calendar');\n"
+    "    var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+    "        initialView: 'dayGridMonth',\n"
+    "        headerToolbar: {\n"
+    "            left: '',\n"
+    "            center: 'title',\n"
+    "            right: ''\n"
+    "        },\n"
+    "        locale: 'es',\n"
+    "        events: [\n");
+
+	int first = 1;
+	while(/*iterar events*/0){
+		if(!first){
+			fprintf(file,",\n");
+		} else {
+			first = 0;
+		}
+
+
+		fprintf(file,"            { title: 'Evento 3', start: '2024-11-12T10:30:00', end: '2024-11-14T12:30:00' }\n");
+		//fprintf(file,"            { title: 'Evento 1', start: '2024-11-04' }\n");
+		//fprintf(file,"            { title: 'Evento 2', start: '2024-11-10', allDay: true }\n");
+	}
+
+
+	fprintf(file,
+    "        ]\n"
+    "    });\n"
+    "    calendar.render();\n"
+    "});\n");
+
 	_generateInfo(generateEntry, file);
 	return;
 }
