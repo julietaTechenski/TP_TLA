@@ -54,16 +54,157 @@ static void _generateType(GenerateEntry * generateEntry, FILE *file) {
 }
 
 static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
+	fprintf(file,
+	"<script>\n"
+    "    document.addEventListener('DOMContentLoaded', function() {\n"
+    "        var calendarEl = document.getElementById('calendar');\n\n"
+    "        var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+    "            timeZone: 'UTC',\n"
+    "            initialView: 'timeGridWeek',\n"
+    "            locale: 'es',\n"
+    "            headerToolbar: {\n"
+    "                left: '',\n"
+    "                center: 'title',\n"
+    "                right: ''\n"
+    "            },\n"
+    "            views: {\n"
+    "                timeGridWeek: {\n"
+    "                    dayHeaderFormat: { weekday: 'long' },\n"
+    "                    titleFormat: { year: 'numeric', month: 'long' }\n"
+    "                }\n"
+    "            },\n"
+    "            events: [\n");
+
+	// iteracion en la lista de eventos del generate
+	
+	int first = 1;
+	while(/*events*/0){
+		if(!first){
+			fprintf(file,",\n");
+		} else {
+			first = 0;
+		}
+		fprintf(file,"                { title: 'Tarea 1', daysOfWeek: [1], startTime: '10:00', endTime: '12:00' }");
+	}
+
+	fprintf(file,
+    "            ]\n"
+    "        });\n\n"
+    "        calendar.render();\n"
+    "    });\n\n"
+	"</script>\n"
+    "<style>\n"
+    "    .fc-col-header-cell-cushion {\n"
+    "        display: none;\n"
+    "    }\n\n"
+    "    .fc-day-number {\n"
+    "        display: none;\n"
+    "    }\n"
+	"</style>\n"
+	);
+
 	_generateInfo(generateEntry, file);
 	return;
 }
 
 static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
+	printf(
+	"<script>\n"
+    "	document.addEventListener('DOMContentLoaded', function() {\n"
+    "   	var calendarEl = document.getElementById('calendar');\n"
+    "   	var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+    "       	initialView: 'dayGridMonth',\n"
+    "        	headerToolbar: {\n"
+    "           	left: '',\n"
+    "            	center: 'title',\n"
+    "           	right: ''\n"
+    "        	},\n"
+    "        	locale: 'es',\n"
+    "        	events: [\n");
+
+	int first = 1;
+	while(/*iterar events*/0){
+		if(!first){
+			fprintf(file,",\n");
+		} else {
+			first = 0;
+		}
+
+
+		fprintf(file,"	            { title: 'Evento 3', start: '2024-11-12T10:30:00', end: '2024-11-14T12:30:00' }\n");
+		//fprintf(file,"	            { title: 'Evento 1', start: '2024-11-04' }\n");
+		//fprintf(file,"	            { title: 'Evento 2', start: '2024-11-10', allDay: true }\n");
+	}
+
+
+	fprintf(file,
+    "	        ]\n"
+    "	    });\n"
+    "	    calendar.render();\n"
+    "	});\n"
+	"</script>\n");
+
 	_generateInfo(generateEntry, file);
 	return;
 }
 
 void _generateYearly(GenerateEntry * generateEntry, FILE *file){
+	fprintf(file,
+		"<script>\n"
+		"document.addEventListener('DOMContentLoaded', function() {\n"
+		"    var calendarEl = document.getElementById('calendar');\n\n"
+		"    var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+		"        timeZone: 'UTC',\n"
+		"        initialView: 'multiMonthYear',\n"
+		"        headerToolbar: {\n"
+		"            left: '',\n"
+		"            center: 'title',\n"
+		"            right: ''\n"
+		"        },\n"
+		"        locale: 'es',\n"
+		"        editable: true,\n"
+		"        events: [\n");
+
+		int first = 1;
+		while(/*iterar events*/0){
+			if(!first){
+				fprintf(file,",\n");
+			} else {
+				first = 0;
+			}
+
+			
+
+			fprintf(file,"            { title: 'Reunión con equipo de diseño', start: '2024-11-15T09:00:00', end: '2024-11-15T11:00:00' }\n");
+			//fprintf(file,"            { title: 'Presentación del proyecto X', start: '2024-11-16T14:00:00', end: '2024-11-16T15:30:00' },\n");
+			//fprintf(file,"            { title: 'Clase de Yoga', daysOfWeek: [2, 4], startTime: '18:00:00', endTime: '19:00:00' },\n");
+			//fprintf(file,"            { title: 'Taller de Fotografía', start: '2024-11-18', end: '2024-11-19', allDay: true },\n");
+			//fprintf(file,"            { title: 'Cumpleaños de Andrea', start: '2024-11-21', allDay: true },\n");
+			//fprintf(file,"            { title: 'Revisión de presupuesto', start: '2024-11-22T10:00:00', end: '2024-11-22T12:00:00' },\n");
+			//fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
+		}
+
+		fprintf(file,
+		""
+		"    });\n\n"
+		"    calendar.render();\n"
+		"});\n"
+		"</script>\n\n"
+		"<style>\n"
+		"html, body {\n"
+		"    margin: 0;\n"
+		"    padding: 0;\n"
+		"    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\n"
+		"    font-size: 14px;\n"
+		"}\n\n"
+		"#calendar {\n"
+		"    max-width: 1200px;\n"
+		"    margin: 40px auto;\n"
+		"}\n"
+		"</style>\n"
+	);
+
+
 	_generateInfo(generateEntry, file);
 	return;
 }
@@ -92,16 +233,13 @@ void _generatePrologue(FILE *file){
             "</head>\n"
             "<body>\n"
             "    <div id='calendar'></div>\n"
-            "</body>\n"
-			"<script>\n");
+            "</body>\n");
 	logDebugging(_logger, "Prologue generated.");
 }
 
 
 void _generateEpilogue(FILE *file) {
-    fprintf(file,
-        "</script>\n"
-        "</html>\n");
+    fprintf(file,"</html>\n");
 
 	fclose(file);
 	logDebugging(_logger, "Epilogue generated.");
