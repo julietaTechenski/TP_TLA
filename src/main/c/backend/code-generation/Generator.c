@@ -176,12 +176,12 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 			
 
 			fprintf(file,"            { title: 'Reunión con equipo de diseño', start: '2024-11-15T09:00:00', end: '2024-11-15T11:00:00' }\n");
-			fprintf(file,"            { title: 'Presentación del proyecto X', start: '2024-11-16T14:00:00', end: '2024-11-16T15:30:00' },\n");
-			fprintf(file,"            { title: 'Clase de Yoga', daysOfWeek: [2, 4], startTime: '18:00:00', endTime: '19:00:00' },\n");
-			fprintf(file,"            { title: 'Taller de Fotografía', start: '2024-11-18', end: '2024-11-19', allDay: true },\n");
-			fprintf(file,"            { title: 'Cumpleaños de Andrea', start: '2024-11-21', allDay: true },\n");
-			fprintf(file,"            { title: 'Revisión de presupuesto', start: '2024-11-22T10:00:00', end: '2024-11-22T12:00:00' },\n");
-			fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
+			//fprintf(file,"            { title: 'Presentación del proyecto X', start: '2024-11-16T14:00:00', end: '2024-11-16T15:30:00' },\n");
+			//fprintf(file,"            { title: 'Clase de Yoga', daysOfWeek: [2, 4], startTime: '18:00:00', endTime: '19:00:00' },\n");
+			//fprintf(file,"            { title: 'Taller de Fotografía', start: '2024-11-18', end: '2024-11-19', allDay: true },\n");
+			//fprintf(file,"            { title: 'Cumpleaños de Andrea', start: '2024-11-21', allDay: true },\n");
+			//fprintf(file,"            { title: 'Revisión de presupuesto', start: '2024-11-22T10:00:00', end: '2024-11-22T12:00:00' },\n");
+			//fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
 		}
 
 		fprintf(file,
