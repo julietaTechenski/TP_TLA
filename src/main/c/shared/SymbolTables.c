@@ -72,24 +72,34 @@ static void freeGroupList(KeyNode * groupList);
 
 /** Add an entry to the Generate List  **/
 int addGenerateEntry(Generate * generate){
-    return addGenerateEntryInGenerateList(generate, &(generateList), usersTableMap, groupsTableMap);
+    char * defineId = generate->user_name == NULL ?  NULL : generate->user_name->id;
+    int error = ERROR;
+
+    if(defineId == NULL) {
+        return addGenerateEntryInGenerateList(generate, &(generateList), usersTableMap, groupsTableMap);
+    } else {
+        CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+        if(codeBlock == NULL) {
+            error = ERROR;
+        } else {
+            GenerateEntryNode * codeBlockGenerateList = codeBlock->generateList;
+            while(codeBlockGenerateList != NULL) {
+                printf("EN LOOP");
+                error = addGenerateEntryInGenerateList(codeBlockGenerateList->entry->generate, &(codeBlockGenerateList->next), codeBlockGenerateList->entry->usersMap, codeBlockGenerateList->entry->groupsMap);
+                codeBlockGenerateList = codeBlockGenerateList->next;
+            }
+            error = addGenerateEntryInGenerateList(generate, &(generateList), codeBlock->usersTableMap, codeBlock->groupsTableMap);
+        }
+    }
+    return error;
 }
 
 int addGenerateEntryInGenerateList(Generate * generate, GenerateEntryNode ** generateLi, UserHashEntry * usersMap, GroupHashEntry * groupsMap){
-    // TODO : verify is block of code exists
     UserHashEntry * current_user, *tmp;
-    
-    HASH_ITER(hh, usersTableMap, current_user, tmp) {
-        printf("User ID: %s, User Data: %s\n", current_user->userId, current_user->userData->user->role->id);
-    }
-
-    // Verify that the generate users exist
     UsersList * current = generate->users->user_list;
     while(current != NULL) {
         UserEntry * userEntry = findUserInMap(current->id->id, usersMap);
 		if(userEntry == NULL) {
-            // TODO: finish excecution ; as of now, it does not create the generate
-            printf("User with ID %s not found in usersTableMap\n", current->id->id);
             return ERROR;
         }
         current = current->user_list;
@@ -107,12 +117,13 @@ int addGenerateEntryInGenerateList(Generate * generate, GenerateEntryNode ** gen
     if (*generateLi == NULL) {
         *generateLi = newNode;
     } else {
-        struct GenerateEntryNode * current = *generateLi;
-        while (current->next != NULL) {
-            current = current->next;
+        GenerateEntryNode * currentNode = *generateLi;
+        while (currentNode->next != NULL) {
+            currentNode = currentNode->next;
         }
-        current->next = newNode;
+        currentNode->next = newNode;
     }
+
 
     return SUCCESS;
 }
@@ -603,8 +614,32 @@ int addGenerateEntryToCodeBlock(const char * codeBlockId, Generate * generate) {
     if (codeBlock == NULL) {
         return ERROR;
     }
-    
     return addGenerateEntryInGenerateList(generate, &(codeBlock->generateList), codeBlock->usersTableMap, codeBlock->groupsTableMap);
+}
+
+int addTaskToGroupToCodeBlock(const char * defineId, const char * groupId, CreateTask * task){
+    CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+    return addTaskToGroupInGroupsMap(groupId, task, &(codeBlock->groupsTableMap));
+}
+
+int addTaskToUserToCodeBlock(const char * defineId, const char * groupId, CreateTask * task){
+    CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+    return addTaskToUserInUsersMap(groupId, task, &(codeBlock->usersTableMap));
+}
+
+int addEventToGroupToCodeBlock(const char * defineId, const char * groupId, CreateEvent * event){
+    CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+    return addEventToGroupInGroupsMap(groupId, event, &(codeBlock->groupsTableMap));
+}
+
+int addEventToUserToCodeBlock(const char * defineId, const char * groupId, CreateEvent * event){
+    CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+    return addEventToUserInUsersMap(groupId, event, &(codeBlock->usersTableMap));
+}
+
+int addGroupsToUserInCodeBlock(const char * defineId, const char * userId, Groups * groups){
+    CodeBlocksEntry * codeBlock = findCodeBlock(defineId);
+    return addGroupsToUserInUsersMap(userId, groups, &(codeBlock->usersTableMap), &(codeBlock->groupsTableMap));
 }
 
 void destroyCodeBlock() {
@@ -647,7 +682,7 @@ void addEventNode(EventNode ** head, CreateEvent * event) {
 }
 
 void addKeyNode(KeyNode ** head, char * key) {
-    KeyNode *newNode = malloc(sizeof(KeyNode));
+    KeyNode * newNode = malloc(sizeof(KeyNode));
     if (newNode == NULL) {
         return; 
     }

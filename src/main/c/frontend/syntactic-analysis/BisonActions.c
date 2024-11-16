@@ -4,6 +4,8 @@
 /* MODULE INTERNAL STATE */
 
 static Logger * _logger = NULL;
+static char * defineId = NULL;
+
 
 void initializeBisonActionsModule() {
 	_logger = createLogger("BisonActions");
@@ -222,11 +224,14 @@ Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, User
 	generate->users = users;
 	generate->start_date = date;
 
-	if(	addGenerateEntry(generate) == ERROR) {
+	const char * key = defineId;
+	int result = (key == NULL) ? addGenerateEntry(generate) : addGenerateEntryToCodeBlock(key, generate);
+	if (result == ERROR) {
 		logError(_logger, "Error creating Generate Entry");
 	} else {
-		logInformation(_logger, "Succesful creation of Generate Entry");
+		logInformation(_logger, "Successful creation of Generate Entry");
 	}
+
 	return generate;
 }
 
@@ -267,14 +272,17 @@ CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date
 	createTask->end_time = endTime;
 	createTask->description = description;
 
-	if(userGroup->type == GROUP_USER){
-		if(addTaskToUser(userGroup->user->id, createTask) == ERROR) {
-			logError(_logger, "Error creating and asigning Task to User");
-		}
+	const char * key = defineId;
+	int result;
+
+	if (userGroup->type == GROUP_USER) {
+		result = (key == NULL) ? addTaskToUser(userGroup->user->id, createTask) : addTaskToUserToCodeBlock(key, userGroup->user->id, createTask);
 	} else {
-		if(addTaskToGroup(userGroup->group->id, createTask) == ERROR) {
-			logError(_logger, "Error creating and asigning Task to Group");
-		}
+		result = (key == NULL) ? addTaskToGroup(userGroup->group->id, createTask) : addTaskToGroupToCodeBlock(key, userGroup->group->id, createTask);
+	}
+
+	if (result == ERROR) {
+		logError(_logger, "Error creating and assigning a Task");
 	}
 
 	return createTask;
@@ -291,14 +299,17 @@ CreateEvent *CreateEventSemanticAction(Id * id, UserGroup * userGroup, Date * st
 	createEvent->start_date = stDate;
 	createEvent->end_date = endDate;
 
-	if(userGroup->type == GROUP_USER){
-		if(addEventToUser(userGroup->user->id, createEvent) == ERROR) {
-			logError(_logger, "Error creating and asigning Event to User");
-		}
+	const char * key = defineId;
+	int result;
+
+	if (userGroup->type == GROUP_USER) {
+		result = (key == NULL) ? addEventToUser(userGroup->user->id, createEvent) : addEventToUserToCodeBlock(key, userGroup->user->id, createEvent);
 	} else {
-		if(addEventToGroup(userGroup->group->id, createEvent) == ERROR) {
-			logError(_logger, "Error creating and asigning Event to Group");
-		}
+		result = (key == NULL) ? addEventToGroup(userGroup->group->id, createEvent) : addEventToGroupToCodeBlock(key, userGroup->group->id, createEvent);
+	}
+
+	if (result == ERROR) {
+		logError(_logger, "Error creating and assigning an Event");
 	}
 
 	return createEvent;
@@ -313,9 +324,14 @@ Add * AddSemanticAction(Id * user, Groups * groups) {
 	add->user = user;
 	add->groups = groups;
 
-	if(addGroupsToUser(user->id, groups) == ERROR) {
-		logError(_logger, "Error adding User to Group");
+	const char * key = defineId;
+	int result = (key == NULL) ? addGroupsToUser(user->id, groups) : addGroupsToUserInCodeBlock(key, user->id, groups);
+	if (result == ERROR) {
+		logError(_logger, "Error creating assigning groups to user");
+	} else {
+		logInformation(_logger, "Successful asignment of groups to user");
 	}
+
 	return add;
 }
 
@@ -431,7 +447,6 @@ Define *DefineSemanticAction(Id *id, CommandList * commandList) {
 	Define *define = calloc(1, sizeof(Define));
 	define->id = id;
 	define->command_list = commandList;
-
 	return define;
 }
 
@@ -490,9 +505,14 @@ User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList
 	user->weekdays = weekdays;
 	user->hour_list = hourList;
 
-	if(addUser(user) == ERROR) {
-		logError(_logger, "A User with this ID already exists");
+	const char * key = defineId;
+	int result = (key == NULL) ? addUser(user) : addUserToCodeBlockUsersMap(key, user);
+	if (result == ERROR) {
+		logError(_logger, "Error adding user");
+	} else {
+		logInformation(_logger, "Successful adding of user");
 	}
+
 	return user;
 }
 
@@ -504,9 +524,15 @@ Group * GroupSemanticAction(Id *id) {
 	Group *group = calloc(1, sizeof(Group));
 	group->name = id;
 
-	if(addGroup(group) == ERROR) {
-		logError(_logger, "A Group with this ID already exists");
+
+	const char * key = defineId;
+	int result = (key == NULL) ? addGroup(group) : addGroupToCodeBlockUsersMap(key, group);
+	if (result == ERROR) {
+		logError(_logger, "Error adding group");
+	} else {
+		logInformation(_logger, "Successful adding of group");
 	}
+
 	return group;
 }
 
@@ -568,7 +594,18 @@ Weekdays * WeekdaysEverySemanticAction(){
 	return weekdays;
 }
 
-void ImprimirSemantic(char * mensaje){
+void BeginCodeBlock(Id * id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
-	logDebugging(_logger, "hola");
+	
+	if(defineId != NULL || addCodeBlockEntry(id->id) == ERROR) {
+		logError(_logger, "Error creating a code block");
+	}
+	if(defineId == NULL){
+		defineId = id->id;
+	}
+}
+
+void EndCodeBlock() {
+	_logSyntacticAnalyzerAction(__FUNCTION__);
+	defineId = NULL;
 }

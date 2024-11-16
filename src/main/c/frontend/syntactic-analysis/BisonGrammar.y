@@ -1,6 +1,7 @@
 %{
 
 #include "BisonActions.h"
+#include "AbstractSyntaxTree.h"
 #include <stdio.h>
 
 %}
@@ -221,9 +222,9 @@ hour_range: HOUR HYPHEN HOUR											{ $$ = HourRangeSemanticAction($1, $3); }
 	;
 
 
-define: DEF id OPEN_CURLY_BRACE 										{ ImprimirSemantic("hola"); } 
-			command_list												{ ImprimirSemantic("chau"); }
-			CLOSE_CURLY_BRACE 											{ $$ = DefineSemanticAction($2, $4); }
+define: DEF id OPEN_CURLY_BRACE 										{ BeginCodeBlock($2); } 
+			command_list												{ EndCodeBlock(); }
+			CLOSE_CURLY_BRACE 											{ $$ = DefineSemanticAction($2, $5); }
 	;
 
 command_list: command SEMICOLON 										{ $$ = CommandListSemanticAction($1); }
