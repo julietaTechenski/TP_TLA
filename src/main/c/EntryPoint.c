@@ -32,6 +32,7 @@ const int main(const int count, const char ** arguments) {
 	CompilerState compilerState = {
 		.abstractSyntaxtTree = NULL,
 		.succeed = false,
+		.errors = 0,
 		.value = 0
 	};
 
@@ -44,10 +45,16 @@ const int main(const int count, const char ** arguments) {
 		Program * program = compilerState.abstractSyntaxtTree;
 		//ComputationResult computationResult = computeExpression(program->expression);
 			compilerState.value = true;
-			generate(&compilerState);
 
+			if(compilerState.errors == 0) {
+				generate(&compilerState);
+			} 
+
+		logDebugging(logger, "Releasing Symbol Tables resources...");
+		destroySymbolTables();
 		logDebugging(logger, "Releasing AST resources...");
 		releaseProgram(program);
+
 		}
 		// ...end of the Backend. -----------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------

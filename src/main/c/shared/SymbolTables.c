@@ -83,10 +83,11 @@ int addGenerateEntry(Generate * generate){
             error = ERROR;
         } else {
             GenerateEntryNode * codeBlockGenerateList = codeBlock->generateList;
-            while(codeBlockGenerateList != NULL) {
-                printf("EN LOOP");
-                error = addGenerateEntryInGenerateList(codeBlockGenerateList->entry->generate, &(codeBlockGenerateList->next), codeBlockGenerateList->entry->usersMap, codeBlockGenerateList->entry->groupsMap);
-                codeBlockGenerateList = codeBlockGenerateList->next;
+            GenerateEntryNode * tempNode = codeBlockGenerateList;
+
+            while (tempNode != NULL) {
+                error = addGenerateEntryInGenerateList(tempNode->entry->generate, &(generateList), tempNode->entry->usersMap, tempNode->entry->groupsMap);
+                tempNode = tempNode->next;
             }
             error = addGenerateEntryInGenerateList(generate, &(generateList), codeBlock->usersTableMap, codeBlock->groupsTableMap);
         }
@@ -729,6 +730,13 @@ void freeGroupList(KeyNode * groupList) {
     free(tmp->key);
     freeGroupList(groupList->next);
     free(tmp);
+}
+
+void destroySymbolTables() {
+    destroyGenerateList();
+    destroyUsersTableMap();
+    destroyGroupsTableMap();
+    destroyCodeBlock();     
 }
 
 

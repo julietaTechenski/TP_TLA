@@ -60,6 +60,9 @@ int addEventToUserToCodeBlock(const char * defineId, const char * groupId, Creat
 int addGroupsToUserInCodeBlock(const char * defineId, const char * userId, Groups * groups);
 void destroyCodeBlock();
 
+// Destroy everything
+void destroySymbolTables();
+
 
 // Definition of nodes
 struct KeyNode {

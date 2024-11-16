@@ -5,6 +5,7 @@
 
 static Logger * _logger = NULL;
 static char * defineId = NULL;
+static int errors = 0;
 
 
 void initializeBisonActionsModule() {
@@ -34,61 +35,6 @@ static void _logSyntacticAnalyzerAction(const char * functionName) {
 
 /* PUBLIC FUNCTIONS */
 
-/*
-Constant * IntegerConstantSemanticAction(const int value) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Constant * constant = calloc(1, sizeof(Constant));
-	constant->value = value;
-	return constant;
-}
-
-Expression * ArithmeticExpressionSemanticAction(Expression * leftExpression, Expression * rightExpression, ExpressionType type) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->leftExpression = leftExpression;
-	expression->rightExpression = rightExpression;
-	expression->type = type;
-	return expression;
-}
-
-Expression * FactorExpressionSemanticAction(Factor * factor) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Expression * expression = calloc(1, sizeof(Expression));
-	expression->factor = factor;
-	expression->type = FACTOR;
-	return expression;
-}
-
-Factor * ConstantFactorSemanticAction(Constant * constant) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->constant = constant;
-	factor->type = CONSTANT;
-	return factor;
-}
-
-Factor * ExpressionFactorSemanticAction(Expression * expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Factor * factor = calloc(1, sizeof(Factor));
-	factor->expression = expression;
-	factor->type = EXPRESSION;
-	return factor;
-}
-
-Program * ExpressionProgramSemanticAction(CompilerState * compilerState, Expression * expression) {
-	_logSyntacticAnalyzerAction(__FUNCTION__);
-	Program * program = calloc(1, sizeof(Program));
-	program->expression = expression;
-	compilerState->abstractSyntaxtTree = program;
-	if (0 < flexCurrentContext()) {
-		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
-		compilerState->succeed = false;
-	}
-	else {
-		compilerState->succeed = true;
-	}
-	return program;
-}*/
 
 /*
 FUNCIONES DE SEMANTICA
@@ -101,6 +47,7 @@ Program * ProgramSemanticAction(CompilerState * compilerState, CommandList * com
 	Program *program = calloc(1, sizeof(Program));
 	program->command_list = commandList;
 	compilerState->abstractSyntaxtTree = program;
+	compilerState->errors = errors;
 	if (0 < flexCurrentContext()) {
 		logError(_logger, "The final context is not the default (0): %d", flexCurrentContext());
 		compilerState->succeed = false;
@@ -227,6 +174,7 @@ Generate *GenerateSemanticAction(Id * generateId, Id * id, DefType defType, User
 	const char * key = defineId;
 	int result = (key == NULL) ? addGenerateEntry(generate) : addGenerateEntryToCodeBlock(key, generate);
 	if (result == ERROR) {
+		errors++;
 		logError(_logger, "Error creating Generate Entry");
 	} else {
 		logInformation(_logger, "Successful creation of Generate Entry");
@@ -282,6 +230,7 @@ CreateTask *CreateTaskSemanticAction(Id * id, UserGroup * userGroup, Date * date
 	}
 
 	if (result == ERROR) {
+		errors++;
 		logError(_logger, "Error creating and assigning a Task");
 	}
 
@@ -327,6 +276,7 @@ Add * AddSemanticAction(Id * user, Groups * groups) {
 	const char * key = defineId;
 	int result = (key == NULL) ? addGroupsToUser(user->id, groups) : addGroupsToUserInCodeBlock(key, user->id, groups);
 	if (result == ERROR) {
+		errors++;
 		logError(_logger, "Error creating assigning groups to user");
 	} else {
 		logInformation(_logger, "Successful asignment of groups to user");
@@ -508,6 +458,7 @@ User *UserSemanticAction(Id * userId, Id * roleId, Weekdays * weekdays, HourList
 	const char * key = defineId;
 	int result = (key == NULL) ? addUser(user) : addUserToCodeBlockUsersMap(key, user);
 	if (result == ERROR) {
+		errors++;
 		logError(_logger, "Error adding user");
 	} else {
 		logInformation(_logger, "Successful adding of user");
@@ -528,6 +479,7 @@ Group * GroupSemanticAction(Id *id) {
 	const char * key = defineId;
 	int result = (key == NULL) ? addGroup(group) : addGroupToCodeBlockUsersMap(key, group);
 	if (result == ERROR) {
+		errors++;
 		logError(_logger, "Error adding group");
 	} else {
 		logInformation(_logger, "Successful adding of group");
@@ -598,11 +550,10 @@ void BeginCodeBlock(Id * id) {
 	_logSyntacticAnalyzerAction(__FUNCTION__);
 	
 	if(defineId != NULL || addCodeBlockEntry(id->id) == ERROR) {
+		errors++;
 		logError(_logger, "Error creating a code block");
 	}
-	if(defineId == NULL){
-		defineId = id->id;
-	}
+	defineId = id->id;
 }
 
 void EndCodeBlock() {
