@@ -44,24 +44,17 @@ const int main(const int count, const char ** arguments) {
 		logDebugging(logger, "Computing expression value...");
 		Program * program = compilerState.abstractSyntaxtTree;
 		//ComputationResult computationResult = computeExpression(program->expression);
-			compilerState.value = true;
+		compilerState.value = true;
 
-			if(compilerState.errors == 0) {
-				generate(&compilerState);
-			} 
+		if(compilerState.errors == 0) {
+			generate(&compilerState);
+		} else {
+			logError(logger ,"Error processing input.");
+		}
 
 		logDebugging(logger, "Releasing Symbol Tables resources...");
-		destroyGenerateList();
-				logDebugging(logger, "Succesful release generate list...");
-
-    	destroyUsersTableMap();
-				logDebugging(logger, "Succesful release users table...");
-
-    	destroyGroupsTableMap();
-				logDebugging(logger, "Succesful release groups table...");
-   		destroyCodeBlock();   
-		
 		destroySymbolTables();
+		
 		logDebugging(logger, "Releasing AST resources...");
 		releaseProgram(program);
 

@@ -25,7 +25,9 @@ static TaskNode * copyTaskList(TaskNode * originalTask);
 static EventNode * copyEventList(EventNode * originalEvent);
 static KeyNode * copyGroupList(KeyNode * originalGroup);
 static void freeGenerateEntry(struct GenerateEntry * entry);
-void freeGenerateEntryNodeList(GenerateEntryNode * generateLi);
+static void freeGenerateEntryNodeList(GenerateEntryNode * generateLi);
+static void destroyGenerateList();
+
 
 
 // User Map managment functions
@@ -35,6 +37,7 @@ static int addEventToUserInUsersMap(const char * userId, CreateEvent * event, Us
 static int addGroupsToUserInUsersMap(const char * userId, Groups * groups, UserHashEntry ** usersMap, GroupHashEntry ** groupsMap);
 static int addTaskToUserInUsersMap(const char * userId, CreateTask * task, UserHashEntry ** usersMap);
 static void destroyUsersMap(UserHashEntry * usersMap);
+static void destroyUsersTableMap();
 static void deleteUserInUserMap(char * userId, UserHashEntry * usersMap);
 static void freeUserEntry(UserEntry *entry);
 
@@ -44,12 +47,14 @@ static GroupEntry * createGroupEntry(Group * group);
 static int addTaskToGroupInGroupsMap(const char * groupId, CreateTask * task, GroupHashEntry ** groupsMap);
 static int addEventToGroupInGroupsMap(const char * groupId, CreateEvent * event, GroupHashEntry ** groupsMap);
 static void deleteGroupInGroupMap(char * groupId, GroupHashEntry * groupsMap);
+static void destroyGroupsTableMap();
 static void freeGroupEntry(GroupEntry * entry);
 
 
 // Code Blocks List managment functions
 CodeBlocksEntry * createCodeBlocksEntry(const char * codeBlockId);
 CodeBlocksEntry * findCodeBlock(const char * codeBlockId);
+static void destroyCodeBlock();
 
 
 // Add to items to lists
@@ -642,13 +647,18 @@ int addGroupsToUserInCodeBlock(const char * defineId, const char * userId, Group
 void destroyCodeBlock() {
     CodeBlocksHashEntry * current, * tmp;
     HASH_ITER(hh, clodeBlocksTableMap, current, tmp) {
-        HASH_DEL(clodeBlocksTableMap, current);
+        if (current->codeBlocksId) {
+            free(current->codeBlocksId);
+        }
+        
+        if (current->codeBlocksData) {
+            freeGenerateEntryNodeList(current->codeBlocksData->generateList);
+            destroyUsersMap(current->codeBlocksData->usersTableMap);
+            destroyGroupsMap(current->codeBlocksData->groupsTableMap);
 
-        free(current->codeBlocksId);  
-        destroyGenerateList(current->codeBlocksData->generateList);
-        destroyUsersMap(current->codeBlocksData->usersTableMap);
-        destroyGroupsMap(current->codeBlocksData->groupsTableMap);
-        free(current->codeBlocksData);
+            free(current->codeBlocksData);
+        }
+        HASH_DEL(clodeBlocksTableMap, current);
         free(current); 
     }
 }
@@ -729,7 +739,10 @@ void freeGroupList(KeyNode * groupList) {
 }
 
 void destroySymbolTables() {
-      
+    destroyGenerateList();
+    destroyUsersTableMap();
+    destroyGroupsTableMap();
+   	destroyCodeBlock();   
 }
 
 
