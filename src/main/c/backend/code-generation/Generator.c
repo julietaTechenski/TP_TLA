@@ -256,11 +256,6 @@ void generate(CompilerState * compilerState) {
 		logInformation(_logger, "Calendar %d generated.", i++);
 	}
 
-	destroyGenerateList();
-	destroyUsersTableMap();
-	destroyGroupsTableMap();
-	destroyCodeBlock();
-
 	// CHANGE LOG FOR PROD
 	logInformation(_logger, "Generation is done.");
 }

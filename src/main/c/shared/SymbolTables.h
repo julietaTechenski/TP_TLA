@@ -21,6 +21,7 @@ typedef struct UserEntry UserEntry;
 typedef struct GroupEntry GroupEntry;
 typedef struct GenerateEntry GenerateEntry;
 typedef struct CodeBlocksEntry CodeBlocksEntry;
+typedef struct DoubleEndKeyNodeList DoubleEndKeyNodeList;
 
 
 // Generate List managment functions
@@ -52,7 +53,15 @@ int addUserToCodeBlockUsersMap(const char * codeBlockId, User * user);
 int addGroupToCodeBlockUsersMap(const char * codeBlockId, Group * group);
 int addCodeBlockEntry(const char * codeBlockId);
 int addGenerateEntryToCodeBlock(const char * codeBlockId, Generate * generate);
+int addTaskToGroupToCodeBlock(const char * defineId, const char * groupId, CreateTask * task);
+int addTaskToUserToCodeBlock(const char * defineId, const char * groupId, CreateTask * task);
+int addEventToGroupToCodeBlock(const char * defineId, const char * groupId, CreateEvent * event);
+int addEventToUserToCodeBlock(const char * defineId, const char * groupId, CreateEvent * event);
+int addGroupsToUserInCodeBlock(const char * defineId, const char * userId, Groups * groups);
 void destroyCodeBlock();
+
+// Destroy everything
+void destroySymbolTables();
 
 
 // Definition of nodes
@@ -132,8 +141,7 @@ struct CodeBlocksEntry {
     struct GenerateEntryNode * generateList;
     UserHashEntry * usersTableMap;     
     GroupHashEntry * groupsTableMap;   
+    CodeBlocksHashEntry * codeBlocks;
 };
-
-
 
 #endif
