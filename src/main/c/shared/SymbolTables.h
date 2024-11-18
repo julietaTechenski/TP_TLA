@@ -33,6 +33,7 @@ GenerateEntryNode * getGenerateList();
 // User Map managment functions
 int addUser(User * user);
 UserEntry * findUser(const char * userId);
+UserEntry * findUserInMap(const char * userId, UserHashEntry * usersMap);
 int addTaskToUser(const char * userId, CreateTask * task);
 int addEventToUser(const char * userId, CreateEvent * event);
 int addGroupsToUser(const char * userId, Groups * groups);
@@ -42,10 +43,13 @@ void deleteUser(char * userId);
 
 // Group Map managment functions
 int addGroup(Group * group);
+int addGroupToGroupMap(Group * group, GroupHashEntry ** groupsMap);
 GroupEntry * findGroup(const char * groupId);
+GroupEntry * findGroupInMap(const char * groupId, GroupHashEntry * groupsMap);
 int addTaskToGroup(const char * groupId, CreateTask * task);
 int addEventToGroup(const char * groupId, CreateEvent * event);
 void destroyGroupsTableMap();
+void destroyGroupsMap(GroupHashEntry * groupsMap);
 void deleteGroup(char * groupId);
 
 // Code Blocks List managment functions

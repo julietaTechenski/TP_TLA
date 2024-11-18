@@ -31,7 +31,6 @@ void freeGenerateEntryNodeList(GenerateEntryNode * generateLi);
 // User Map managment functions
 static int addUserToUserMap(User * user, UserHashEntry ** usersMap);
 static UserEntry * createUserEntry(User * user);
-static UserEntry * findUserInMap(const char * userId, UserHashEntry * usersMap);
 static int addEventToUserInUsersMap(const char * userId, CreateEvent * event, UserHashEntry ** usersMap);
 static int addGroupsToUserInUsersMap(const char * userId, Groups * groups, UserHashEntry ** usersMap, GroupHashEntry ** groupsMap);
 static int addTaskToUserInUsersMap(const char * userId, CreateTask * task, UserHashEntry ** usersMap);
@@ -41,12 +40,9 @@ static void freeUserEntry(UserEntry *entry);
 
 
 // Group Map managment functions
-static int addGroupToGroupMap(Group * group, GroupHashEntry ** groupsMap);
 static GroupEntry * createGroupEntry(Group * group);
-static GroupEntry * findGroupInMap(const char * groupId, GroupHashEntry * groupsMap);
 static int addTaskToGroupInGroupsMap(const char * groupId, CreateTask * task, GroupHashEntry ** groupsMap);
 static int addEventToGroupInGroupsMap(const char * groupId, CreateEvent * event, GroupHashEntry ** groupsMap);
-static void destroyGroupsMap(GroupHashEntry * groupsMap);
 static void deleteGroupInGroupMap(char * groupId, GroupHashEntry * groupsMap);
 static void freeGroupEntry(GroupEntry * entry);
 
@@ -733,10 +729,7 @@ void freeGroupList(KeyNode * groupList) {
 }
 
 void destroySymbolTables() {
-    destroyGenerateList();
-    destroyUsersTableMap();
-    destroyGroupsTableMap();
-    destroyCodeBlock();     
+      
 }
 
 

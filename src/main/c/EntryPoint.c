@@ -51,6 +51,16 @@ const int main(const int count, const char ** arguments) {
 			} 
 
 		logDebugging(logger, "Releasing Symbol Tables resources...");
+		destroyGenerateList();
+				logDebugging(logger, "Succesful release generate list...");
+
+    	destroyUsersTableMap();
+				logDebugging(logger, "Succesful release users table...");
+
+    	destroyGroupsTableMap();
+				logDebugging(logger, "Succesful release groups table...");
+   		destroyCodeBlock();   
+		
 		destroySymbolTables();
 		logDebugging(logger, "Releasing AST resources...");
 		releaseProgram(program);
