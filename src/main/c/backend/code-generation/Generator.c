@@ -1,5 +1,39 @@
 #include "Generator.h"
 
+ /** ------------------------- Global Variables  ------------------------- **/
+
+int backgroundColorsIndex = 0;
+static const char * backgroundColors[100] = {
+    "#FF5733", "#33FF57", "#5733FF", "#FF33A1", "#33FFD7", 
+    "#FFDA33", "#33FFDA", "#DA33FF", "#FFD733", "#33DAFF", 
+    "#FF8000", "#00FF80", "#8000FF", "#FF0080", "#00FF8A", 
+    "#FFD700", "#00FFD7", "#D700FF", "#FF0077", "#7F00FF", 
+    "#FF6347", "#4682B4", "#8A2BE2", "#FF4500", "#2E8B57", 
+    "#D2691E", "#A52A2A", "#8B4513", "#B22222", "#556B2F", 
+    "#8B008B", "#006400", "#2F4F4F", "#B8860B", "#228B22", 
+    "#9932CC", "#8B0000", "#D3D3D3", "#B0E0E6", "#20B2AA", 
+    "#FF1493", "#FF00FF", "#C71585", "#8B0000", "#F08080", 
+	"#BDB76B", "#FF8C00", "#A9A9A9", "#0066CC", "#8B0000", 
+    "#8A2BE2", "#5F9EA0", "#D2691E", "#DC143C", "#00008B", 
+    "#008B8B", "#B8860B", "#A52A2A", "#5C4033", "#D3D3D3", 
+    "#FFD700", "#FF00FF", "#00BFFF", "#8B4513", "#D8BFD8", 
+    "#FF6347", "#B22222", "#8FBC8F", "#B0E0E6", "#B22222", 
+    "#9ACD32", "#DAA520", "#FF7F50", "#3CB371", "#D3D3D3", 
+    "#F08080", "#ADFF2F", "#E9967A", "#C71585", "#DB7093", 
+    "#FFE4E1", "#FF4500", "#E6E6FA", "#800080", "#98FB98", 
+    "#8B0000", "#FFFF00", "#7FFF00", "#20B2AA", "#FF6347", 
+    "#F0E68C", "#E6A8D7", "#D3D3D3", "#C71585", "#F5F5F5", 
+    "#32CD32", "#00FF7F", "#7CFC00", "#FA8072", "#DDA0DD"
+};
+
+typedef struct {
+    char * userName;
+    const char * color;
+} UserColorPair;
+
+UserColorPair usersWithColors[100]; 
+int usersWithColorsIndex = 0;
+
  /** ------------------------- Module Internal State ------------------------- **/
 
 const char _indentationCharacter = ' ';
@@ -73,11 +107,16 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
 	addTasksAndEvents(generateEntry, file);
 
     fprintf(file,
-    "            ]\n"
+    "            ],\n"
+	"	eventTimeFormat: { \n"
+	"	            hour: 'numeric', \n"
+	"	            minute: '2-digit',\n"
+	"	            hour12: false, \n"
+	"	            meridiem: false \n"
+	"	}\n"
     "        });\n\n"
     "        calendar.render();\n"
-    "    });\n"
-    "</script>\n");
+    "    });\n");
 
     _generateInfo(generateEntry, file);
     return;
@@ -85,7 +124,7 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
 
 
 static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
-	printf(
+	fprintf(file, 
 	"<script>\n"
     "	document.addEventListener('DOMContentLoaded', function() {\n"
     "   	var calendarEl = document.getElementById('calendar');\n"
@@ -111,11 +150,16 @@ static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
 	addTasksAndEvents(generateEntry, file);
 
 	fprintf(file,
-    "	        ]\n"
+    "	        ],\n"
+	"	eventTimeFormat: { \n"
+	"	            hour: 'numeric', \n"
+	"	            minute: '2-digit',\n"
+	"	            hour12: false, \n"
+	"	            meridiem: false \n"
+	"	}\n"
     "	    });\n"
     "	    calendar.render();\n"
-    "	});\n"
-	"</script>\n");
+    "	});\n");
 
 	_generateInfo(generateEntry, file);
 	return;
@@ -123,6 +167,18 @@ static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
 
 void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 	fprintf(file,
+		"<style>\n"
+		"html, body {\n"
+		"    margin: 0;\n"
+		"    padding: 0;\n"
+		"    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\n"
+		"    font-size: 14px;\n"
+		"}\n\n"
+		"#calendar {\n"
+		"    max-width: 1200px;\n"
+		"    margin: 40px auto;\n"
+		"}\n"
+		"</style>\n"
 		"<script>\n"
 		"document.addEventListener('DOMContentLoaded', function() {\n"
 		"    var calendarEl = document.getElementById('calendar');\n\n"
@@ -162,23 +218,16 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 			//fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
 	
 		fprintf(file,
-    	"	        ]\n"
+    	"	        ],\n"
+		"	eventTimeFormat: { \n"
+		"	            hour: 'numeric', \n"
+		"	            minute: '2-digit',\n"
+		"	            hour12: false, \n"
+		"	            meridiem: false \n"
+		"	}\n"
 		"    });\n\n"
 		"    calendar.render();\n"
 		"});\n"
-		"</script>\n\n"
-		"<style>\n"
-		"html, body {\n"
-		"    margin: 0;\n"
-		"    padding: 0;\n"
-		"    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\n"
-		"    font-size: 14px;\n"
-		"}\n\n"
-		"#calendar {\n"
-		"    max-width: 1200px;\n"
-		"    margin: 40px auto;\n"
-		"}\n"
-		"</style>\n"
 	);
 
 
@@ -216,97 +265,175 @@ void _generatePrologue(FILE *file){
 }
 
 void _generateEpilogue(FILE *file) {
-    fprintf(file,"</html>\n");
+    fprintf(file, 
+        "document.addEventListener('DOMContentLoaded', function() {\n"
+        "    var usersDiv = document.getElementById('users');\n"
+        "    usersDiv.innerHTML = '';\n");
 
-	fclose(file);
-	logDebugging(_logger, "Epilogue generated.");
+    for (int i = 0; i < usersWithColorsIndex; i++) {
+        fprintf(file, 
+            "    var userDiv = document.createElement('div');\n"
+            "    userDiv.style.display = 'flex';\n"          
+            "    userDiv.style.alignItems = 'center';\n"     
+            
+            "    var colorBlock = document.createElement('div');\n"
+            "    colorBlock.style.width = '20px';\n"          
+            "    colorBlock.style.height = '20px';\n"         
+            "    colorBlock.style.backgroundColor = '%s';\n"  
+            "    colorBlock.style.marginRight = '10px';\n"     
+
+            "    var nameText = document.createElement('span');\n"
+            "    nameText.innerText = '%s';\n"                 
+            "    nameText.style.color = '#000000';\n"           
+
+            "    userDiv.appendChild(colorBlock);\n"
+            "    userDiv.appendChild(nameText);\n"
+            "    usersDiv.appendChild(userDiv);\n", 
+            usersWithColors[i].color, 
+            usersWithColors[i].userName);
+    }
+
+    fprintf(file, 
+        "});\n"
+        "</script>\n");
+
+    fprintf(file, "</html>\n");
+
+    fclose(file);
+    logDebugging(_logger, "Epilogue generated.");
 }
-
-
-
 
 
 void addTasksAndEvents(GenerateEntry * generateEntry, FILE *file) {
-	GroupHashEntry * processesGroups = NULL;
-	
-	UsersList * users = generateEntry->generate->users->user_list;
+    GroupHashEntry * processesGroups = NULL;
+    
+    UsersList * users = generateEntry->generate->users->user_list;
+    int first = 1; 
 
-	int first = 1;
-	while(users != NULL) {
-		logInformation(_logger, "Hay users: %s", users->id->id);
-		UserEntry * user = findUserInMap(users->id->id, generateEntry->usersMap);
+    int userIndex = backgroundColorsIndex;
+    backgroundColorsIndex++;
+    while(users != NULL) {
+        UserEntry * user = findUserInMap(users->id->id, generateEntry->usersMap);
 
-		EventNode * userEvents = user->eventsListFirst;
-    	while (userEvents != NULL) {
-			if (!first) {
-				fprintf(file, ",\n");
+		const char * color = backgroundColors[userIndex % 50];
+        usersWithColors[usersWithColorsIndex].userName = users->id->id;
+        usersWithColors[usersWithColorsIndex].color = color;
+        usersWithColorsIndex++;
+
+        EventNode * userEvents = user->eventsListFirst;
+
+        while (userEvents != NULL) {
+            if (!first) {
+                fprintf(file, ",\n");
+            } else {
+                first = 0;
+            }
+            CreateEvent * event = userEvents->event;
+            fprintf(file, "                { title: '%s', start: '%d-%02d-%02dT00:00:00', end: '%d-%02d-%02dT00:00:00',", 
+                    event->id->id, event->start_date->day, event->start_date->month, event->start_date->year, 
+                    event->end_date->day, event->end_date->month, event->end_date->year);
+        
+			if(generateEntry->generate->def_type == WEEKLY) {
+				fprintf(file, "  display: 'background', backgroundColor: '%s' }", color);
 			} else {
-				first = 0;
-			}
-			CreateEvent * event = userEvents->event;
-			fprintf(file, "				{ title: '%s', start: '%d-%02d-%02dT00:00:00', end: '%d-%02d-%02dT00:00:00' },\n", event->id->id, event->start_date->day, event->start_date->month, event->start_date->year, event->end_date->day, event->end_date->month, event->end_date->year);
-    	
-			userEvents = userEvents->next;
-		}
+				fprintf(file, "  color: '%s' }", color);
+			} 
 
-		TaskNode * userTasks = user->tasksListFirst;
-		while (userTasks != NULL) {
-			if (!first) {
-				fprintf(file, ",\n");
+            userEvents = userEvents->next;
+        }
+
+        TaskNode * userTasks = user->tasksListFirst;
+        while (userTasks != NULL) {
+            if (!first) {
+                fprintf(file, ",\n");
+            } else {
+                first = 0;
+            }
+            CreateTask * task = userTasks->task;
+            fprintf(file, "                { title: '%s', start: '%d-%02d-%02dT%02d:%02d:00', end: '%d-%02d-%02dT%02d:%02d:00',", 
+                    task->id->id, task->date->day, task->date->month, task->date->year, task->start_time->hour, task->start_time->minute, 
+                    task->date->day, task->date->month, task->date->year, task->end_time->hour, task->end_time->minute);
+            
+			if(generateEntry->generate->def_type == WEEKLY) {
+				fprintf(file, "  display: 'background', backgroundColor: '%s' }", color);
 			} else {
-				first = 0;
+				fprintf(file, "  color: '%s' }", color);
 			}
-			CreateTask * task = userTasks->task;
-			fprintf(file, "				{ title: '%s', start: '%d-%02d-%02dT%02d:%02d:00', end: '%d-%02d-%02dT%02d:%02d:00' },\n", task->id->id, task->date->day, task->date->month, task->date->year, task->start_time->hour, task->start_time->minute, task->date->day, task->date->month, task->date->year, task->end_time->hour, task->end_time->minute);
-										// TODO : agregar descripcion
+			
 			userTasks = userTasks->next;
-		}
-		
-		addGroupsTasksAndEvents(generateEntry, file, user, &(processesGroups), first);
+        }
+        
+        addGroupsTasksAndEvents(generateEntry, file, user, &(processesGroups), first);
 
-		users = users->user_list;
-	}
+        userIndex = backgroundColorsIndex;
+        backgroundColorsIndex++;
+        users = users->user_list;
+    }
 
-	destroyGroupsMap(processesGroups);
+    destroyGroupsMap(processesGroups);
 }
 
 void addGroupsTasksAndEvents(GenerateEntry * generateEntry, FILE *file, UserEntry * user, GroupHashEntry ** processesGroups, int first) {
-		KeyNode * groups = user->groupFirst;
-		while(groups != NULL) {
-			if(findGroupInMap(groups->key, *processesGroups) == NULL) {
-				GroupEntry * group = findGroupInMap(groups->key, generateEntry->groupsMap);
-				
-				addGroupToGroupMap(group->group, processesGroups);
+    KeyNode * groups = user->groupFirst;
+    int groupIndex = backgroundColorsIndex;
+    backgroundColorsIndex++;
 
-				EventNode * groupEvents = group->eventsListFirst;
-				while (groupEvents != NULL) {
-					if (!first) {
-						fprintf(file, ",\n");
-					} else {
-						first = 0;
-					}
-					CreateEvent * event = groupEvents->event;
-					fprintf(file, "				{ title: '%s', start: '%d-%02d-%02dT00:00:00', end: '%02d-%02d-%02dT00:00:00' },\n", event->id->id, event->start_date->day, event->start_date->month, event->start_date->year, event->end_date->day, event->end_date->month, event->end_date->year);
-				
-					groupEvents = groupEvents->next;
-				}	
+    while(groups != NULL) {
+        if(findGroupInMap(groups->key, *processesGroups) == NULL) {
+			GroupEntry * group = findGroupInMap(groups->key, generateEntry->groupsMap);
+            addGroupToGroupMap(group->group, processesGroups); 
+			const char * color = backgroundColors[groupIndex % 50];
+       		usersWithColors[usersWithColorsIndex].userName = group->group->name->id;
+        	usersWithColors[usersWithColorsIndex].color = color;
+        	usersWithColorsIndex++;
 
-				TaskNode * groupTasks = group->tasksListFirst;
-					while (groupTasks != NULL) {
-					if (!first) {
-						fprintf(file, ",\n");
-					} else {
-						first = 0;
-					}
-					CreateTask * task = groupTasks->task;
-					fprintf(file, "				{ title: '%s', start: '%d-%02d-%02dT%02d:%02d:00', end: '%d-%02d-%02dT%02d:%02d:00' },\n", task->id->id, task->date->day, task->date->month, task->date->year, task->start_time->hour, task->start_time->minute, task->date->day, task->date->month, task->date->year, task->end_time->hour, task->end_time->minute);
-												// TODO : agregar descripcion
-					groupTasks = groupTasks->next;
+            EventNode * groupEvents = group->eventsListFirst;
+            while (groupEvents != NULL) {
+                if (!first) {
+                    fprintf(file, ",\n");
+                } else {
+                    first = 0;
+                }
+                CreateEvent * event = groupEvents->event;
+                fprintf(file, "                { title: '%s', start: '%d-%02d-%02dT00:00:00', end: '%02d-%02d-%02dT00:00:00', ", 
+                        event->id->id, event->start_date->day, event->start_date->month, event->start_date->year, 
+                        event->end_date->day, event->end_date->month, event->end_date->year);
+
+				if(generateEntry->generate->def_type == WEEKLY) {
+					fprintf(file, "  display: 'background', backgroundColor: '%s' }", color);
+				} else {
+					fprintf(file, "  color: '%s' }", color);
 				}
-			}
-			
-			groups = groups->next;
-		}
+
+                groupEvents = groupEvents->next;
+            }
+
+            // Tareas del grupo
+            TaskNode * groupTasks = group->tasksListFirst;
+            while (groupTasks != NULL) {
+                if (!first) {
+                    fprintf(file, ",\n");
+                } else {
+                    first = 0;
+                }
+                CreateTask * task = groupTasks->task;
+                fprintf(file, "                { title: '%s', start: '%d-%02d-%02dT%02d:%02d:00', end: '%d-%02d-%02dT%02d:%02d:00', ", 
+                        task->id->id, task->date->day, task->date->month, task->date->year, task->start_time->hour, task->start_time->minute, 
+                        task->date->day, task->date->month, task->date->year, task->end_time->hour, task->end_time->minute);
+                
+				if(generateEntry->generate->def_type == WEEKLY) {
+					fprintf(file, "  display: 'background', backgroundColor: '%s' }", color);
+				} else {
+					fprintf(file, "  color: '%s' }", color);
+				}
+				groupTasks = groupTasks->next;
+            }
+        }
+
+        groupIndex = backgroundColorsIndex;
+        backgroundColorsIndex++;
+        groups = groups->next;
+    }
 }
 
  /** ------------------------- Implementation of public functions ------------------------- **/
