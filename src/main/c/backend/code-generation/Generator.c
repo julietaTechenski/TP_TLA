@@ -75,7 +75,8 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
     "            },\n"
     "            events: [\n");
 
-	// iteracion en la lista de eventos del generate
+	// iteracion en la lista de eventos del generate que entren dentro de la semana del calendario
+	// computar daysOfWeek para que los eventos queden dentro de la semana
 	
 	int first = 1;
 	while(/*events*/0){
@@ -233,10 +234,10 @@ void _generatePrologue(FILE *file){
             "</head>\n"
             "<body>\n"
             "    <div id='calendar'></div>\n"
+			"    <div id='users'></div>\n"
             "</body>\n");
 	logDebugging(_logger, "Prologue generated.");
 }
-
 
 void _generateEpilogue(FILE *file) {
     fprintf(file,"</html>\n");
