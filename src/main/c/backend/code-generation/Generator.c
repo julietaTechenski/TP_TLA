@@ -109,15 +109,15 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
 
     fprintf(file,
     	"	            ],\n"
-		"	   eventTimeFormat: { \n"
-		"	        hour: 'numeric', \n"
-		"	        minute: '2-digit',\n"
-		"	        hour12: false, \n"
-		"	        meridiem: false \n"
-		"	    }\n"
-		"    });\n\n"
-		"    calendar.render();\n"
-		"});\n");
+		"            eventTimeFormat: { \n"
+		"               hour: 'numeric', \n"
+		"               minute: '2-digit',\n"
+		"               hour12: false, \n"
+		"               meridiem: false \n"
+		"            }\n"
+		"        });\n\n"
+		"        calendar.render();\n"
+		"    });\n");
 
     _generateInfo(generateEntry, file);
     return;
