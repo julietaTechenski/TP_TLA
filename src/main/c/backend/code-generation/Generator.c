@@ -450,7 +450,7 @@ void generate(CompilerState * compilerState) {
 
 	while(current != NULL) {
 		char filename[50];
-        snprintf(filename, sizeof(filename), "calendar_%d.html", i);
+        snprintf(filename, sizeof(filename), "%s.html", current->entry->generate->id->id);
 
 		FILE *file = fopen(filename, "w");
         if (file == NULL) {
