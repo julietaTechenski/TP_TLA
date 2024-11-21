@@ -12,13 +12,14 @@ define "create groups block" {
         add user "German Pezzela" to groups ["Selección Argentina"];
 
         event "Qatar World Cup 2022" group "Selección Argentina" start_date 2022-11-20 end_date 2022-12-18;
-        
-        generate "SMALL BLOCK" type weekly users ["Enzo Fernandéz"] start_date 2024-01-01;
-        generate "SMALL BLOCK 2" type weekly users ["Cuti Romero"] start_date 2024-01-01;
+        task "Trainning" user "Enzo Fernandéz" date 2022-11-22 start_time 09:00 end_time 12:00 description "He has to train";
+
+        generate "SMALL BLOCK" type weekly users ["Enzo Fernandéz"] start_date 2022-11-20;
+        generate "SMALL BLOCK 2" type monthly users ["Enzo Fernandéz"] start_date 2022-11-20;
         
 
 };
 
-generate "BIGGEST BLOCK" from "create groups block" type weekly users ["German Pezzela"] start_date 2024-01-01;
+generate "BIGGEST BLOCK" from "create groups block" type yearly users ["Enzo Fernandéz"] start_date 2022-11-20;
 
 
