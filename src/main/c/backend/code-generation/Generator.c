@@ -90,19 +90,32 @@ static void _generateType(GenerateEntry * generateEntry, FILE *file) {
 }
 static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
     fprintf(file,
-    "<script>\n"
-    "    document.addEventListener('DOMContentLoaded', function() {\n"
-    "        var calendarEl = document.getElementById('calendar');\n\n"
-    "        var calendar = new FullCalendar.Calendar(calendarEl, {\n"
-    "            timeZone: 'UTC',\n"
-    "            initialView: 'timeGridWeek',\n"
-	"			 initialDate: '%d-%02d-%02d',\n"
-    "            headerToolbar: {\n"
-    "                left: '',\n"
-    "                center: 'title',\n"
-    "                right: ''\n"
-    "            },\n"
-    "            events: [\n", generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
+        "<style>\n"
+        "    .fc-col-header-cell-cushion .fc-col-header-cell-cushion {\n"
+        "        display: none;\n"
+        "    }\n\n"
+        "    .fc-col-header-cell-cushion .fc-day-number {\n"
+        "        display: none;\n"
+        "    }\n"
+        "</style>\n"
+    );
+
+
+    fprintf(file,
+        "<script>\n"
+        "    document.addEventListener('DOMContentLoaded', function() {\n"
+        "        var calendarEl = document.getElementById('calendar');\n\n"
+        "        var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+        "            timeZone: 'UTC',\n"
+        "            initialView: 'timeGridWeek',\n"
+        "			 initialDate: '%d-%02d-%02d',\n"
+        "            headerToolbar: {\n"
+        "                left: '',\n"
+        "                center: 'title',\n"
+        "                right: ''\n"
+        "            },\n"
+        "            events: [\n"
+    , generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
 
 	addTasksAndEvents(generateEntry, file);
 
@@ -125,28 +138,30 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
 
 
 static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
+
 	fprintf(file, 
-	"<script>\n"
-    "	document.addEventListener('DOMContentLoaded', function() {\n"
-    "   	var calendarEl = document.getElementById('calendar');\n"
-	"	 	var startDate = '%d-%02d-%02d';  \n"
-	"	 	var endDate = new Date(startDate); \n"
-	" 	 	endDate.setFullYear(endDate.getFullYear() + 1); \n"
-	"  	 	var formattedEndDate = endDate.toISOString().split('T')[0]; \n"
-    "   	var calendar = new FullCalendar.Calendar(calendarEl, {\n"
-    "       	initialView: 'dayGridMonth',\n"
-	" 			initialDate: startDate, \n"
-    "    		validRange: { 			\n"
-    "         		start: startDate, 		\n"
-    "        		end: formattedEndDate 		\n"
-    "  		 	},	\n"
-    "        	headerToolbar: {		\n"
-    "           	left: '',	\n"
-    "            	center: 'title',	\n"
-    "           	right: ''	\n"
-    "        	},\n"
-    "        	locale: 'es',\n"
-    "        	events: [\n", generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
+        "<script>\n"
+        "	document.addEventListener('DOMContentLoaded', function() {\n"
+        "   	var calendarEl = document.getElementById('calendar');\n"
+        "	 	var startDate = '%d-%02d-%02d';  \n"
+        "	 	var endDate = new Date(startDate); \n"
+        " 	 	endDate.setFullYear(endDate.getFullYear() + 1); \n"
+        "  	 	var formattedEndDate = endDate.toISOString().split('T')[0]; \n"
+        "   	var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+        "       	initialView: 'dayGridMonth',\n"
+        " 			initialDate: startDate, \n"
+        "    		validRange: { 			\n"
+        "         		start: startDate, 		\n"
+        "        		end: formattedEndDate 		\n"
+        "  		 	},	\n"
+        "        	headerToolbar: {		\n"
+        "           	left: '',	\n"
+        "            	center: 'title',	\n"
+        "           	right: ''	\n"
+        "        	},\n"
+        "        	locale: 'es',\n"
+        "        	events: [\n"
+    , generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
 
 	addTasksAndEvents(generateEntry, file);
 
@@ -168,19 +183,23 @@ static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
 }
 
 void _generateYearly(GenerateEntry * generateEntry, FILE *file){
+    fprintf(file,
+        "<style>\n"
+        "    html, body {\n"
+        "        margin: 0;\n"
+        "        padding: 0;\n"
+        "        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\n"
+        "        font-size: 14px;\n"
+        "    }\n\n"
+        "    #calendar {\n"
+        "        max-width: 1200px;\n"
+        "        margin: 40px auto;\n"
+        "    }\n"
+        "</style>\n"
+    );
+
+
 	fprintf(file,
-		"<style>\n"
-		"html, body {\n"
-		"    margin: 0;\n"
-		"    padding: 0;\n"
-		"    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\n"
-		"    font-size: 14px;\n"
-		"}\n\n"
-		"#calendar {\n"
-		"    max-width: 1200px;\n"
-		"    margin: 40px auto;\n"
-		"}\n"
-		"</style>\n"
 		"<script>\n"
 		"    document.addEventListener('DOMContentLoaded', function() {\n"
 		"       var calendarEl = document.getElementById('calendar');\n\n"
