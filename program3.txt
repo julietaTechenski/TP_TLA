@@ -1,11 +1,22 @@
 
 
 define "create groups block" {
+        create group "Selección Argentina";
+
         create user "Enzo Fernandéz" role "defender" weekdays [tuesday, thursday] hours [08:00-18:00];
         create user "Cuti Romero" role "defender" weekdays [tuesday, thursday] hours [08:00-18:00];
+        create user "German Pezzela" role "defender" weekdays [tuesday, thursday] hours [08:00-18:00];
+
+        add user "Enzo Fernandéz" to groups ["Selección Argentina"];
+        add user "Cuti Romero" to groups ["Selección Argentina"];
+        add user "German Pezzela" to groups ["Selección Argentina"];
+
+        event "Qatar World Cup 2022" group "Selección Argentina" start_date 2022-11-20 end_date 2022-12-18;
+        
         generate "SMALL BLOCK" type weekly users ["Enzo Fernandéz"] start_date 2024-01-01;
         generate "SMALL BLOCK 2" type weekly users ["Cuti Romero"] start_date 2024-01-01;
-    create user "German Pezzela" role "defender" weekdays [tuesday, thursday] hours [08:00-18:00];
+        
+
 };
 
 generate "BIGGEST BLOCK" from "create groups block" type weekly users ["German Pezzela"] start_date 2024-01-01;

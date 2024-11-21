@@ -106,17 +106,18 @@ static void _generateWeekly(GenerateEntry * generateEntry, FILE *file){
 
 	addTasksAndEvents(generateEntry, file);
 
+
     fprintf(file,
-    "            ],\n"
-	"	eventTimeFormat: { \n"
-	"	            hour: 'numeric', \n"
-	"	            minute: '2-digit',\n"
-	"	            hour12: false, \n"
-	"	            meridiem: false \n"
-	"	}\n"
-    "        });\n\n"
-    "        calendar.render();\n"
-    "    });\n");
+    	"	            ],\n"
+		"	   eventTimeFormat: { \n"
+		"	        hour: 'numeric', \n"
+		"	        minute: '2-digit',\n"
+		"	        hour12: false, \n"
+		"	        meridiem: false \n"
+		"	    }\n"
+		"    });\n\n"
+		"    calendar.render();\n"
+		"});\n");
 
     _generateInfo(generateEntry, file);
     return;
@@ -149,18 +150,19 @@ static void _generateMonthly(GenerateEntry * generateEntry, FILE *file){
 
 	addTasksAndEvents(generateEntry, file);
 
-	fprintf(file,
-    "	        ],\n"
-	"	eventTimeFormat: { \n"
-	"	            hour: 'numeric', \n"
-	"	            minute: '2-digit',\n"
-	"	            hour12: false, \n"
-	"	            meridiem: false \n"
-	"	}\n"
-    "	    });\n"
-    "	    calendar.render();\n"
-    "	});\n");
 
+
+	fprintf(file,
+    	"	            ],\n"
+		"	   eventTimeFormat: { \n"
+		"	        hour: 'numeric', \n"
+		"	        minute: '2-digit',\n"
+		"	        hour12: false, \n"
+		"	        meridiem: false \n"
+		"	    }\n"
+		"    });\n\n"
+		"    calendar.render();\n"
+		"});\n");
 	_generateInfo(generateEntry, file);
 	return;
 }
@@ -180,33 +182,33 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 		"}\n"
 		"</style>\n"
 		"<script>\n"
-		"document.addEventListener('DOMContentLoaded', function() {\n"
-		"    var calendarEl = document.getElementById('calendar');\n\n"
-		"	 var startDate = '%d-%02d-%02d';  \n"
-		"	 var endDate = new Date(startDate); \n"
-		" 	 endDate.setFullYear(endDate.getFullYear() + 1); \n"
-		"  	 var formattedEndDate = endDate.toISOString().split('T')[0]; \n"
-		"    var calendar = new FullCalendar.Calendar(calendarEl, {\n"
-		"        timeZone: 'UTC',\n"
-		"        initialView: 'multiMonth',\n"
-		"		 initialDate: startDate,   \n"
-    	"    	 validRange: { 			   \n"
+		"    document.addEventListener('DOMContentLoaded', function() {\n"
+		"       var calendarEl = document.getElementById('calendar');\n\n"
+		"	    var startDate = '%d-%02d-%02d';  \n"
+		"   	var endDate = new Date(startDate); \n"
+		" 	    endDate.setFullYear(endDate.getFullYear() + 1); \n"
+		"  	    var formattedEndDate = endDate.toISOString().split('T')[0]; \n"
+		"       var calendar = new FullCalendar.Calendar(calendarEl, {\n"
+		"           timeZone: 'UTC',\n"
+		"           initialView: 'multiMonth',\n"
+		"		    initialDate: startDate,   \n"
+    	"    	    validRange: { 			   \n"
     	"         		start: startDate, 		\n"
     	"        		end: formattedEndDate 		\n"
-    	"  		 },	\n"
-		"        headerToolbar: {\n"
-		"            left: '',\n"
-		"            center: 'title',\n"
-		"            right: ''\n"
-		"        },\n"
-		"        views: { 							\n"
-		"		 	multiMonth: {	  				\n"
-    	"    	 		duration: { months: 12 }	\n"
+    	"  		    },	\n"
+		"       headerToolbar: {\n"
+		"           left: '',\n"
+		"           center: 'title',\n"
+		"           right: ''\n"
+		"       },\n"
+		"       views: { 							\n"
+		"		    multiMonth: {	  				\n"
+    	"    	 	    duration: { months: 12 }	\n"
     	"         	} 								\n"
-    	"  		 },	\n"
-		"        locale: 'es',\n"
-		"        editable: true,\n"
-		"        events: [\n", generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
+    	"  		},	\n"
+		"       locale: 'es',\n"
+		"       editable: true,\n"
+		"       events: [\n", generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
 
 		addTasksAndEvents(generateEntry, file);
 
@@ -218,13 +220,13 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 			//fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
 	
 		fprintf(file,
-    	"	        ],\n"
-		"	eventTimeFormat: { \n"
-		"	            hour: 'numeric', \n"
-		"	            minute: '2-digit',\n"
-		"	            hour12: false, \n"
-		"	            meridiem: false \n"
-		"	}\n"
+    	"	            ],\n"
+		"	   eventTimeFormat: { \n"
+		"	        hour: 'numeric', \n"
+		"	        minute: '2-digit',\n"
+		"	        hour12: false, \n"
+		"	        meridiem: false \n"
+		"	    }\n"
 		"    });\n\n"
 		"    calendar.render();\n"
 		"});\n"
@@ -266,35 +268,35 @@ void _generatePrologue(FILE *file){
 
 void _generateEpilogue(FILE *file) {
     fprintf(file, 
-        "document.addEventListener('DOMContentLoaded', function() {\n"
-        "    var usersDiv = document.getElementById('users');\n"
-        "    usersDiv.innerHTML = '';\n");
+        "    document.addEventListener('DOMContentLoaded', function() {\n"
+        "       var usersDiv = document.getElementById('users');\n"
+        "       usersDiv.innerHTML = '';\n");
 
     for (int i = 0; i < usersWithColorsIndex; i++) {
         fprintf(file, 
-            "    var userDiv = document.createElement('div');\n"
-            "    userDiv.style.display = 'flex';\n"          
-            "    userDiv.style.alignItems = 'center';\n"     
+            "       var userDiv = document.createElement('div');\n"
+            "       userDiv.style.display = 'flex';\n"          
+            "       userDiv.style.alignItems = 'center';\n"     
             
-            "    var colorBlock = document.createElement('div');\n"
-            "    colorBlock.style.width = '20px';\n"          
-            "    colorBlock.style.height = '20px';\n"         
-            "    colorBlock.style.backgroundColor = '%s';\n"  
-            "    colorBlock.style.marginRight = '10px';\n"     
+            "       var colorBlock = document.createElement('div');\n"
+            "       colorBlock.style.width = '20px';\n"          
+            "       colorBlock.style.height = '20px';\n"         
+            "       colorBlock.style.backgroundColor = '%s';\n"  
+            "       colorBlock.style.marginRight = '10px';\n"     
 
-            "    var nameText = document.createElement('span');\n"
-            "    nameText.innerText = '%s';\n"                 
-            "    nameText.style.color = '#000000';\n"           
+            "       var nameText = document.createElement('span');\n"
+            "       nameText.innerText = '%s';\n"                 
+            "       nameText.style.color = '#000000';\n"           
 
-            "    userDiv.appendChild(colorBlock);\n"
-            "    userDiv.appendChild(nameText);\n"
-            "    usersDiv.appendChild(userDiv);\n", 
+            "       userDiv.appendChild(colorBlock);\n"
+            "       userDiv.appendChild(nameText);\n"
+            "       usersDiv.appendChild(userDiv);\n", 
             usersWithColors[i].color, 
             usersWithColors[i].userName);
     }
 
     fprintf(file, 
-        "});\n"
+        "   });\n"
         "</script>\n");
 
     fprintf(file, "</html>\n");
