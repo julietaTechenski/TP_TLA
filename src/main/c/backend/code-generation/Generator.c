@@ -3,7 +3,7 @@
  /** ------------------------- Global Variables  ------------------------- **/
 
 int backgroundColorsIndex = 0;
-static const char * backgroundColors[100] = {
+static char * backgroundColors[100] = {
     "#FF5733", "#33FF57", "#5733FF", "#FF33A1", "#33FFD7", 
     "#FFDA33", "#33FFDA", "#DA33FF", "#FFD733", "#33DAFF", 
     "#FF8000", "#00FF80", "#8000FF", "#FF0080", "#00FF8A", 
@@ -28,7 +28,7 @@ static const char * backgroundColors[100] = {
 
 typedef struct {
     char * userName;
-    const char * color;
+    char * color;
 } UserColorPair;
 
 UserColorPair usersWithColors[100]; 
@@ -230,13 +230,6 @@ void _generateYearly(GenerateEntry * generateEntry, FILE *file){
 		"       events: [\n", generateEntry->generate->start_date->day, generateEntry->generate->start_date->month, generateEntry->generate->start_date->year);
 
 		addTasksAndEvents(generateEntry, file);
-
-			//fprintf(file,"            { title: 'Presentación del proyecto X', start: '2024-11-16T14:00:00', end: '2024-11-16T15:30:00' },\n");
-			//fprintf(file,"            { title: 'Clase de Yoga', daysOfWeek: [2, 4], startTime: '18:00:00', endTime: '19:00:00' },\n");
-			//fprintf(file,"            { title: 'Taller de Fotografía', start: '2024-11-18', end: '2024-11-19', allDay: true },\n");
-			//fprintf(file,"            { title: 'Cumpleaños de Andrea', start: '2024-11-21', allDay: true },\n");
-			//fprintf(file,"            { title: 'Revisión de presupuesto', start: '2024-11-22T10:00:00', end: '2024-11-22T12:00:00' },\n");
-			//fprintf(file,"            { title: 'Cena de fin de año', start: '2024-11-30T20:00:00', end: '2024-11-30T23:30:00' }\n");
 	
 		fprintf(file,
     	"	            ],\n"
@@ -336,10 +329,21 @@ void addTasksAndEvents(GenerateEntry * generateEntry, FILE *file) {
     while(users != NULL) {
         UserEntry * user = findUserInMap(users->id->id, generateEntry->usersMap);
 
-		const char * color = backgroundColors[userIndex % 50];
-        usersWithColors[usersWithColorsIndex].userName = users->id->id;
-        usersWithColors[usersWithColorsIndex].color = color;
-        usersWithColorsIndex++;
+        int colorAssigned = 0;
+        char * color = NULL;
+        for(int i = 0; i < usersWithColorsIndex && !colorAssigned; i++) {
+            if(strcmp(usersWithColors[i].userName, users->id->id) == 0) {
+                colorAssigned = 1;
+                color = usersWithColors[i].color;
+            }
+        }
+
+        if(!colorAssigned) {
+            color = backgroundColors[userIndex % 100];
+            usersWithColors[usersWithColorsIndex].userName = users->id->id;
+            usersWithColors[usersWithColorsIndex].color = color;
+            usersWithColorsIndex++;
+        }
 
         EventNode * userEvents = user->eventsListFirst;
 
@@ -402,13 +406,29 @@ void addGroupsTasksAndEvents(GenerateEntry * generateEntry, FILE *file, UserEntr
     while(groups != NULL) {
         if(findGroupInMap(groups->key, *processesGroups) == NULL) {
 			GroupEntry * group = findGroupInMap(groups->key, generateEntry->groupsMap);
-            addGroupToGroupMap(group->group, processesGroups); 
-			const char * color = backgroundColors[groupIndex % 50];
-       		usersWithColors[usersWithColorsIndex].userName = group->group->name->id;
-        	usersWithColors[usersWithColorsIndex].color = color;
-        	usersWithColorsIndex++;
+            addGroupToGroupMap(group->group, processesGroups);
+
+
+
+            int colorAssigned = 0;
+            char * color = NULL;
+            for(int i = 0; i < usersWithColorsIndex && !colorAssigned; i++) {
+                if(strcmp(usersWithColors[i].userName, group->group->name->id) == 0) {
+                    colorAssigned = 1;
+                    color = usersWithColors[i].color;
+                }
+            }
+
+            if(!colorAssigned) {
+                color = backgroundColors[groupIndex % 100];
+                usersWithColors[usersWithColorsIndex].userName = group->group->name->id;
+                usersWithColors[usersWithColorsIndex].color = color;
+                usersWithColorsIndex++;
+            }
+
 
             EventNode * groupEvents = group->eventsListFirst;
+            
             while (groupEvents != NULL) {
                 if (!first) {
                     fprintf(file, ",\n");
