@@ -463,10 +463,6 @@ void addGroupsTasksAndEvents(GenerateEntry * generateEntry, FILE *file, UserEntr
                         task->id->id, task->date->day, task->date->month, task->date->year, task->start_time->hour, task->start_time->minute, 
                         task->date->day, task->date->month, task->date->year, task->end_time->hour, task->end_time->minute);
                 
-                if(task->description != NULL) {
-                    fprintf(file, "description: '%s', ", task->description);
-                }
-
 				if(generateEntry->generate->def_type == WEEKLY) {
 					fprintf(file, "  display: 'background', backgroundColor: '%s' }", color);
 				} else {
